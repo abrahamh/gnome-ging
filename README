@@ -1,0 +1,35 @@
+Memo:
+
+Starting point for this application was:
+=======================================
+
+This is "Ding"
+  * a dictionary lookup program for Unix,
+  * DIctionary Nice Grep,
+  * a Tk based Front-End to [ae]grep, ispell, dict, ...
+  * Ding {n} :: thing
+ Copyright (c) Frank Richter <Frank.Richter@hrz.tu-chemnitz.de> 1999-2002
+ GNU public license, see COPYING for details
+ Ding comes with ABSOLUTELY NO WARRANTY.
+
+Ding contains a program "ding" and a German-English dictionary 
+(about 135,000 entries). 
+
+http://dict.tu-chemnitz.de/
+
+=======================================
+
+But Ding has some limitations:
+- no nice gnome UI
+- only one dictionary
+- no support for spelling and thesaurus
+- no real unicode support
+
+My idea was to redevelop Ding as gtk application. Add more 
+dictionaries and add spelling support as well.
+
+But first I look for similary applications and found 
+
+* g2ding from Oliver Grawert <http://www.grawert.net/software/>
+
+Based on this knowledge, I start to develop gnome-ding.
