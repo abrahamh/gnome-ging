@@ -1,0 +1,22 @@
+Sep 05 2003 - H.Abraham
+ - stable version 2.0
+ - new gnome-like content entry
+ - add documentation im xml-format for C/de
+ - check for some mem-sucks
+
+Sep 04 2003 - H.Abraham
+ - gui, use gnome-default menu-entries and stock icons
+ - add aspell c-api code, check for valid UFT8
+ - convert ding-dict to uft8, extend some words
+ - add support for own local ding-dict
+ - redesign list-view, use markup
+
+Sep 03 2003 - H.Abraham
+ - create ChangeLog, News, ToDo
+ - add po-support, change some Make/Buildfiles
+ - make About-Box Gnome-like
+ - add GConf-Support
+ - rewrite ding-code-part
+ - new gnome-like info-dialog
+ - new project 'gnome-ding' begann, intended by g2ding (by O.Grawert)
+

@@ -1,0 +1,691 @@
+<?xml version="1.0" encoding='ISO-8859-1' standalone="no"?>
+<!DOCTYPE article PUBLIC "-//OASIS/DTD DocBookXML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!-- replace with actual application  version number-->
+<!ENTITY mdash ";"> 
+<!ENTITY legal SYSTEM "legal.xml">
+<!ENTITY appversion "2.0"> 
+<!ENTITY date "April 2003"> 
+<!ENTITY manrevision "2.0">
+<!ENTITY mymail "abrahamh@web.de">
+<!ENTITY auml "&#228;">
+<!ENTITY uuml "&#252;">
+<!ENTITY ouml "&#246;">
+<!ENTITY sz   "&#223;">
+<!ENTITY app "gnome-ding">
+
+
+<!ENTITY gnome-ding "<application>gnome-ding</application>"> 
+]>
+
+<!--
+      (Do not remove this comment block.)
+  Maintained by the gnome-ding-Project (Heiko Abraham)
+  http://www.abe-si.de/gnome-ding.html
+  Template version: 1.0 beta
+  Template last modified Apr 24, 2003
+-->
+
+
+<!-- =============Document Header ============================= -->
+<article id="index" lang="de">
+<!-- appropriate code -->
+ <articleinfo>
+   <title>&app; - Benutzerhandbuch</title>
+   <copyright>
+     <year>2003</year>
+     <holder>Heiko Abraham</holder>
+   </copyright>
+   <releaseinfo>
+    Dies ist des Benutzerhandbuch zu &app; (Programmversion &appversion;, Handbuchversion &manrevision;) 
+   </releaseinfo>
+
+   <publisher>
+   <publishername>&app;-Team, Heiko Abraham </publishername>
+   </publisher>
+
+   <abstract>
+   <para>
+        &app; ist ein grafisches Werkzeug zur Rechtschreibpr&uuml;fung sowie zum
+        &uuml;bersetzen einzelner eingegebener Worte. &app; ist f&uuml;r die 
+        Verwendung mit Gnome2 ausgelegt.
+        Zur Rechtschreibpr&uuml;fung verwendet &app; aspell. Zum &uuml;bersetzen
+        verwendet &app; ein eigenes, vom ding-Projekt abgeleitetes W&ouml;rterbuch.
+   </para>
+   <para>
+   Die Programmversionen 1.0 und 1.2 von &app; wurden von Oliver Grawert ( 
+   <ulink type="help" url="http://www.grawert.net/software/">http://www.grawert.net/software/</ulink>)
+   erstellt.
+   Version 2.0 von &app; wurden komplett neu von H. Abraham erstellt und erweitert.
+   </para>	 
+   <para>
+	Dieses Handbuch beschreibt nur kurz wichtige und interessante 
+        Fragen zur Benutzung von &app;.   
+    </para>
+    </abstract>
+
+    <authorgroup>
+	<author>
+	  <firstname>Heiko</firstname> <surname>Abraham</surname>
+	  <affiliation><orgname>University of Freiburg, Germany</orgname>
+	  <address> <email>&mymail;</email> </address>
+	  </affiliation>
+	</author> 
+    </authorgroup>
+
+    &legal;
+    <legalnotice id="feedback">
+       <title>Feedback</title>
+       <para>
+       Falls sie einen Fehler gefunden haben und Ihn melden m&ouml;chten oder zum Projekt oder 
+       dem Handbuch Beitrag leisten wollen, wenden Sie sich bitte an den Autor.
+       </para>
+    </legalnotice>
+
+</articleinfo>
+
+<indexterm zone="index"><primary>gnome-ding</primary></indexterm>
+<indexterm zone="index"><primary>gnome-ding</primary></indexterm>
+<indexterm zone="index"><primary>Schl&uuml;sselmanager</primary></indexterm>
+
+
+<!-- ################################################################# -->
+<!--                   GENERAL STUFF                                   -->
+<!-- ################################################################# -->
+
+<sect1 id="introduction">
+<title>Einleitung</title>
+<para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+   
+<para>
+        &app; ist ein grafisches Werkzeug zur Rechtschreibpr&uuml;fung sowie zum
+        &uuml;bersetzen einzelner eingegebener Worte. &app; ist f&uuml;r die 
+        Verwendung mit <acronym>Gtk2+</acronym> und <acronym>GNOME2</acronym> ausgelegt.
+        Zur Rechtschreibpr&uuml;fung verwendet &app; aspell. Zum &uuml;bersetzen
+        verwendet &app; ein eigenes, vom ding-Projekt abgeleitetes W&ouml;rterbuch.
+</para>
+
+<para>
+        &app; ben&ouml;tigt <acronym>GNOME2</acronym> und aspell (Version 0.50) 
+        sowie grep (Version 2.5.x).
+</para>
+
+</sect1> <!-- id=introduction -->
+
+<!-- ################################################################# -->
+<sect1 id="getting-started">
+<title>Erste Schritte mit &app;</title>
+<para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+
+<sect2 id="getting-started-gnome-ding-to-start">
+       <title>&app; starten</title> 
+       <para>
+       Sie k&ouml;nnen <application>&app;</application> auf folgende Art und Weise starten:
+       </para>
+          <variablelist>
+                <varlistentry>
+                <term><guimenu>Anwendungs</guimenu> Men&uuml;</term>
+                <listitem>
+                <para>W&auml;hlen Sie dann <menuchoice><guisubmenu>Zubeh&ouml;r</guisubmenu><guimenuitem>
+                gnome-ding</guimenuitem>
+                </menuchoice>. </para>
+                </listitem>
+
+                </varlistentry>
+                <varlistentry>
+                <term>Oder &uuml;ber die Kommandozeile </term>
+                <listitem>
+                <para>Geben Sie <programlisting>gnome-ding</programlisting>
+                ein und dr&uuml;cken Sie <keycap>Return</keycap>.
+		</para>
+		</listitem>
+                </varlistentry>
+          </variablelist>
+	<para>
+        Falls Sie &app; jetzt das erste Mal starten, werden alle Konfigurationen automatisch 
+        durchgef&uuml;rt.
+	</para>	
+
+</sect2> <!-- gnome-ding-to-start -->
+
+<sect2 id="getting-started-gnome-ding-is-start">
+   <title>Wenn &app; gestartet ist</title>
+   <para>Wenn Sie &app; gestartet haben werden Sie folgendes Hauptfenster angezeigt bekommen:
+   </para>
+   <figure>
+   <title>&app; main window</title>
+     <screenshot><mediaobject> 
+	    <imageobject><imagedata fileref="figures/trans1.2.png" format="PNG"/></imageobject>
+	    <textobject><phrase>Bildschirmfoto vom &app; Hauptfenster.</phrase></textobject>
+
+     </mediaobject></screenshot>
+   </figure>
+
+   <para>
+   Das &app; Hauptfenster enth&auml;lt folgende Elemente:
+   <variablelist>
+       <varlistentry><term>Men&uuml;leiste</term>
+             <listitem>
+                 <para>
+                 Die Men&uuml;s der Men&uuml;leiste enthalten alle Befehle und Optionen, die Sie normal
+                 zum Suchen mit &app; ben&ouml;tigen.
+                 </para>
+             </listitem>
+       </varlistentry> 
+       <varlistentry><term>Suchleiste</term>
+             <listitem>
+                 <para>
+                 Die Suchleiste ist in Ihrer Funktion analog zu einer Werkzeugleiste, beinhaltet aber
+                 als zwei zentrale Elemente die Eingabe f&uuml;r das Suchwort und das zu verwendende
+                 W&ouml;rterbuch.
+                 </para>
+             </listitem>
+       </varlistentry> 
+       <varlistentry><term>Ergebnis-Fenster</term>
+             <listitem>
+                 <para>
+                 Das Ergebnis-Fenster stellt nach erfolgter Suche die jeweiligen Resultate der Suche
+                 in einer Listenform aufbereitet dar.
+                 </para>
+             </listitem>
+       </varlistentry>   
+       <varlistentry><term>Statusleiste</term>
+             <listitem>
+                 <para>
+		 Die Statusleiste zeigt Informationen zum aktuellen Programmstatus bzw. Kontexbezogene
+                 Informationen oder Fehlermeldungen an.
+                 </para>
+             </listitem>
+       </varlistentry> 
+   </variablelist>
+
+
+   </para>
+   
+</sect2> <!-- gnome-ding-is-start -->
+
+</sect1> <!-- id=getting-started -->
+
+
+
+
+<!-- ################################################################# -->
+<!--                 SECTION: MAIN WINDOW                              -->
+<!-- ################################################################# -->
+<sect1 id="win-main">
+<title>Hauptfenster</title>
+<para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+
+<para>
+ <figure>
+   <title>&app; Hauptfenster</title>
+     <screenshot><mediaobject> 
+	    <imageobject><imagedata fileref="figures/trans1.2.png" format="PNG"/></imageobject>
+	    <textobject><phrase>Bildschirmfoto vom &app; Hauptfenster.</phrase></textobject>
+
+     </mediaobject></screenshot>
+   </figure>
+</para>
+
+<para>
+Das &app; Hauptfenster enth&auml;lt folgende Elemente:
+
+  <itemizedlist>
+
+    <listitem>
+     <para>Men&uuml;leiste</para>
+    </listitem>	
+   
+    <listitem>
+     <para>Suchleiste</para>
+    </listitem>	
+
+    <listitem>
+     <para>Ergebnis-Fenster</para>
+    </listitem>	
+
+     <listitem>
+     <para>Statusleiste</para>
+     </listitem>
+
+ </itemizedlist>
+</para>
+
+
+<sect2 id="win-main-menubar">
+   <title>Men&uuml;leiste</title>
+   <para>
+   Die Men&uuml;s der Men&uuml;leiste enthalten alle Befehle und Optionen, die Sie normal
+   zum Suchen mit &app; ben&ouml;tigen.
+   </para>
+</sect2>
+
+<sect2 id="win-main-commandbar">
+   <title>Suchleiste</title>
+   <para>
+   Die Suchleiste ist in Ihrer Funktion analog zu einer Werkzeugleiste. Sie beinhaltet alle
+   zentral notwendigen Kommandos. Hier geben Sie den zu Suchenden Begriff, bzw. das zu pr&uuml;fenden
+   Wort ein. Weiter k&ouml;nnen Sie hier das zu verwendenen W&ouml;rterbuch ausw&auml;hlen.
+   </para>
+   <para>
+   Zum Start der Suche dr&uuml;cken Sie die 'Suchen'-Schaltfl&auml;che oder w&auml;hlen Sie 'Suchen'
+   aus der Men&uuml;leiste.
+   </para>
+</sect2>
+
+
+
+<sect2 id="win-main-result">
+    <title>Ergebnis-Fenster</title>
+    <para>
+    Das Ergebnis-Fenster stellt nach erfolgter Suche die jeweiligen Resultate der Suche
+    in einer Listenform aufbereitet dar.
+    </para>
+
+    <para>    
+    Falls Sie eine Rechtschreibpr&uuml;fung ausgew&auml;hlt haben, wird das Ergebnis-Fenster entweder
+    die korrekte Schreibweise des eingegebenen Suchwortes best&auml;tigen, oder, sofern M&ouml;glich
+    eine Liste von Vorschl&auml;gen zur korrekten Schreibweise enthalten.
+    </para>
+
+    <para>
+    Falls Sie &app; zum &uuml;bersetzen verwenden, z.B. Deutsch Englisch, wird das Ergebnis-Fenster
+    eine Liste von m&ouml;glichen Treffern enthalten. Hierbei sind einzelne Worte, aber auch 
+    &uuml;bersetzungen zum Kontex enthalten. Beachten Sie die hierbei zur weiteren Beschreibung
+    Verwendeten Abk&uuml;rzungen.
+    </para>
+
+</sect2>
+
+<sect2 id="win-main-statusbar">
+   <title>Statusleiste</title>
+   <para>
+   Die Statusleiste zeigt Informationen zum aktuellen Programmstatus bzw. kontexbezogene
+   Informationen oder Fehlermeldungen an.
+   </para>
+</sect2>
+
+</sect1>
+
+
+
+<!-- ################################################################# -->
+<!--                 SECTION: Usage                                    -->
+<!-- ################################################################# -->
+<sect1 id="win-usage">
+<title>Verwendung</title>
+<para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+
+<para>
+Die Verwendung von &app; ist sehr einfach. Geben Sie ein Wort in das Eingabefeld der 
+Suchleiste ein, welches &app; f&uuml;r Sie pr&uuml;fen soll. W&auml;hlen Sie dann
+das zu verwendende W&ouml;rterbuch aus, also beispielsweise 'Rechtschreibpr&uuml;fung (Deutsch)'.
+Dr&uuml;cken Sie dann die 'Suchen'-Schaltfl&auml;che und wenig sp&auml;ter wird, sofern
+M&ouml;glich das Ergebnis im Ergebnis-Fenster dargestellt.
+</para>
+
+<para>
+Beachten Sie, dass &app; nicht entwickelt wurde um S&auml;tze oder mehrere Worte gleichzeitig
+zu &uuml;bersetzen. Geben Sie gleichzeitig mehrere Worte ein, so wird die als unmittelbar
+zusammenh&auml;gende Anfrage gewertet und nur selten ein erwartetes Suchergebnis liefern.
+</para>
+
+<para>
+Beachten Sie bitte, &app; wurde entwickelt um Offline arbeiten zu k&ouml;nnen. Es ist
+daher notwendig, das die von Ihnen gew&uuml;nschten W&ouml;rterb&uuml;cher lokal auf Ihren
+Rechner installiert sind. Dies sind in wenigen F&auml;llen vielleicht nicht installiert.
+</para>
+ 
+</sect1>  <!-- usage -->
+
+
+<!-- ################################################################# -->
+<!--                 SECTION: Abbreviation                             -->
+<!-- ################################################################# -->
+<sect1 id="win-abbre">
+<title>Abk&uuml;rzungen</title>
+  <para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+
+<para>
+Falls Sie &app; im &uuml;bersetzungsmodus (zusammen mit dem ding-W&ouml;rterbuch) verwenden,
+werden Sie im Ergebnis-Fenster einige Abk&uuml;rzungen vorfinden.
+Diese Abk&uuml;rzungen folgen den &uuml;blichen Notationen eines W&ouml;rterbuches und sind
+an diese angelehnt. Im folgenden werden Sie hier nochmals aufgelistet.
+</para>
+
+<para>
+Abk&uuml;rzungen zur Beschreibung der Wortart.
+    <informaltable frame="topbot">
+                <tgroup cols="2">
+                <colspec colname="col1"/>
+                <colspec colname="col2"/>
+                <thead>
+                <row valign="top">
+                        <entry colname="col1" colsep="0" valign="top"><para>Abk&uuml;rzung</para></entry>
+                        <entry colname="col2" valign="top"><para>Wortart</para></entry>
+                </row>
+                </thead>
+                <tbody>
+                <row valign="top">
+                        <entry><para><replaceable>m.</replaceable></para></entry>
+                        <entry><para>Substantiv, m&auml;nnlich</para></entry>
+                </row>  
+		<row valign="top">
+                        <entry><para><replaceable>f.</replaceable></para></entry>
+                        <entry><para>Substantiv, weiblich</para></entry>
+                </row> 	
+		<row valign="top">
+                        <entry><para><replaceable>n.</replaceable></para></entry>
+                        <entry><para>Substantiv, s&auml;chlich</para></entry>
+                </row>
+		<row valign="top">
+                        <entry><para><replaceable>pl.</replaceable></para></entry>
+                        <entry><para>Substantiv, Plural</para></entry>
+                </row>	
+		<row valign="top">
+                        <entry><para><replaceable>adj.</replaceable></para></entry>
+                        <entry><para>Adjektiv</para></entry>
+                </row>	
+		<row valign="top">
+                        <entry><para><replaceable>adv.</replaceable></para></entry>
+                        <entry><para>Adverb</para></entry>
+                </row>	
+		<row valign="top">
+                        <entry><para><replaceable>prp.</replaceable></para></entry>
+                        <entry><para>Pr&auml;position</para></entry>
+                </row>
+		<row valign="top">
+                        <entry><para><replaceable>num.</replaceable></para></entry>
+                        <entry><para>Numeral, Zahlwert</para></entry>
+                </row>	
+		<row valign="top">
+                        <entry><para><replaceable>cj.</replaceable></para></entry>
+                        <entry><para>Konjunktion</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para><replaceable>interj.</replaceable></para></entry>
+                        <entry><para>Interjektion, Ausruf</para></entry>
+                </row>
+		</tbody>
+                </tgroup>
+    </informaltable>
+</para> 
+
+<para>
+Abk&uuml;rzung zur Beschreibung der Verwendung eines Wortes.
+
+    <informaltable frame="topbot">
+                <tgroup cols="2">
+                <colspec colname="col1"/>
+                <colspec colname="col2"/>
+                <thead>
+                <row valign="top">
+                        <entry colname="col1" colsep="0" valign="top"><para>Abk&uuml;rzung</para></entry>
+                        <entry colname="col2" valign="top"><para>Verwendung</para></entry>
+                </row>
+                </thead>
+                <tbody>
+                <row valign="top">
+                        <entry><para>[<replaceable>alt.</replaceable>]</para></entry>
+                        <entry><para>alte deutsche Rechtschreibung</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>obs.</replaceable>]</para></entry>
+                        <entry><para>veraltet, nicht mehr gebr&auml;chlich</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>Am.</replaceable>]</para></entry>
+                        <entry><para>Amerikanisches Englisch</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>Br.</replaceable>]</para></entry>
+                        <entry><para>Britisches Englisch</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>Sc.</replaceable>]</para></entry>
+                        <entry><para>Schottisches Englisch</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>Austr.</replaceable>]</para></entry>
+                        <entry><para>Australisches Englisch</para></entry>
+                </row> 
+                <row valign="top">
+                        <entry><para>[<replaceable>coll.</replaceable>]</para></entry>
+                        <entry><para>umgangssprachlich, auch vulg&auml;r</para></entry>
+                </row>   
+                <row valign="top">
+                        <entry><para>[<replaceable>S&uuml;ddt.</replaceable>]</para></entry>
+                        <entry><para>S&uuml;ddeutsch</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>&ouml;s.</replaceable>]</para></entry>
+                        <entry><para>&ouml;sterreichisches Deutsch</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>ugs.</replaceable>]</para></entry>
+                        <entry><para>umgangssprachlich</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>fig.</replaceable>]</para></entry>
+                        <entry><para>&uuml;bertragen, bildlich</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>prov.</replaceable>]</para></entry>
+                        <entry><para>Sprichwort</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>slang</replaceable>]</para></entry>
+                        <entry><para>Jargon, Slang, saloppe, Umgangssprache</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>Sprw.</replaceable>]</para></entry>
+                        <entry><para>Sprichwort</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>tm</replaceable>]</para></entry>
+                        <entry><para>Handelsmarke, Warenzeichen</para></entry>
+                </row>    
+
+		</tbody>
+                </tgroup>
+    </informaltable>
+</para>
+
+<para>
+Abk&uuml;rzung zur Beschreibung bestimmter Fachgebiete, bez&uuml;glich der Wortverwendung.
+    <informaltable frame="topbot">
+                <tgroup cols="2">
+                <colspec colname="col1"/>
+                <colspec colname="col2"/>
+                <thead>
+                <row valign="top">
+                        <entry colname="col1" colsep="0" valign="top"><para>Abk&uuml;rzung</para></entry>
+                        <entry colname="col2" valign="top"><para>Fachgebiete</para></entry>
+                </row>
+                </thead>
+                <tbody>
+                <row valign="top">
+                        <entry><para>[<replaceable>anat.</replaceable>]</para></entry>
+                        <entry><para>Anatomie</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>arch.</replaceable>]</para></entry>
+                        <entry><para>Architektur</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>astron.</replaceable>]</para></entry>
+                        <entry><para>Astronomie</para></entry>
+                </row> 
+                <row valign="top">
+                        <entry><para>[<replaceable>auto</replaceable>]</para></entry>
+                        <entry><para>Autos; Automobilindustrie</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>biochem.</replaceable>]</para></entry>
+                        <entry><para>Biochemie</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>biol.</replaceable>]</para></entry>
+                        <entry><para>Biologie</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>bot.</replaceable>]</para></entry>
+                        <entry><para>Botanik, Pflanzen</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>chem.</replaceable>]</para></entry>
+                        <entry><para>Chemie</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>comp.</replaceable>]</para></entry>
+                        <entry><para>Computer, Informatik</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>econ.</replaceable>]</para></entry>
+                        <entry><para>&ouml;konomie, Wirtschaft</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>electr.</replaceable>]</para></entry>
+                        <entry><para>Elektrotechnik, Elektronik</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>gastr.</replaceable>]</para></entry>
+                        <entry><para>Gastronomie, Speisen, Kochen</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>geogr.</replaceable>]</para></entry>
+                        <entry><para>Geografie</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>geol.</replaceable>]</para></entry>
+                        <entry><para>Geologie</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>gramm.</replaceable>]</para></entry>
+                        <entry><para>Grammatik</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>jur.</replaceable>]</para></entry>
+                        <entry><para>Recht, Jura</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>math.</replaceable>]</para></entry>
+                        <entry><para>Mathematik</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>med.</replaceable>]</para></entry>
+                        <entry><para>Medizin</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>mil.</replaceable>]</para></entry>
+                        <entry><para>Milit&auml;r</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>min.</replaceable>]</para></entry>
+                        <entry><para>Mineralogie</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>mus.</replaceable>]</para></entry>
+                        <entry><para>Musik</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>naut.</replaceable>]</para></entry>
+                        <entry><para>Nautik, Schifffahtskunde</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>phil.</replaceable>]</para></entry>
+                        <entry><para>Philosophie</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>phys.</replaceable>]</para></entry>
+                        <entry><para>Physik</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>pol.</replaceable>]</para></entry>
+                        <entry><para>Politik</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>relig.</replaceable>]</para></entry>
+                        <entry><para>Religion</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>sport</replaceable>]</para></entry>
+                        <entry><para>Sport</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>techn.</replaceable>]</para></entry>
+                        <entry><para>Technik</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>textil.</replaceable>]</para></entry>
+                        <entry><para>Textilindustrie</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>zool.</replaceable>]</para></entry>
+                        <entry><para>Zoologie, Tiere</para></entry>
+                </row>
+
+		</tbody>
+                </tgroup>
+    </informaltable>
+
+
+</para>
+
+</sect1>  <!-- abbreviation -->
+
+
+
+<!-- ################################################################# -->
+<!--  SECTION:Customization  -->
+
+<!-- ################################################################# -->
+<!--  SECTION: Known Bugs and Limitations -->
+<sect1 id="win-bugs">
+<title>Beschr&auml;nkungen</title>
+  <para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+
+<para>
+&app; verwendet f&uuml;r die die Rechtschreibpr&uuml;fung im Hintergrund aspell. Aspell ist
+neuer und Leistungsf&auml;higer wie psell oder ispell. 
+&app; verwendet zur Kommunikation mit aspell eine C-API, so kann &app; direkt mit aspell 
+arbeiten (verus &uuml;ber pipe-Mechanismen). Dies hat jedoch den Nachteil, dass wenn die
+C-API zu aspell ver&auml;ndert wird, wird &app; vielleicht nichtmehr korrekt arbeiten.
+Dies kann der Fall sein, wenn Sie eine aspell-Version neuer wie 0.5 verwenden.
+Bislang ebenfalls nicht getestet sind besondere Zeichenkodierungen, wie KOI8.
+</para>
+
+<para>
+F&uuml;r die &uuml;bersetzung verwendet &app; ein W&ouml;rterbuch von ding. Dieses W&ouml;rterbuch
+ist jedoch nach UTF8 kodiert und geringf&uuml;gig erweitert wurden. Durch die neue Zeichenkodierung
+ist jedoch die Arbeitsgeschwindigkeit beim durchsuchen des W&ouml;rterbuches langsamer. Jedoch 
+besteht nun einfacher die M&ouml;glichkeit auch andere Sprachen und Zeichen zu verwenden. Weiter
+wird zum suchen egrep verwendet, was nicht so leistungsf&auml;hig ist, besonders bei Tipfehlern eine
+gute Ausgabe zu liefern.
+</para>
+
+</sect1>  <!-- bugs -->
+
+<!-- ################################################################# -->
+<!--  SECTION: AUTHORS -->
+<sect1 id="authors">
+  <title>Autoren</title>
+  <para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+  <para>
+    &app; wird aktuell von folgenden Autoren entwickelt (in alphabetischer Reihenfolge):
+    <itemizedlist>
+		   
+    <listitem>
+     <para>Heiko Abraham (<email>abrahamh@web.de</email>)</para>
+    </listitem>	 
+    <listitem>
+     <para>Oliver Gerwing (Programmversion 1.0 und 1.2, <email>hostmaster@grawert.net</email>) </para> 
+    </listitem>
+   
+    </itemizedlist>
+  </para>
+
+</sect1>
+
+
+
+</article>

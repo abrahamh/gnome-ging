@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Gnome Ding
+Name[de]=Gnome Ding
+Comment=A Spellchecker and Translation
+Comment[de]=Ein Wörterbuch für Rechtschreibung und Übersetzung
+Exec=gnome-ding
+Terminal=0
+Type=Application
+Categories=Application;Utility;X-Red-Hat-Base;
+Icon=gnome-ding.png

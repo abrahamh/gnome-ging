@@ -1,0 +1,684 @@
+<?xml version="1.0" encoding='ISO-8859-1' standalone="no"?>
+<!DOCTYPE article PUBLIC "-//OASIS/DTD DocBookXML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!-- replace with actual application  version number-->
+<!ENTITY mdash ";"> 
+<!ENTITY legal SYSTEM "legal.xml">
+<!ENTITY appversion "2.0"> 
+<!ENTITY date "April 2003"> 
+<!ENTITY manrevision "2.0">
+<!ENTITY mymail "abrahamh@web.de">
+<!ENTITY auml "&#228;">
+<!ENTITY uuml "&#252;">
+<!ENTITY ouml "&#246;">
+<!ENTITY sz   "&#223;">
+<!ENTITY app "gnome-ding">
+
+
+<!ENTITY gnome-ding "<application>gnome-ding</application>"> 
+]>
+
+<!--
+      (Do not remove this comment block.)
+  Maintained by the gnome-ding-Project (Heiko Abraham)
+  http://www.abe-si.de/gnome-ding.html
+  Template version: 1.0 beta
+  Template last modified Apr 24, 2003
+-->
+
+
+<!-- =============Document Header ============================= -->
+<article id="index" lang="en">
+<!-- appropriate code -->
+ <articleinfo>
+   <title>&app; - user manual</title>
+   <copyright>
+     <year>2003</year>
+     <holder>Heiko Abraham</holder>
+   </copyright>
+   <releaseinfo>
+    This is version &manrevision; of &app; user manuals and describt program version &appversion;.
+   </releaseinfo>
+
+   <publisher>
+   <publishername>&app;-Team, Heiko Abraham </publishername>
+   </publisher>
+
+   <abstract>
+   <para>
+        &app; is a grafical frontend intended by ding for translation and spellchecking for GNOME. 
+        It will use grep and a ispell/aspell dictionary in the background in the same way like
+        a shiped ding-dictinory for translation.
+   </para>
+   <para>
+   First release of &app; was developed by Oliver Grawert, 
+   <ulink type="help" url="http://www.grawert.net/software/">http://www.grawert.net/software/</ulink>.
+   Since version 2.0 &app; was writen completly new by H. Abraham, become a aspell interface and a ding-dictinory
+   himself.
+   </para>	 
+   <para>
+	This document describt at short some intressting questions for &app;.   
+    </para>
+    </abstract>
+
+    <authorgroup>
+	<author>
+	  <firstname>Heiko</firstname> <surname>Abraham</surname>
+	  <affiliation><orgname>University of Freiburg, Germany</orgname>
+	  <address> <email>&mymail;</email> </address>
+	  </affiliation>
+	</author> 
+    </authorgroup>
+
+    &legal;
+    <legalnotice id="feedback">
+       <title>Feedback</title>
+       <para>
+       To report a bug or make a suggestion regarding the &app; application or this manual, 
+       send a email to author.
+       </para>
+    </legalnotice>
+
+</articleinfo>
+
+<indexterm zone="index"><primary>gnome-ding</primary></indexterm>
+<indexterm zone="index"><primary>gnome-ding</primary></indexterm>
+<indexterm zone="index"><primary>Schl&uuml;sselmanager</primary></indexterm>
+
+
+<!-- ################################################################# -->
+<!--                   GENERAL STUFF                                   -->
+<!-- ################################################################# -->
+
+<sect1 id="introduction">
+<title>Introduction</title>
+<para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+   
+<para>
+        &app; is a grafical tool for spellchecking and translation for Gnome2.
+        &app; was intended by ding (http://www-user.tu-chemnitz.de/~fri/ding/)
+</para>
+<para>
+        &app; will use egrep and a ispell/aspell dictionary as backend.
+</para>
+
+<para>
+        &app; work with <acronym>Gtk2+</acronym> and <acronym>GNOME2</acronym>. 
+        &app; required as backend aspell (0.50) und grep (2.5.x).
+</para>
+
+</sect1> <!-- id=introduction -->
+
+<!-- ################################################################# -->
+<sect1 id="getting-started">
+<title>Getting started with &app;</title>
+<para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+
+<sect2 id="getting-started-gnome-ding-to-start">
+       <title>To start &app;</title>
+       <para>You can start <application>&app;</application> in the following ways:</para>
+          <variablelist>
+                <varlistentry>
+                <term><guimenu>Application</guimenu> menu</term>
+                <listitem>
+                <para>Choose <menuchoice><guisubmenu>Accessories</guisubmenu><guimenuitem>gnome-ding</guimenuitem>
+                </menuchoice>. </para>
+                </listitem>
+                </varlistentry>
+                <varlistentry>
+                <term>Or bye using Command line </term>
+                <listitem>
+                <para>Type <programlisting>gnome-ding</programlisting>then press <keycap>Return</keycap>.
+		</para>
+		</listitem>
+                </varlistentry>
+          </variablelist>
+	<para>
+	If you start &app; now at first time, then all nesseccary configurations will be make automaticly.
+	</para>	
+
+</sect2> <!-- gnome-ding-to-start -->
+
+<sect2 id="getting-started-gnome-ding-is-start">
+   <title>&app; is started</title>
+   <para>When you start &app;, the following window is displayed:</para>
+   <figure>
+   <title>&app; main window</title>
+     <screenshot><mediaobject> 
+	    <imageobject><imagedata fileref="figures/trans1.2.png" format="PNG"/></imageobject>
+	    <textobject><phrase>Screenshot  &app; main window.</phrase></textobject>
+
+     </mediaobject></screenshot>
+   </figure>
+
+   <para>
+   The &app; main window contains the following elements:
+   <variablelist>
+       <varlistentry><term>Menubar</term>
+             <listitem>
+                 <para>
+		 The menus on the menubar contain all of the commands you need to work with &app;.
+                 </para>
+             </listitem>
+       </varlistentry> 
+       <varlistentry><term>Commandbar</term>
+             <listitem>
+                 <para>
+                 The commandbar ist like a toolbar. At this position you will define your search request.
+                 </para>
+             </listitem>
+       </varlistentry> 
+       <varlistentry><term>Result-window</term>
+             <listitem>
+                 <para>
+                 The result-window will contain the result of your search request. The results, if possible, will
+                 be shown line by line, like a list. 
+                 </para>
+             </listitem>
+       </varlistentry>   
+       <varlistentry><term>Statusbar</term>
+             <listitem>
+                 <para>
+		 The statusbar displays information about current &app; activity and contextual 
+		 information about error messages or search results. 
+                 </para>
+             </listitem>
+       </varlistentry> 
+   </variablelist>
+
+
+   </para>
+   
+</sect2> <!-- gnome-ding-is-start -->
+
+</sect1> <!-- id=getting-started -->
+
+
+
+
+<!-- ################################################################# -->
+<!--                 SECTION: MAIN WINDOW                              -->
+<!-- ################################################################# -->
+<sect1 id="win-main">
+<title>Main Window</title>
+<para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+
+<para>
+ <figure>
+   <title>&app; main window</title>
+     <screenshot><mediaobject> 
+	    <imageobject><imagedata fileref="figures/trans1.2.png" format="PNG"/></imageobject>
+	    <textobject><phrase>Scrennshot of &app;</phrase></textobject>
+
+     </mediaobject></screenshot>
+   </figure>
+</para>
+
+<para>
+The &app; main window  contains the following elements: 
+
+  <itemizedlist>
+
+    <listitem>
+     <para> Menubar</para>
+    </listitem>	
+   
+    <listitem>
+     <para>Commandbar</para>
+    </listitem>	
+
+    <listitem>
+     <para>Result-Window</para>
+    </listitem>	
+
+     <listitem>
+     <para> Statusbar</para>
+     </listitem>
+
+ </itemizedlist>
+</para>
+
+
+<sect2 id="win-main-menubar">
+   <title>Menubar</title>
+   <para>
+   The menus on the menubar contain all of the commands you need to work with &app;.
+   </para>
+</sect2>
+
+<sect2 id="win-main-commandbar">
+   <title>Commandbar</title>
+   <para>
+   The Commandbar contain all possible commands of &app; for searching and selecting a dictionary.
+   In the editable  'Search' you can input your word where you wish to lookup for in the dictionary.
+   Byside you will can selected the dictionary, where you want to use for the lookup, like spelling in
+   German or translation.
+   </para>
+   <para>
+   For start the lookup, press the 'Search'-Button on the commandbar or choose 'search from the menubar.
+   </para>
+</sect2>
+
+
+
+<sect2 id="win-main-result">
+    <title>Result-Window</title>
+    <para>
+    The Result-Windows will shown the result of the lookup for the defined word. 
+    </para>
+
+    <para>    
+    If you use a dictionary for spellchecking, then the result-window will show, if the word will be found.
+    If the spelling are incorrect or unknown, then the result-window will contain some suggestions for
+    the correct spelling, if aspell will have found someone.
+    </para>
+
+    <para>
+    If you use the ding-dictionary for translation, i.e. german to english, the result-window will shown the
+    matching results for the defined search-word. The results will shown as a list of matches. In the list,
+    you will find some spezials abbreviation. This abbreviations give a better describe for the matched entries,
+    like the sex of the word, or the typical usage or the special branches.
+    </para>
+
+</sect2>
+
+<sect2 id="win-main-statusbar">
+   <title>Statusbar</title>
+   <para>
+   The statusbar at the bottom of the window will displays information about current &app; 
+   activity and contextual information. This can be a error messages or the number of search results. 
+   </para>
+</sect2>
+
+</sect1>
+
+
+
+
+
+
+
+
+
+<!-- ################################################################# -->
+<!--                 SECTION: Usage                                    -->
+<!-- ################################################################# -->
+<sect1 id="win-usage">
+<title>Usage</title>
+<para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+
+<para>
+The usage of &app; is very easy. First you will input your interrested word into the
+search entry. After you have now input your search-string, please select the prefered
+dictionary to use for the search. Then press the search-button on the serachbar.
+In the follow &app; will display in the result-window the results (as a list) for
+your search request.
+</para>
+
+<para>
+Please remember, &app; is not developed to check or translate sentences. 
+</para>
+
+<para>
+Please remember, &app; is developed to work offline. You must have installed the
+prefered dictionaries. Typical, all neccessary dictonaries will be installed on
+your linux-box, if you use Gnome2 and have installed &app; correctly.
+</para>
+ 
+</sect1>  <!-- usage -->
+
+
+<!-- ################################################################# -->
+<!--                 SECTION: Abbreviation                             -->
+<!-- ################################################################# -->
+<sect1 id="win-abbre">
+<title>Abbreviation</title>
+  <para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+
+<para>
+If you use the ding-dictionary for translation some words with &app; then in the result-window
+sometimes you will find some abbreviations. This abbreviations should be better describe the
+meaning or usage of the founded match.
+</para>
+
+<para>
+Abbreviation to describe the sex of the word or part of speech.
+    <informaltable frame="topbot">
+                <tgroup cols="2">
+                <colspec colname="col1"/>
+                <colspec colname="col2"/>
+                <thead>
+                <row valign="top">
+                        <entry colname="col1" colsep="0" valign="top"><para>Abbreviation</para></entry>
+                        <entry colname="col2" valign="top"><para>Part of speech</para></entry>
+                </row>
+                </thead>
+                <tbody>
+                <row valign="top">
+                        <entry><para><replaceable>m.</replaceable></para></entry>
+                        <entry><para>noun, masculine</para></entry>
+                </row>  
+		<row valign="top">
+                        <entry><para><replaceable>f.</replaceable></para></entry>
+                        <entry><para>noun, feminine</para></entry>
+                </row> 	
+		<row valign="top">
+                        <entry><para><replaceable>n.</replaceable></para></entry>
+                        <entry><para>noun, neuter</para></entry>
+                </row>
+		<row valign="top">
+                        <entry><para><replaceable>pl.</replaceable></para></entry>
+                        <entry><para>noun, plural</para></entry>
+                </row>	
+		<row valign="top">
+                        <entry><para><replaceable>adj.</replaceable></para></entry>
+                        <entry><para>adjective</para></entry>
+                </row>	
+		<row valign="top">
+                        <entry><para><replaceable>adv.</replaceable></para></entry>
+                        <entry><para>adverb</para></entry>
+                </row>	
+		<row valign="top">
+                        <entry><para><replaceable>prp.</replaceable></para></entry>
+                        <entry><para>preposition</para></entry>
+                </row>
+		<row valign="top">
+                        <entry><para><replaceable>num.</replaceable></para></entry>
+                        <entry><para>numeral</para></entry>
+                </row>	
+		<row valign="top">
+                        <entry><para><replaceable>cj.</replaceable></para></entry>
+                        <entry><para>conjunction</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para><replaceable>interj.</replaceable></para></entry>
+                        <entry><para>interjection</para></entry>
+                </row>
+		</tbody>
+                </tgroup>
+    </informaltable>
+</para> 
+
+<para>
+Abbreviation to describe better the usage of the word.
+
+    <informaltable frame="topbot">
+                <tgroup cols="2">
+                <colspec colname="col1"/>
+                <colspec colname="col2"/>
+                <thead>
+                <row valign="top">
+                        <entry colname="col1" colsep="0" valign="top"><para>Abbreviation</para></entry>
+                        <entry colname="col2" valign="top"><para>Usage</para></entry>
+                </row>
+                </thead>
+                <tbody>
+                <row valign="top">
+                        <entry><para>[<replaceable>alt.</replaceable>]</para></entry>
+                        <entry><para>old German spelling</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>obs.</replaceable>]</para></entry>
+                        <entry><para>obsolete</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>Am.</replaceable>]</para></entry>
+                        <entry><para>American English</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>Br.</replaceable>]</para></entry>
+                        <entry><para>British English</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>Sc.</replaceable>]</para></entry>
+                        <entry><para>Scottish English</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>Austr.</replaceable>]</para></entry>
+                        <entry><para>Australian English</para></entry>
+                </row> 
+                <row valign="top">
+                        <entry><para>[<replaceable>coll.</replaceable>]</para></entry>
+                        <entry><para>colloquial</para></entry>
+                </row>   
+                <row valign="top">
+                        <entry><para>[<replaceable>S&uuml;ddt.</replaceable>]</para></entry>
+                        <entry><para>Southern German</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>&ouml;s.</replaceable>]</para></entry>
+                        <entry><para>Austrian German</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>ugs.</replaceable>]</para></entry>
+                        <entry><para>colloquial</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>fig.</replaceable>]</para></entry>
+                        <entry><para>figurative</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>prov.</replaceable>]</para></entry>
+                        <entry><para>proverb</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>slang</replaceable>]</para></entry>
+                        <entry><para>slang</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>Sprw.</replaceable>]</para></entry>
+                        <entry><para>proverb</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>tm</replaceable>]</para></entry>
+                        <entry><para>trademark</para></entry>
+                </row>    
+
+		</tbody>
+                </tgroup>
+    </informaltable>
+</para>
+
+<para>
+Abbreviation to describe the special branches of usage this word.
+    <informaltable frame="topbot">
+                <tgroup cols="2">
+                <colspec colname="col1"/>
+                <colspec colname="col2"/>
+                <thead>
+                <row valign="top">
+                        <entry colname="col1" colsep="0" valign="top"><para>Abbreviation</para></entry>
+                        <entry colname="col2" valign="top"><para>Special branches</para></entry>
+                </row>
+                </thead>
+                <tbody>
+                <row valign="top">
+                        <entry><para>[<replaceable>anat.</replaceable>]</para></entry>
+                        <entry><para>anatomy</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>arch.</replaceable>]</para></entry>
+                        <entry><para>architecture</para></entry>
+                </row>  
+                <row valign="top">
+                        <entry><para>[<replaceable>astron.</replaceable>]</para></entry>
+                        <entry><para>astronomy</para></entry>
+                </row> 
+                <row valign="top">
+                        <entry><para>[<replaceable>auto</replaceable>]</para></entry>
+                        <entry><para>cars, automotive industry</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>biochem.</replaceable>]</para></entry>
+                        <entry><para>biochemistry</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>biol.</replaceable>]</para></entry>
+                        <entry><para>biology</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>bot.</replaceable>]</para></entry>
+                        <entry><para>biology</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>chem.</replaceable>]</para></entry>
+                        <entry><para>chemistry</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>comp.</replaceable>]</para></entry>
+                        <entry><para>computer</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>econ.</replaceable>]</para></entry>
+                        <entry><para>economy</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>electr.</replaceable>]</para></entry>
+                        <entry><para>electrical engineering, electronics</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>gastr.</replaceable>]</para></entry>
+                        <entry><para>gastronomy, dishes, cooking </para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>geogr.</replaceable>]</para></entry>
+                        <entry><para>geography</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>geol.</replaceable>]</para></entry>
+                        <entry><para>geology</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>gramm.</replaceable>]</para></entry>
+                        <entry><para>grammar</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>jur.</replaceable>]</para></entry>
+                        <entry><para>law</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>math.</replaceable>]</para></entry>
+                        <entry><para>mathematics</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>med.</replaceable>]</para></entry>
+                        <entry><para>medicine</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>mil.</replaceable>]</para></entry>
+                        <entry><para>military</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>min.</replaceable>]</para></entry>
+                        <entry><para>mineralogy</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>mus.</replaceable>]</para></entry>
+                        <entry><para>music</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>naut.</replaceable>]</para></entry>
+                        <entry><para>nautical science, seafaring </para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>phil.</replaceable>]</para></entry>
+                        <entry><para>philosophy</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>phys.</replaceable>]</para></entry>
+                        <entry><para>physics</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>pol.</replaceable>]</para></entry>
+                        <entry><para>politics</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>relig.</replaceable>]</para></entry>
+                        <entry><para>religion</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>sport</replaceable>]</para></entry>
+                        <entry><para>sports</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>techn.</replaceable>]</para></entry>
+                        <entry><para>technology, engineering </para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>textil.</replaceable>]</para></entry>
+                        <entry><para>textile industry</para></entry>
+                </row>
+                <row valign="top">
+                        <entry><para>[<replaceable>zool.</replaceable>]</para></entry>
+                        <entry><para>zoology, animals </para></entry>
+                </row>
+
+		</tbody>
+                </tgroup>
+    </informaltable>
+
+
+</para>
+
+</sect1>  <!-- abbreviation -->
+
+
+
+<!-- ################################################################# -->
+<!--  SECTION:Customization  -->
+
+<!-- ################################################################# -->
+<!--  SECTION: Known Bugs and Limitations -->
+<sect1 id="win-bugs">
+<title>Limitations</title>
+  <para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+
+<para>
+&app; use als backend for spellchecking aspell. &app; will use the C-API to aspell, so &app; can
+use aspell directly. But if you have install a newer version of aspell, perhaps with a other
+A-API interface design, than &app; will not work correct. Also I have no idea, if my implementation
+will also work correct with some special charsets, like KO8 or japanese. This must be tested be
+some people, who understand this language.
+</para>
+
+<para>
+Also &app; use for translation a ding-dictionary. The search will use only egrep for search of matched
+strings. But it will not know something about the semantic of a lookup. So the search-result is not
+the best one. Also the ding-dictionary is converted to the UFT8-Charset. This is a little better for
+special chars an I front of the extension to other languages, but grep will work very slow with
+utf8-coded files.
+</para>
+
+<para>
+If some people have a solve for this problen, in detail also for the usage of good offline dictionaries
+in multi-languages, please be free and send a email to the author. Also you can use this source-code
+and develop a better program under the terms of the GNU GPL2.
+</para>
+</sect1>  <!-- bugs -->
+
+<!-- ################################################################# -->
+<!--  SECTION: AUTHORS -->
+<sect1 id="authors">
+  <title>Authors</title>
+  <para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+  <para>
+    &app; will be developed at this time by follow authors:
+    <itemizedlist>
+		   
+    <listitem>
+     <para>Heiko Abraham (<email>abrahamh@web.de</email>)</para>
+    </listitem>	 
+    <listitem>
+     <para>Oliver Gerwing (program version 1.0 and 1.2) </para> 
+    </listitem>
+   
+    </itemizedlist>
+  </para>
+
+  <para>
+  At this position, say thank to the work of the Gnome-Project and make Gnome a little better by translation more manuals.
+  </para>
+</sect1>
+
+
+
+</article>

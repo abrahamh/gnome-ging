@@ -1,0 +1,398 @@
+# German translation of PACKAGE.
+# Copyright (C) 2003 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# h.abraham <abrahamh@we.de>, 2003.
+# 
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2003-09-21 16:19+0200\n"
+"PO-Revision-Date: 2003-09-21 16:21+0200\n"
+"Last-Translator: h.abraham <abrahamh@we.de>\n"
+"Language-Team: German <gnome-de@gnome.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: (null)\n"
+
+#: src/main.c:130
+msgid "Read config.."
+msgstr "Lese Konfiguration..."
+
+#: src/main.c:142
+msgid "write config, exit"
+msgstr "Schreibe Konfiguration..."
+
+#: src/interface.c:32
+msgid "Back"
+msgstr "Zurück"
+
+#: src/interface.c:33 src/interface.c:210
+msgid "go back (search history)"
+msgstr "gehe zurück (Such-Chronik)"
+
+#: src/interface.c:39
+msgid "Forward"
+msgstr "Vorwärts"
+
+#: src/interface.c:40 src/interface.c:238
+msgid "go forward (search history)"
+msgstr "gehe vorwärts (Such-Chronik)"
+
+#: src/interface.c:47
+msgid "Search"
+msgstr "Suchen"
+
+#: src/interface.c:48 src/interface.c:277
+msgid "start search for given word"
+msgstr "Starte Suche mit gegebenen Wort"
+
+#: src/interface.c:68
+msgid "Mini-Mode"
+msgstr "Mini-Modus"
+
+#: src/interface.c:69
+msgid "switch to small window size"
+msgstr "Schaltet zur kleineren Fensterdarstellung"
+
+#: src/interface.c:75
+msgid "Window-Mode"
+msgstr "Windows-Modus"
+
+#: src/interface.c:76
+msgid "swizch to normal window size"
+msgstr "Schaltet zur normalen Fensterdarstellung"
+
+#: src/interface.c:94
+msgid "Dictionary"
+msgstr "Wörterbuch"
+
+#: src/interface.c:149
+msgid "gnome ding"
+msgstr "GNOME-Ding"
+
+#: src/interface.c:245
+msgid "_Word:"
+msgstr "_Wort:"
+
+#: src/interface.c:256
+msgid "specify the search string"
+msgstr "Zu suchendes Wort"
+
+#: src/interface.c:269
+msgid "select the dictinory"
+msgstr "Für die Suche zu verwendendes Wörterbuch"
+
+#: src/interface.c:271 src/interface.c:541 src/interface.c:643
+#: src/interface.c:664
+msgid " "
+msgstr " "
+
+#: src/interface.c:298
+msgid "_Search"
+msgstr "_Suchen"
+
+#: src/interface.c:308
+msgid "minimode/winmode"
+msgstr "Mini- bzw. Fenstermodus"
+
+#: src/interface.c:378
+msgid "gnome-ding Homepage: http://www.grawert.net/software/"
+msgstr "GNOME-Ding Web-Seite: http://www.abe-si.de/gnome-ding.html"
+
+#: src/interface.c:451
+msgid "(c) 2003 Heiko Abraham"
+msgstr "(c) 2003 Heiko Abraham"
+
+#: src/interface.c:452
+msgid ""
+"A translation- and spellchecking program for single words, inspired by \"ding"
+"\" and \"g2ding\"."
+msgstr ""
+"Ein Programm zur Übersetzungen und zur Rechtschreibprüfung für Gnome2, "
+"inspiriert von \"ding\" und aspell."
+
+#: src/interface.c:503
+msgid "gnome-ding - preferences"
+msgstr "Gnome-ding - Einstellungen"
+
+#: src/interface.c:530
+msgid ""
+"Sellect some settings for use \n"
+"with spellchecking (by aspell)."
+msgstr ""
+"Einstellungen zur Rechtschreib-\n"
+"prüfung (per aspell)"
+
+#: src/interface.c:555
+msgid "Charset:"
+msgstr "Zeichenkodierung:"
+
+#: src/interface.c:571
+msgid "<small>(low)</small>"
+msgstr "<small>(niedrig)</small>"
+
+#: src/interface.c:585
+msgid "<small>(high)</small>"
+msgstr "<small>(hoch)</small>"
+
+#: src/interface.c:599
+msgid "UTF8"
+msgstr "UTF8"
+
+#: src/interface.c:601
+msgid "Suggestion Mode:"
+msgstr "Vorschlag-Modus:"
+
+#: src/interface.c:610
+msgid "_spellchecker"
+msgstr "_Rechtschreibprüfung"
+
+#: src/interface.c:632
+msgid "Settings only use for translation (by grep)"
+msgstr "Einstellungen zum Übersetzen (per grep)"
+
+#: src/interface.c:654
+msgid "search only exact words"
+msgstr "Eingabe stimmt Wortgenau (exakt)"
+
+#: src/interface.c:659
+msgid "case sensitive"
+msgstr "Groß/Kleinschreibung beachten"
+
+#: src/interface.c:670
+msgid "_translation"
+msgstr "Ü_bersetzung"
+
+#. no match found
+#: src/callbacks.c:282 src/callbacks.c:512
+#, c-format
+msgid ""
+"Word not found or typo incorrect.\n"
+" <b>%s</b>"
+msgstr ""
+"Wort nicht gefunden oder schreibweise fehlerhaft\n"
+"  '<b>%s</b>'"
+
+#: src/callbacks.c:318
+#, c-format
+msgid "<b>Suggestion %i:</b>"
+msgstr "<b>Vorschlag %i:</b>"
+
+#. output
+#: src/callbacks.c:334 src/callbacks.c:978 src/callbacks.c:1044
+#: src/callbacks.c:1065
+msgid "Thesaurus (de)"
+msgstr "Thesaurus (DE)"
+
+#: src/callbacks.c:335 src/callbacks.c:801
+#, c-format
+msgid "%i matches found to '%s'"
+msgstr "%i Treffer für '%s'"
+
+#: src/callbacks.c:376
+msgid "Spelling ok, no suggestions\n"
+msgstr "Rechtschreibung korrekt, keine Vorschläge\n"
+
+#: src/callbacks.c:377
+msgid "Suggestions :"
+msgstr "Vorschläge:"
+
+#: src/callbacks.c:384
+msgid "German spelling result"
+msgstr "Ergebnis der deutschen Rechtschreibprüfung"
+
+#: src/callbacks.c:386
+msgid "English (CA) spelling result"
+msgstr "Ergebnis der englischen (kanadisch) Rechtschreibprüfung"
+
+#: src/callbacks.c:388
+msgid "English (US) spelling result"
+msgstr "Ergebnis der englischen (amerikanisch) Rechtschreibprüfung"
+
+#: src/callbacks.c:390
+msgid "Espain (ES) spelling result"
+msgstr "Ergebnis der spanischen Rechtschreibprüfung"
+
+#: src/callbacks.c:392
+msgid "Frensh (FR) spelling result"
+msgstr "Ergebnis der französischen Rechtschreibprüfung"
+
+#: src/callbacks.c:394
+msgid "English spelling result"
+msgstr "Ergebnis der englischen Rechtschreibprüfung"
+
+#: src/callbacks.c:396
+msgid "English (UK) spelling result"
+msgstr "Ergebnis der englischen (britisch) Rechtschreibprüfung"
+
+#: src/callbacks.c:405 src/callbacks.c:424 src/callbacks.c:460
+#: src/callbacks.c:605
+msgid "Error :"
+msgstr "Fehler:"
+
+#: src/callbacks.c:409
+msgid "Please don't use german special chars in english spellcheck.\n"
+msgstr "Bitte verwenden Sie Sonderzeichen nur für die Deutsche Sprache.\n"
+
+#: src/callbacks.c:427
+msgid "Unknown language selected, please check it.\n"
+msgstr "Unbekannte Sprache ausgewählt, bitte prüfen Sie die Installation.\n"
+
+#: src/callbacks.c:429
+msgid "Error message"
+msgstr "Fehlermeldung"
+
+#: src/callbacks.c:450
+msgid "use aspell c-api\n"
+msgstr "verwende aspell C-API\n"
+
+#: src/callbacks.c:451
+#, c-format
+msgid "search for '%s'\n"
+msgstr "suche für '%s'\n"
+
+#: src/callbacks.c:458
+#, c-format
+msgid "Error: Dictinory %s not found\n"
+msgstr "Fehler: Wörterbuch '%s' nicht gefunden.\n"
+
+#: src/callbacks.c:463
+msgid "Dict not found"
+msgstr "Wörterbuch nicht gefunden"
+
+#: src/callbacks.c:492
+#, c-format
+msgid "Error: %s\n"
+msgstr "Fehler: '%s'\n"
+
+#: src/callbacks.c:529
+msgid "<b>Suggestions:</b>"
+msgstr "<b>Vorschläge:</b>"
+
+#: src/callbacks.c:539
+msgid "Spelling ok, no suggestions"
+msgstr "Rechtschreibung korrekt, keine Vorschläge"
+
+#: src/callbacks.c:555
+msgid "use ispell pipe-mode\n"
+msgstr "verwende ispell PIPE-Modus\n"
+
+#: src/callbacks.c:558
+msgid "de_DE"
+msgstr "de_DE"
+
+#: src/callbacks.c:562
+msgid "en_UK"
+msgstr "en_UK"
+
+#: src/callbacks.c:566
+msgid "en_US"
+msgstr "en_US"
+
+#: src/callbacks.c:570
+msgid "en_CA"
+msgstr "en_CA"
+
+#: src/callbacks.c:574
+msgid "fr"
+msgstr "fr"
+
+#: src/callbacks.c:585
+msgid "command: "
+msgstr "Befehl: "
+
+#: src/callbacks.c:604
+msgid "Typo or unknown word, no suggestions \n"
+msgstr "Wort unbekannt oder Schreibweise fehlerhaft, keine Vorschläge\n"
+
+#: src/callbacks.c:610
+msgid "root"
+msgstr "Wortstamm"
+
+#: src/callbacks.c:698
+msgid "No match found"
+msgstr "Kein Treffer gefunden"
+
+#: src/callbacks.c:699
+msgid "No match"
+msgstr "Kein Treffer"
+
+#. show errormessage
+#: src/callbacks.c:936
+msgid " Please insert only characters !"
+msgstr "Bitte keine Sonderzeichen eingeben!"
+
+#. pthread_t p;
+#. pthread_create (&p, NULL, my_wait_thread, (void *)sub_button );
+#.
+#: src/callbacks.c:974 src/callbacks.c:1047
+msgid "Rechtschreibung (German)"
+msgstr "Rechtschreibung (Deutsch)"
+
+#: src/callbacks.c:976 src/callbacks.c:1042 src/callbacks.c:1063
+msgid "German <--> English"
+msgstr "Deutsch <--> Englisch"
+
+#: src/callbacks.c:977 src/callbacks.c:981
+msgid "German"
+msgstr "Deutsch"
+
+#: src/callbacks.c:977
+msgid "English"
+msgstr "Englisch"
+
+#: src/callbacks.c:980 src/callbacks.c:1043
+msgid "Latin <--> German"
+msgstr "Latein <--> Deutsch"
+
+#: src/callbacks.c:981
+msgid "Latin"
+msgstr "Latein"
+
+#: src/callbacks.c:982 src/callbacks.c:1051
+msgid "Spellcheck (Canadian)"
+msgstr "Spellchecker (Kanadisch)"
+
+#: src/callbacks.c:984 src/callbacks.c:1053
+msgid "Spellcheck (American)"
+msgstr "Spellchecker (Amerikanisch)"
+
+#: src/callbacks.c:986 src/callbacks.c:1055
+msgid "pelant (French)"
+msgstr ""
+
+#: src/callbacks.c:988
+msgid "Spellcheck (Spanish)"
+msgstr "Spellchecker (Spanisch)"
+
+#. else print error to statusbar
+#: src/callbacks.c:1003
+msgid "Your entry is to short!"
+msgstr "Ihre Eingabe (Suchwort) ist zu kurz!"
+
+#: src/callbacks.c:1049 src/callbacks.c:1066
+msgid "Spellcheck (British)"
+msgstr "Spellchecker (Britisch)"
+
+#: src/callbacks.c:1064
+msgid "Rechtschreibung (DE)"
+msgstr "Rechtschreibung (DE)"
+
+#. combo_entry = g_list_append (combo_entry, (gpointer) _("Spellcheck (Canadian)") );
+#. combo_entry = g_list_append (combo_entry, (gpointer) _("Spellcheck (American)") );
+#: src/callbacks.c:1069
+msgid "pelant (FR)"
+msgstr ""
+
+#: src/support.c:60 src/support.c:85
+#, c-format
+msgid "Couldn't find pixmap file: %s"
+msgstr "Konnte Bild '%s' nicht finden"
+
+#~ msgid "De <-> En"
+#~ msgstr "Deutsch·<-->·Englisch"
+
+#~ msgid "Deutsch"
+#~ msgstr "Deutsch"

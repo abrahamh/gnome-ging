@@ -1,0 +1,33 @@
+- add syntax-highlight for result-window (include better upper-case)
+- add thesaurus (de, en)
+- update documentations 
+- update languages de/es (I need help for it)
+- check-in more aspell-languages
+
+-------------------------------------
+
+
+the thesaurus come from "http://thesaurus.kdenews.org". This
+Thesaurus is not very nice. It will not support reletions between
+the words like defined in ISO 2788 (or DIN 1463-1)
+A better way is to transform the thesaurus, take a look to
+http://de.wikipedia.org/wiki/Thesaurus#Linguistische_Thesauri
+http://de.wikipedia.org/wiki/W%F6rterb%FCcher
+
+
+
+-------------------------------------
+
+
+HINT: for people who will help to translate:
+
+- example: in dirrectory 'po' you will find a file 'gnome-ding.pot'
+  copy this file to 'po/es.po' for spain-translation or to
+  'po/it.po' for italy and so on.
+- then load this file 'po/es.po' with a tool like 'kbabel' or 'emacs'
+  or 'gtranslator' and change the strings.
+- then save the file and send this file to the author or distributed
+  this file with the package.
+
+- in the same way you should work with the online-documentation,
+  make a new subdirectory in './doc/' and translate the '.xml' files

@@ -1,35 +1,20 @@
-Memo:
+What's this?
+============
 
-Starting point for this application was:
-=======================================
+gnome ding is a translator and spellchecker for Gtk2/Gnome2. This program
+is intended by "ding" (http://www-user.tu-chemnitz.de/~fri/ding/). Also
+this program is intended by xsteak (and his spelling limits) and by g2ding
+(by Oliver Grawert http://www.grawert.net/software/).
 
-This is "Ding"
-  * a dictionary lookup program for Unix,
-  * DIctionary Nice Grep,
-  * a Tk based Front-End to [ae]grep, ispell, dict, ...
-  * Ding {n} :: thing
- Copyright (c) Frank Richter <Frank.Richter@hrz.tu-chemnitz.de> 1999-2002
- GNU public license, see COPYING for details
- Ding comes with ABSOLUTELY NO WARRANTY.
+The main intentions of gnome-ding are to provide a offline spellchecker,
+based on aspell-dictionarys and a tool for translation (de-en) and a
+thesaurus (de).
 
-Ding contains a program "ding" and a German-English dictionary 
-(about 135,000 entries). 
+gnome-ding is programming in C for Gnome2. It use aspell over the C-api.
+The thesaurus and the translation-dictionary is use by egrep.
 
-http://dict.tu-chemnitz.de/
+With gnome-dict shiped a de-en-dicionary,original by ding. It's only
+extend a little...
 
-=======================================
-
-But Ding has some limitations:
-- no nice gnome UI
-- only one dictionary
-- no support for spelling and thesaurus
-- no real unicode support
-
-My idea was to redevelop Ding as gtk application. Add more 
-dictionaries and add spelling support as well.
-
-But first I look for similary applications and found 
-
-* g2ding from Oliver Grawert <http://www.grawert.net/software/>
-
-Based on this knowledge, I start to develop gnome-ding.
+H.Abraham,
+<abrahamh@web.de>
