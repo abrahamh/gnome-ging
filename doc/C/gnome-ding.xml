@@ -3,7 +3,7 @@
 <!-- replace with actual application  version number-->
 <!ENTITY mdash ";"> 
 <!ENTITY legal SYSTEM "legal.xml">
-<!ENTITY appversion "2.0"> 
+<!ENTITY appversion "2.2"> 
 <!ENTITY date "April 2003"> 
 <!ENTITY manrevision "2.0">
 <!ENTITY mymail "abrahamh@web.de">
@@ -33,6 +33,7 @@
    <title>&app; - user manual</title>
    <copyright>
      <year>2003</year>
+	 <year>2004</year>
      <holder>Heiko Abraham</holder>
    </copyright>
    <releaseinfo>
@@ -45,15 +46,15 @@
 
    <abstract>
    <para>
-        &app; is a grafical frontend intended by ding for translation and spellchecking for GNOME. 
+        &app; is a grafical frontend intended by ding for translation and spelling for GNOME. 
         It will use grep and a ispell/aspell dictionary in the background in the same way like
         a shiped ding-dictinory for translation.
    </para>
    <para>
-   First release of &app; was developed by Oliver Grawert, 
+   &app; is inspired by gding2, developed by Oliver Grawert, 
    <ulink type="help" url="http://www.grawert.net/software/">http://www.grawert.net/software/</ulink>.
-   Since version 2.0 &app; was writen completly new by H. Abraham, become a aspell interface and a ding-dictinory
-   himself.
+   &app; was writen completly new by H. Abraham, become as extention to gding2 a aspell interface and a 
+   ding-dictinory himself.
    </para>	 
    <para>
 	This document describt at short some intressting questions for &app;.   
@@ -63,7 +64,7 @@
     <authorgroup>
 	<author>
 	  <firstname>Heiko</firstname> <surname>Abraham</surname>
-	  <affiliation><orgname>University of Freiburg, Germany</orgname>
+	  <affiliation><orgname>Freiburg, Germany</orgname>
 	  <address> <email>&mymail;</email> </address>
 	  </affiliation>
 	</author> 
@@ -91,11 +92,13 @@
 <para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
    
 <para>
-        &app; is a grafical tool for spellchecking and translation for Gnome2.
-        &app; was intended by ding (http://www-user.tu-chemnitz.de/~fri/ding/)
+        &app; is a grafical tool for spell checking and translation for Gnome2.
+        &app; was intended by ding 
+		(<ulink type="help" url="http://www-user.tu-chemnitz.de/~fri/ding/">ding project</ulink>).
 </para>
 <para>
         &app; will use egrep and a ispell/aspell dictionary as backend.
+		For thesaurus and ttranslation &app; will have own dictionaries (in ding-like format).
 </para>
 
 <para>
@@ -622,6 +625,70 @@ Abbreviation to describe the special branches of usage this word.
 
 <!-- ################################################################# -->
 <!--  SECTION:Customization  -->
+<sect1 id="preferneces">
+<title>Preferences</title>
+  <para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+
+  <para>To configure <application>&app;</application>, choose <menuchoice> 
+  <guimenu>Dictionary</guimenu> <guimenuitem>Preferences</guimenuitem> </menuchoice>. 
+  The <guilabel>Preferences</guilabel> dialog contains the following categories:</para>
+
+  <itemizedlist>
+    <listitem><para><xref linkend="ding-pref-spell"/></para></listitem>
+	<listitem><para><xref linkend="ding-pref-trans"/></para></listitem>
+	<listitem><para><xref linkend="ding-pref-lang"/></para></listitem>
+	<listitem><para><xref linkend="ding-pref-general"/></para></listitem>
+  </itemizedlist>
+  
+  <sect2 id="ding-pref-spell">
+  <title>Spellchecker</title>
+  
+  <para>Use the <guilabel>Suggestion Mode</guilabel> slider to select the 
+  sharpness and the quality of the spelling.
+  </para>
+  
+  </sect2>
+  
+  <sect2 id="ding-pref-trans">
+  <title>Translation</title>
+  <para>Select the <guilabel>search only exact words</guilabel> option to 
+  only find occurrences of the string that match the entire words of the 
+  text that you type.
+  </para>
+  
+  <para>Select the <guilabel>case sensetive</guilabel> option to only find 
+  occurrences of the string that match the case of the text that you type.
+  </para>
+  
+  </sect2>
+  
+  <sect2 id="ding-pref-lang">
+  <title>Languages</title>
+  
+  <para>
+  &app; will show a list of available languages. The list is depends on 
+  your installation. Select the languages, i.e. 
+  the language for the spelling checker, for the thesaurus or the
+  translation dictionary.
+  </para>
+  <para>As result, the selection box from the commandbar will only contains
+  your prefered languages that defined her.</para>
+  
+  </sect2>
+  
+  <sect2 id="ding-pref-general">
+  <title>General</title>
+  
+  <para>
+  Select you prefered color and font for the &app; result window.
+  </para>
+  
+  </sect2>
+  
+
+</sect1>  <!-- bugs -->
+
+
 
 <!-- ################################################################# -->
 <!--  SECTION: Known Bugs and Limitations -->
@@ -665,7 +732,7 @@ and develop a better program under the terms of the GNU GPL2.
      <para>Heiko Abraham (<email>abrahamh@web.de</email>)</para>
     </listitem>	 
     <listitem>
-     <para>Oliver Gerwing (program version 1.0 and 1.2) </para> 
+     <para>Oliver Gerwing (program gding2, version 1.0 and 1.2) </para> 
     </listitem>
    
     </itemizedlist>

@@ -1,3 +1,30 @@
+/*
+ * Copyright (C) 2003-2004 the gnome-ding project
+ *
+ * This file is part of gnome-ding, a free translator/spellchecker
+ *
+ * gnome-ding is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * gnome-ding is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
+ *
+ * myaspell.c
+ *
+ * all callbacks for aspell search
+ *
+ * begin                : Sat May 31 2003
+ * copyright            : (C) 2003 by Heiko Abraham
+ */
+ 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
@@ -13,18 +40,30 @@
 #include "callbacks.h"
 #include "main.h"
 
-// usage:  SPELL_FILL( "de_DE", _("German spelling result") );
-#define SPELL_FILL(x, y) \
+/**
+ *
+ * @doc macro to fill header of list with information
+ *     <BR> usage:  SPELL_FILL( "de_DE", _("German spelling result") );
+ *
+ * @parameter x - string for aspell language (like "de_DE")
+ *
+ * @parameter y - corresponding string for list header (like _("German spelling result")
+ *
+**/
+ #define SPELL_FILL(x, y) \
 	(strcmp (lang, x) == 0) ) { \
 		language = g_strdup( y );
 
+		
+		
 /**
- * @run spellchecker
+ * @doc this function is called to search for a given word inside
+ *       aspell dictionary
  *
  * @parameter: caller - callback WidgetPointer
- * @parameter: lang   - chose language { ngerman, british, ... }
+ * @parameter: lang   - chose language { de, fr, de_DE, ... }
  *
- * @return: fill g_tree_list over callback-pointer with serach-results
+ * @return: void - fill g_tree_list over callback-pointer with serach-results
 **/
 void
 run_spellchecker(GtkWidget *caller, gchar *lang)
@@ -32,6 +71,8 @@ run_spellchecker(GtkWidget *caller, gchar *lang)
 	if (caller == NULL ) return;
 	if (lang == NULL) return;	
 	
+	set_model_int(MAIN_COLUMN_NUM, 1);
+	on_contex_menu_show(caller);
 	GtkWidget       *entry = NULL;
 	GtkWidget       *win = NULL;
 	GtkListStore    *store = NULL;
@@ -43,24 +84,56 @@ run_spellchecker(GtkWidget *caller, gchar *lang)
 	gchar *match = NULL;
 	gchar *output = NULL;
 	
-	entry = lookup_widget(GTK_WIDGET(caller), "suchinput");
-	win   = lookup_widget(GTK_WIDGET(caller), "gnome_ding");
-
+	win   = get_mainwin();
+	if (win == NULL) return;
+		
+	entry = lookup_widget( win, "search_input");
 	such  = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry) ));
 	match = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry) ));
-	
 	ok   = g_strdup( _("Spelling ok, no suggestions\n") ); 
 	sugg  = g_strdup( _("Suggestions :") );
 	store = gtk_list_store_new (1, G_TYPE_STRING);
 	
-	// gtk_list_store_clear(store);
-	
 	// fill top-level description
 	if( SPELL_FILL( "de_DE", _("German spelling result") );
+	} else if( SPELL_FILL( "de_CH", _("German (CH) spelling result") );
+	} else if( SPELL_FILL( "af", _("Afrikans (AF) spelling result") );
+	} else if( SPELL_FILL( "bg", _("Bulgarian (BG) spelling result") );
+	} else if( SPELL_FILL( "br", _("Breton (BR) spelling result") );
+	} else if( SPELL_FILL( "ca", _("Catalan (CA) spelling result") );
+	} else if( SPELL_FILL( "cs", _("Czech (CS) spelling result") );
+	} else if( SPELL_FILL( "cy", _("Welsh (CY) spelling result") );
+	} else if( SPELL_FILL( "da", _("Danish (DA) spelling result") );
+	} else if( SPELL_FILL( "eo", _("Esperanto (EO) spelling result") ); 
+	} else if( SPELL_FILL( "el", _("Greek (EL) spelling result") );
+	} else if( SPELL_FILL( "es", _("Spanish (ES) spelling result") );
+	} else if( SPELL_FILL( "fo", _("Faroese (FO) spelling result") );
+	} else if( SPELL_FILL( "ga", _("Irish, Gaelic (GA) spelling result") );
+	} else if( SPELL_FILL( "gl", _("Gallegan (GL) spelling result") );
+	} else if( SPELL_FILL( "hr", _("Croatian (HR) spelling result") );
+	} else if( SPELL_FILL( "fr_FR" , _("French (FR) spelling result") );
+	} else if( SPELL_FILL( "fr_CH", _("French (CH) spelling result") );
+	} else if( SPELL_FILL( "id", _("Indonesian (ID) spelling result") );
+	} else if( SPELL_FILL( "it", _("Italian (IT) spelling result") );
+	} else if( SPELL_FILL( "is", _("Icelandic (IS) spelling result") );
+	} else if( SPELL_FILL( "mi", _("Maori (MI) spelling result") );
+	} else if( SPELL_FILL( "mk", _("Makasar (MK) spelling result") );
+	} else if( SPELL_FILL( "ms", _("Malay (MS) spelling result") );
+	} else if( SPELL_FILL( "mt", _("Maltese (MT) spelling result") );
+	} else if( SPELL_FILL( "nl", _("Dutch (NL) spelling result") );
+	} else if( SPELL_FILL( "no", _("Norwegian (NO) spelling result") );
+	// } else if( SPELL_FILL( "pt_BR", _("Portuguese (BR) spelling result") );
+	} else if( SPELL_FILL( "pt", _("Portuguese (PT) spelling result") );
+	} else if( SPELL_FILL( "ru", _("Russian (RU) spelling result") );
+	} else if( SPELL_FILL( "ro", _("Romanian (RO) spelling result") );
+	} else if( SPELL_FILL( "sk", _("Slovak (SK) spelling result") );
+	} else if( SPELL_FILL( "sl", _("Slovenian (SL) spelling result") );
+	} else if( SPELL_FILL( "sv", _("Swedish (SV) spelling result") );
+	} else if( SPELL_FILL( "uk", _("Ukrainian (UK) spelling result") );
 	} else if( SPELL_FILL( "en_CA", _("English (CA) spelling result") );
 	} else if( SPELL_FILL( "en_US", _("English (US) spelling result") );
-	} else if( SPELL_FILL( "es"   , _("Spanish (ES) spelling result") );
-	} else if( SPELL_FILL( "fr"   , _("Frensh (FR) spelling result") );
+	} else if( SPELL_FILL( "wa"   , _("Walloon (WA) spelling result") );
+	} else if( SPELL_FILL( "zu"   , _("Zulu (ZU) spelling result") );
 	} else if( SPELL_FILL( "en"   , _("English spelling result") );
 	} else if( SPELL_FILL( "en_UK", _("English (UK) spelling result") );
 		/* fixme: check not for wrong char, check for correct char */
@@ -76,7 +149,6 @@ run_spellchecker(GtkWidget *caller, gchar *lang)
 			gtk_list_store_append (GTK_LIST_STORE(store), &iter);
 			gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0, 
 					_("Please don't use german special chars in english spellcheck.\n"), -1);
-				
 				
 			showtable(GTK_WIDGET(caller), store, 1, 200, language, NULL);
 				
@@ -190,15 +262,16 @@ run_spellchecker(GtkWidget *caller, gchar *lang)
 		
 		word_list = aspell_speller_suggest(spell_manager, match, strlen(match) );
 		suggestions = aspell_word_list_elements( word_list );
- 		while (( word = aspell_string_enumeration_next(suggestions)) != NULL) {
-			g_string_append_printf(sug_list, " %s\r", word );
-		}
-		
+
 		gtk_list_store_append (GTK_LIST_STORE(store), &iter);
 		gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0,  _("<b>Suggestions:</b>"), -1);
-			
-		gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-		gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0, sug_list->str, -1);
+		
+ 		while (( word = aspell_string_enumeration_next(suggestions)) != NULL) {
+			g_string_printf(sug_list, "%s", word );
+
+			gtk_list_store_append (GTK_LIST_STORE(store), &iter);
+			gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0, sug_list->str, -1);
+		}
 		
 		showtable(GTK_WIDGET(caller), store, 1, 500, language, NULL);
 	
@@ -307,7 +380,7 @@ run_spellchecker(GtkWidget *caller, gchar *lang)
 #endif /* use_aspell */
                                                                                                        
 	/* cleanup status */
-	cleanup_status(caller);
+	on_statusbar_cleanup(caller);
 	g_free(language);
 	g_free(ok);				
 	g_free(sugg);

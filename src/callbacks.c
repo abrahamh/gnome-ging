@@ -1,3 +1,30 @@
+/*
+ * Copyright (C) 2003-2004 the gnome-ding project
+ *
+ * This file is part of gnome-ding, a free translator/spellchecker
+ *
+ * gnome-ding is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * gnome-ding is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
+ *
+ * callbacks.c
+ *
+ * all gtk+-callbacks for gui interaction
+ *
+ * begin                : Sat May 31 2003
+ * copyright            : (C) 2003 by Heiko Abraham
+ */
+
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
@@ -18,6 +45,15 @@
 #include "main.h"
 #include "thesaurus.h"
 #include "aspell.h"
+
+// global list for Search-history
+GList *wordlist;
+
+// global pointer for preferences dialog
+GtkWidget *pref_dlg = NULL;
+
+
+
 
 // usage:  THESAURUS_MACRO( THES_DE, _("Thesaurus German") )
 #define THESAURUS_MACRO(x, y) \
@@ -74,21 +110,32 @@
                           COLUMN_DICT_NUM, x, \
                           -1);		 
 
-static void on_spell_toggle(GtkCellRendererToggle *cell, gchar *path_str, gpointer data);
-static void on_thes_toggle(GtkCellRendererToggle *cell, gchar *path_str, gpointer data);
-static void on_dict_toggle(GtkCellRendererToggle *cell, gchar *path_str, gpointer data);
+static void on_pref_spell_toggle(GtkCellRendererToggle *cell, gchar *path_str, gpointer data);
+static void on_pref_thes_toggle(GtkCellRendererToggle *cell, gchar *path_str, gpointer data);
+static void on_pref_dict_toggle(GtkCellRendererToggle *cell, gchar *path_str, gpointer data);
 
-	 
-GList *wordlist;
-GtkWidget *pref_dlg = NULL;
-
+void on_window_unhide (GtkWidget *widget);
+void on_search_history_go_back(GtkWidget *widget);
+void on_search_history_go_forward(GtkWidget *widget);
+void on_search(GtkWidget *widget);
+		 
 
 /**
- * init wordlist-history for (prev/next search string  
+ * @doc this function initialize the global stored Glist to
+ *     store a history of the search words.
+ *     By using this GList we provide a access to the 
+ *     prev/next search string in the history
+ *
+ * @parameter wordlist, a pointer to a global stored GList
+ *
+ * @return wordlist - global stored pointer
+ *
+ * @author Heiko Abraham, <abrahamh@web.de>
+ *
+ * @see on_search_history_wordlist_delete()
+ *
 **/
-void 
-on_wordlist_init()
-{
+void on_search_history_wordlist_init() {
 	wordlist = g_list_append (wordlist, g_strdup( "" ) );
 	wordlist = g_list_last(wordlist);
 }
@@ -96,11 +143,12 @@ on_wordlist_init()
 
 
 /**
- * delete wordlist-history for search-string 
+ * @doc delete wordlist-history for search-string 
+ *
+ * @author Heiko Abraham, <abrahamh@web.de>
+ *
 **/
-void 
-on_wordlist_delete()
-{
+void on_search_history_wordlist_delete() {
 	if (wordlist != NULL) {
 		gchar *foo;
 		while( g_list_last(wordlist) != NULL ) {
@@ -114,19 +162,22 @@ on_wordlist_delete()
 
 
 
-
-/* history back/forward for search-sting */
-void 
-on_go_back(GtkWidget *widget)
-{
+/**
+ *
+ * @doc history back/forward for search-sting
+ *
+ * @author Heiko Abraham, <abrahamh@web.de>
+ *
+**/
+void on_search_history_go_back(GtkWidget *widget) {
 	if (wordlist != NULL ) {
 		GtkWidget * entry = NULL;
 		GtkWidget *prev_button = NULL;
 		GtkWidget *next_button = NULL;
 		
-		entry = lookup_widget(widget, "suchinput");
-		prev_button = lookup_widget( widget, "button1");
-		next_button = lookup_widget( widget, "button_vor");
+		entry = lookup_widget(widget, "search_input");
+		prev_button = lookup_widget( widget, "button_back");
+		next_button = lookup_widget( widget, "button_forward");
 		
 		if (wordlist->prev != NULL ) {
 			wordlist = g_list_previous(wordlist);
@@ -146,17 +197,22 @@ on_go_back(GtkWidget *widget)
 	}
 }
 
-/* history back/forward for search-sting */
-void 
-on_go_forward(GtkWidget *widget)
-{
+
+/**
+ * 
+ * @doc history back/forward for search-sting
+ *
+ * @author Heiko Abraham, <abrahamh@web.de>
+ * 
+**/
+void on_search_history_go_forward(GtkWidget *widget) {
 	if( wordlist != NULL) {
 		GtkWidget * entry = NULL;
 		GtkWidget *prev_button = NULL;
 		GtkWidget *next_button = NULL;
-		entry = lookup_widget(widget, "suchinput");
-		prev_button = lookup_widget( widget, "button1");
-		next_button = lookup_widget( widget, "button_vor");
+		entry = lookup_widget(widget, "search_input");
+		prev_button = lookup_widget( widget, "button_back");
+		next_button = lookup_widget( widget, "button_forward");
 	
 		if( wordlist->next != NULL) {
 			wordlist = g_list_next(wordlist);
@@ -174,44 +230,150 @@ on_go_forward(GtkWidget *widget)
 			gtk_widget_set_sensitive (GTK_WIDGET(next_button), TRUE);
 		}
 	}
-	
 }
 
 /**
- * get the widgets to restore
+ *
+ * @doc get the widgets to restore
+ *
+ * @author Heiko Abraham, <abrahamh@web.de>
+ *
  **/
-void
-unhide (GtkWidget      *widget)
-{
+void on_window_unhide (GtkWidget      *widget) {
 	if ( widget == NULL ) return;
 		
-	GtkWidget *list;
-	GtkWidget *menu;
-	GtkWidget *status;
-	GtkWidget *win;
+	GtkWidget *list = NULL;
+	GtkWidget *status = NULL;
+	GtkWidget *win = NULL;
+	gboolean value = FALSE;
 	
-	list = lookup_widget(GTK_WIDGET(widget), "vbox7");
-    menu = lookup_widget(GTK_WIDGET(widget), "menubar1");
-    status = lookup_widget(GTK_WIDGET(widget), "statusbar");
-    win = lookup_widget(GTK_WIDGET(widget), "gnome_ding");
-                                                                                                       
-	/* restore the win */
-	if( list != NULL) gtk_widget_show(list);
-	if (menu != NULL) gtk_widget_show(menu);
-	if (status != NULL) gtk_widget_show(status);
-	if (win != NULL) gtk_window_resize(GTK_WINDOW(win), get_model_int(MAIN_SIZE_X), get_model_int(MAIN_SIZE_Y) );
-	if (win != NULL) gtk_window_set_resizable(GTK_WINDOW(win), 1);
+	win = get_mainwin(); 
+	if ( win != NULL ) {
+		GtkWidget *toggle = NULL;
+		toggle = lookup_widget(win, "on_menu_window_mode");
+		value = gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(toggle) );
+		
+		if (value != TRUE) {
+			list = lookup_widget( win, "scrolledwindow1");
+    		status = lookup_widget(win, "appbar1");
+
+			gtk_widget_show(list);
+			gtk_widget_show_all( GNOME_APP(win)->menubar );
+			gtk_widget_show(status);
+			gtk_window_resize(GTK_WINDOW(win), get_model_int(MAIN_SIZE_X), get_model_int(MAIN_SIZE_Y) );
+			gtk_window_set_resizable(GTK_WINDOW(win), 1);
+			// set menuitem 
+			gtk_toggle_button_set_active ( GTK_TOGGLE_BUTTON ( toggle), TRUE);
+		}
+	}
 } // unhide
 
 
 
 /**
- * get the widgets and set vars
+ *
+ * @doc gtk-callback function, typical called from main-win help menu.
+ *     This function create and show a Gnome-About-Box.
+ *
+ * @author Heiko Abraham, <abrahamh@web.de>
+ *
 **/
 void
-showtable (GtkWidget *widget, GtkListStore *store, 
-			gint col_num, gint basewidth, gchar *hdr, gchar *hdr2)
+on_menu_about_activate                 (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
 {
+  GtkWidget *about_gnome_ding;
+  about_gnome_ding = create_about_gnome_ding ();
+  // gtk_window_set_transient_for( GTK_WINDOW(infodialog), GTK_WINDOW( get_mainwindow() ) );
+  gtk_widget_show (about_gnome_ding);
+}
+
+
+/**
+ *
+ * @doc gtk-callback function, called, if the application will 
+ *      be destroyed.
+ *      <BR>Store lates main window size that we can save it
+ *      as personal configuration.
+ *
+**/
+void
+on_mainwin_destroy                     (GtkObject       *object,
+                                        gpointer         user_data)
+{
+	gint x,y;
+	gtk_window_get_size(GTK_WINDOW( get_mainwin()) , &x , &y );
+	set_model_int(MAIN_SIZE_X, x);
+	set_model_int(MAIN_SIZE_Y, y);
+	gtk_main_quit();
+}
+
+/**
+ * @doc gtk-callback to swich main window into the mini-mode.
+ *      The Mini-Mode resize the main window and show only
+ *      the search toolbar.
+ *
+**/
+void
+on_menu_mini_mode_activate          (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	GtkWidget *list = NULL;
+	GtkWidget *status = NULL;
+	GtkWidget *win = NULL;
+
+	win = get_mainwin();
+	if ( win != NULL ) {
+    	list = lookup_widget( win, "scrolledwindow1");
+	    status = lookup_widget( win, "appbar1");
+
+		if (gtk_window_get_resizable(GTK_WINDOW(win))) {
+			gtk_widget_hide(list);
+			gtk_widget_hide( GNOME_APP(win)->menubar  );
+			gtk_widget_hide(status);
+			gtk_window_resize(GTK_WINDOW(win), get_model_int(MAIN_SIZE_X), 40);
+			gtk_window_set_resizable(GTK_WINDOW(win), 0);
+		}
+	}
+}
+
+
+/**
+ * @doc gtk-callback - switch main window in the normal 
+ *      display mode (versus mini-mode). 
+ *
+**/
+void
+on_menu_window_mode_activate        (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	on_window_unhide(GTK_WIDGET(menuitem) );
+}
+
+
+/**
+ *
+ * @doc helper function to create and show the listview with the 
+ *      search result 
+ *
+ * @parameter widget - a pointer to main window
+ *
+ * @parameter store - a pointer to the list store model 
+ *
+ * @parameter col_num - integer to define how many columns 
+ *           to be shown (typical One or Two)
+ *
+ * @parameter basewidth - width of the column in pixel
+ *
+ * @parameter hdr - string to define the list header (left)
+ *
+ * @parameter hdr2 - string to define the list header (right)
+ *
+ * @return void
+ *
+**/
+void showtable (GtkWidget *widget, GtkListStore *store, 
+			gint col_num, gint basewidth, gchar *hdr, gchar *hdr2) {
 	if (widget == NULL) return;
 	if( store == NULL) return;
 	gint i;
@@ -242,70 +404,243 @@ showtable (GtkWidget *widget, GtkListStore *store,
 		gtk_tree_view_column_set_sort_column_id(column, 1);
 		gtk_tree_view_insert_column (GTK_TREE_VIEW (treeview), column, 1);
 		g_object_set (G_OBJECT (column), "min-width", basewidth, "resizable", TRUE, NULL);
-	}
-	
-
+	} 
 }
+        
 
 
 /** 
- * print message for user information
- **/
-void
-print_to_status                         (GtkWidget      *parent,
-                                         gchar           *msg)
-{
+ *
+ * @doc print message for user information
+ *
+ * @parameter parent - a pointer to the main window
+ *
+ * @parameter msg - the message to be show in the statusbar
+ *
+ * @return void 
+ *
+**/
+void on_statusbar_print(GtkWidget *parent, gchar *msg) {
 	if (parent == NULL) return;
-	if (msg == NULL) return;
-	GtkWidget *statusbar;
-	statusbar = lookup_widget(GTK_WIDGET(parent), "statusbar");	
-        
-    gtk_statusbar_push(GTK_STATUSBAR(statusbar),
-           	gtk_statusbar_get_context_id( 
-			GTK_STATUSBAR(statusbar), "err" ) , msg);
+	GtkWidget *statusbar = NULL;
+	statusbar = lookup_widget(GTK_WIDGET(parent), "appbar1");	
 	
+	if ( statusbar == NULL) return;
+		
+    if ( msg == NULL ) {
+		gnome_appbar_clear_stack (GNOME_APPBAR(statusbar));
+		gnome_appbar_set_default( GNOME_APPBAR(statusbar) , ""  );
+	} else {
+		gnome_appbar_set_default( GNOME_APPBAR(statusbar) , msg  );
+	}
 }
 
 
 /**
- * cleanup statusbar
+ *
+ * @doc clean up the status bar of the main window
+ *
+ * @parameter parent - a pointer to the main window
+ *
 **/
-void
-cleanup_status  (GtkWidget      *parent)
-{
+void on_statusbar_cleanup(GtkWidget *parent) {
 	if (parent == NULL) return;
-	GtkWidget       *statusbar; 
-                                                                                                      
-    statusbar = lookup_widget(GTK_WIDGET(parent), "statusbar");                                                                                               
-    gtk_statusbar_push(GTK_STATUSBAR(statusbar),
-                        gtk_statusbar_get_context_id(
-                        GTK_STATUSBAR(statusbar), "err") , " ");
+	GtkWidget       *statusbar = NULL; 
+	statusbar = lookup_widget(GTK_WIDGET(parent), "appbar1");	
+	gnome_appbar_clear_stack (GNOME_APPBAR(statusbar));
+	gnome_appbar_set_default( GNOME_APPBAR(statusbar) , ""  );
+
+}
+
+
+/**
+ *
+ * @doc gtk-callback - quit the main application and store the
+ *      last main window size to the personal configuration 
+ *      (GConf)
+ * 
+ * @parameter menuitem - pointer to the called menu entry 
+ *
+ * @parameter user_data - unused
+ *
+ * @return void - destory application main loop
+ *
+**/
+void
+on_menu_quit_activate                  (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint x,y;
+	gtk_window_get_size( GTK_WINDOW( get_mainwin() ), 
+			&x , &y );
+	set_model_int(MAIN_SIZE_X, x);
+	set_model_int(MAIN_SIZE_Y, y);
+	gtk_main_quit ();
+}
+
+
+/**
+ *
+ * @doc gtk-callback - go one step back in the search history
+ *     and get the last search word from the global list and
+ *     fill it into the search entry.
+ *
+ * @parameter menuitem - pointer to the called menu entry 
+ *
+ * @parameter user_data - unused
+ *
+ * return void - fill last word into the search entry
+ *
+**/
+void
+on_menu_back_activate                  (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	on_search_history_go_back( GTK_WIDGET(menuitem) );
+}
+
+
+/**
+ *
+ * @doc gtk-callback - go one step forward in the search history
+ *     and get the next search word from the global list and
+ *     fill it into the search entry.
+ *
+ * @parameter menuitem - pointer to the called menu entry 
+ *
+ * @parameter user_data - unused
+ *
+ * return void - fill next word into the search entry
+ *
+**/
+void
+on_menu_forward_activate               (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	on_search_history_go_forward( GTK_WIDGET(menuitem) );
+}
+
+
+/**
+ *
+ * @doc gtk-callback - start search for the enter word in
+ *      the search entry and the selected dictionary.
+ *
+ * @parameter menuitem - pointer to the called menu entry 
+ *
+ * @parameter user_data - unused
+ *
+ * @return void - search result in listview if possible
+ *
+**/
+
+void
+on_menu_search_activate                (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	on_search( GTK_WIDGET(menuitem) );
+}
+
+/**
+ *
+ * @doc gtk-callback - function is called if the user wish to
+ *      insert the content of the clipboard to the entry for
+ *      the search word 
+ *
+ * @parameter menuitem - pointer to the called menu entry 
+ *
+ * @parameter user_data - unused
+ *
+ * @return void 
+ *
+**/
+void
+on_menu_paste_activate              (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	if( menuitem == NULL) return;
+	GtkWidget *entry;
+	entry = lookup_widget(GTK_WIDGET(menuitem), "search_input");
+        
+	gtk_entry_set_text(GTK_ENTRY(entry), "");
+    gtk_editable_paste_clipboard(GTK_EDITABLE(GTK_ENTRY(entry)));
+    gtk_editable_select_region(GTK_EDITABLE(GTK_ENTRY(entry)), 0, -1);
+}
+
+
+/**
+ *
+ * @doc gtk-callback - called, if the user wish to copy the 
+ *      content of the left cell of the column to the clipboard
+ *
+ * @parameter menuitem - pointer to the called menu entry 
+ *
+ * @parameter user_data - unused
+ *
+ * @return void 
+ * 
+**/
+void
+on_menu_copy_left_activate          (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	on_contex_copy_l(menuitem, NULL);
+}
+
+
+/**
+ *
+ * @doc gtk-callback - called, if the user wish to copy the 
+ *      content of the right cell of the column to the clipboard
+ *
+ * @parameter menuitem - pointer to the called menu entry 
+ *
+ * @parameter user_data - unused
+ *
+ * @return void 
+ * 
+**/
+void
+on_menu_copy_right_activate         (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	on_contex_copy_r(menuitem, NULL);
 }
 
 
 
 /**
- * use a ding dictinory to translate String(lang_from) ---> String(to)
+ *
+ *  @dic use a ding dictinory to translate String(lang_from) ---> String(to)
  * 
- * @lang_from - language, form translate = string for tab-header
- * @lang_to   - language, to translate = string for tab-header
- * @dict - the filename of the uncompressed dict
+ * @parameter caller - a pointer to the main window
+ *
+ * @parameter lang_from - description string of the language (from translation),
+ *           display in the list header 
+ *
+ * @parameter lang_to - description string of the language (translate to .. ),
+ *            displayed in the list header
+ *
+ * @paramter dict - the filename of the uncompressed dict
+ *
+ * @return void
+ *
 **/
-void
-run_translation (GtkWidget *caller, gchar *lang_from, gchar *lang_to, gchar *dict)
-{
+void run_translation (GtkWidget *caller, gchar *lang_from, gchar *lang_to, gchar *dict) {
 	if( get_debug() ) {
 		g_print("call translation '%s' '%s' <--> '%s'\n",
 			dict, lang_from, lang_to);
-		
 	}
 	
 	if (caller == NULL) return;        
 	if (lang_from == NULL) return;
 	if (lang_to == NULL) return;
 	if (dict == NULL) return;
-                                                                                                       
-    GtkWidget       *entry = lookup_widget(GTK_WIDGET(caller), "suchinput");
+    
+	set_model_int(MAIN_COLUMN_NUM, 2);
+	on_contex_menu_show(caller);
+	
+    GtkWidget       *entry = lookup_widget(GTK_WIDGET(caller), "search_input");
     GtkTreeIter     iter;
     GtkListStore    *store = NULL;
                                                                                                        
@@ -387,7 +722,10 @@ run_translation (GtkWidget *caller, gchar *lang_from, gchar *lang_to, gchar *dic
 								}
 							}
 							if (mismatch == FALSE) {
-								out0 = g_string_append(out0, "<span foreground=\"darkblue\">");	
+								// out0 = g_string_append(out0, "<span foreground=\"darkblue\">");	
+								out0 = g_string_append(out0, "<span foreground=\"");	
+								out0 = g_string_append(out0, get_model_char(MAIN_COLOR2) );	
+								out0 = g_string_append(out0, "\">");	
 								out0 = g_string_append(out0, such);	
 								out0 = g_string_append(out0, "</span>");	
 								i = i + such_len - 1;
@@ -422,7 +760,9 @@ run_translation (GtkWidget *caller, gchar *lang_from, gchar *lang_to, gchar *dic
 								}
 							}
 							if (mismatch == FALSE) {
-								out1 = g_string_append(out1, "<span foreground=\"darkblue\">");	
+								out1 = g_string_append(out1, "<span foreground=\"");	
+								out1 = g_string_append(out1, get_model_char(MAIN_COLOR2) );	
+								out1 = g_string_append(out1, "\">");	
 								out1 = g_string_append(out1, such);	
 								out1 = g_string_append(out1, "</span>");	
 								i = i + such_len - 1;
@@ -449,7 +789,7 @@ run_translation (GtkWidget *caller, gchar *lang_from, gchar *lang_to, gchar *dic
     	/* output */
     	showtable(GTK_WIDGET(caller), store, 2, 250, lang_from, lang_to );
     	msg = g_strdup_printf( _("%i matches found to '%s'"), flag, such);
-    	print_to_status(GTK_WIDGET(caller), msg);
+    	on_statusbar_print(GTK_WIDGET(caller), msg);
 	
 	}
 	g_free(msg);
@@ -458,106 +798,478 @@ run_translation (GtkWidget *caller, gchar *lang_from, gchar *lang_to, gchar *dic
 	reste = g_string_free(cmd, TRUE);		
  
 }
-		
-		
-		
-		
-/**
- * quit main program
- * before, save windows settings to GConf
- */
-void
-file_quit_activated                    (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	gint x,y;
-	gtk_window_get_size( 
-			GTK_WINDOW( lookup_widget( 
-			GTK_WIDGET(menuitem), "gnome_ding") ) ,
-			&x , &y );
-	set_model_int(MAIN_SIZE_X, x);
-	set_model_int(MAIN_SIZE_Y, y);
-	gtk_main_quit ();
-}
-
-/**
- * paste the clipboard data to the input entry
-**/
-void
-file_paste_activate                    (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	if( menuitem == NULL) return;
-	GtkWidget *entry;
-	entry = lookup_widget(GTK_WIDGET(menuitem), "suchinput");
-        
-	gtk_entry_set_text(GTK_ENTRY(entry), " ");
-    gtk_editable_paste_clipboard(GTK_EDITABLE(GTK_ENTRY(entry)));
-    gtk_editable_select_region(GTK_EDITABLE(GTK_ENTRY(entry)), 0, -1);
-
-}
 
 
-/**
- *  show up the infodialog
-**/
-void
-on_info1_activate                      (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-  GtkWidget *about_gnome_ding;
-  about_gnome_ding = create_about_gnome_ding ();
-  // gtk_window_set_transient_for( GTK_WINDOW(infodialog), GTK_WINDOW( get_mainwindow() ) );
-  gtk_widget_show (about_gnome_ding);
-}
+
 
 /**
  * visual wait info
  * follow code is only for test, idee, make search-spider
 **/
+/*
 void *my_wait_thread (void *data)
 {
 	GtkWidget *button = (GtkWidget *)data;
-
   	pthread_setcancelstate (PTHREAD_CANCEL_ENABLE, NULL);
   	pthread_setcanceltype  (PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
 	
 	while (1) {
     	g_print (".");
     	usleep(1000 * 500);
-		/* for future		
-		GdkPixbuf *myspider = NULL;
-        if (myflag) {
-			myspider = create_pixbuf( "gnome-ding/gnome-ding24-1.png");
-		} else {
-			myspider = create_pixbuf( "gnome-ding/gnome-ding24-2.png");
-		}
-		if (myflag) {
-			myflag = FALSE;
-		} else {
-			myflag = TRUE;
-		}
-        g_object_set ( G_OBJECT(spider_w) , "pixbuf", myspider, NULL);
-        gdk_pixbuf_unref( myspider );
-		*/
+		// GdkPixbuf *myspider = NULL;
+       // if (myflag) {
+		//	myspider = create_pixbuf( "gnome-ding/gnome-ding24-1.png");
+		// } else {
+		//	myspider = create_pixbuf( "gnome-ding/gnome-ding24-2.png");
+		// }
+		// if (myflag) {
+		// 	myflag = FALSE;
+		// } else {
+		//	myflag = TRUE;
+		// }
+       //  g_object_set ( G_OBJECT(spider_w) , "pixbuf", myspider, NULL);
+       //  gdk_pixbuf_unref( myspider );
 		// gtk_main_iteration();
   	}
   	return NULL;
 }
+*/
+
+
+/**
+ *
+ * @doc get-callback - function called, it the user press the 'search'
+ *      button to start the search
+ *
+ * @parameter menuitem - pointer to the called menu entry 
+ *
+ * @parameter user_data - unused
+ *
+ * @return void 
+ *
+**/
+void on_submitbutton_clicked(GtkButton *button, gpointer user_data) {
+	on_search( GTK_WIDGET(button) );
+}
+
+
+
+/**
+ * @doc gtk-callback - function called if user toggled the 
+ *       hide/unhide area in the toolbar to minimize/resize the
+ *       main window.
+ *      
+ * @parameter widget - pointer this event area widget
+ *
+ * @parameter event - information about actually event
+ *
+ * @parameter user_data - unused
+ *
+ * @return FALSE every times
+ *
+**/
+gboolean
+on_eventbox1_button_press_event        (GtkWidget       *widget,
+                                        GdkEventButton  *event,
+                                        gpointer         user_data)
+{
+	GtkWidget *list = NULL;
+	GtkWidget *status = NULL;
+	GtkWidget *win = NULL;
+	
+	win = get_mainwin();
+	if (win != NULL ) {
+    	list = lookup_widget( win , "scrolledwindow1");
+    	status = lookup_widget(win, "appbar1");
+    
+		if (gtk_window_get_resizable(GTK_WINDOW(win))) {
+			gtk_widget_hide(list);
+			gtk_widget_hide( GNOME_APP(win)->menubar );
+			gtk_widget_hide(status);
+			gtk_window_resize(GTK_WINDOW(win), get_model_int(MAIN_SIZE_X), 40);
+			gtk_window_set_resizable(GTK_WINDOW(win), 0);
+		} else {
+			on_window_unhide(widget);
+		}
+	}
+  	return FALSE;
+}
+
+
+/**
+ *
+ * @doc gtk-callback - function is called if user press the back
+ *      button on toolbar to go back one word into the history
+ *      list of searched words.
+ *      As result the previews word of the history list will
+ *      inserted into the search entry.
+ * 
+ * @parameter button - pointer to this button
+ * 
+ * @parameter user_data - unused
+ * 
+ * @return void
+ *
+**/
+void
+on_button_back_clicked                 (GtkButton       *button,
+                                        gpointer         user_data)
+{
+	on_search_history_go_back(GTK_WIDGET(button)); 
+}
+
+
+
+/**
+ *
+ * @doc gtk-callback - function is called if user press the forward
+ *      button on toolbar to become next word into the history
+ *      list of searched words.
+ *      As result the previews word of the history list will
+ *      inserted into the search entry.
+ * 
+ * @parameter button - pointer to this button
+ * 
+ * @parameter user_data - unused
+ * 
+ * @return void
+ *
+**/
+void
+on_button_vor_clicked                  (GtkButton       *button,
+                                        gpointer         user_data)
+{
+	on_search_history_go_forward(GTK_WIDGET(button));
+}
+
+
+
+
+/**
+ *
+ * @doc gtk-callback - called inside the preferences dialog.
+ *      Toggle flag for use or not use a selected language for
+ *      spelling. This means that only languages, that was selected 
+ *      will also show inside the combo-box for dictionay selction
+ *      into the main win toolbar.
+ *
+ * @parameter cell - pointer to the widget, that was toggled
+ * 
+ * @parameter path_str - treeview path to selected cell
+ *
+ * @parameter data - pointer to the listview data model 
+ *
+ * @return void 
+ *
+**/
+static void
+on_pref_spell_toggle(GtkCellRendererToggle *cell, gchar *path_str, gpointer data) {
+  GtkTreeModel *model = (GtkTreeModel *)data;
+  GtkTreeIter  iter;
+  GtkTreePath *path = gtk_tree_path_new_from_string (path_str);
+  gboolean fixed;
+  gint i;
+  enum {
+	COLUMN_ASPELL_FIXED,
+	COLUMN_ASPELL_DESCRIPTION,
+	COLUMN_ASPELL_NUM,
+	NUM_ASPELL_COLUMNS
+  };
+		
+  // get toggled iter 
+  gtk_tree_model_get_iter (model, &iter, path);
+  gtk_tree_model_get (model, &iter, 
+  	COLUMN_ASPELL_FIXED, &fixed, 
+  	COLUMN_ASPELL_NUM, &i,
+  -1);
+
+  // toggle flag
+  fixed ^= 1;
+  // store it back to the  internal data model 
+  set_model_bool(i, fixed);
+
+  gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_ASPELL_FIXED, fixed, -1);
+  gtk_tree_path_free (path);
+}
+
+
+/**
+ *
+ * @doc gtk-callback - called inside the preferences dialog.
+ *      Toggle flag for use or not use a selected language for
+ *      thesaurus. This means that only thesaurus, that was selected,
+ *      will also show inside the combo-box for dictionay selction
+ *      into the main win toolbar.
+ *
+ * @parameter cell - pointer to the widget, that was toggled
+ * 
+ * @parameter path_str - treeview path to selected cell
+ *
+ * @parameter data - pointer to the listview data model 
+ *
+ * @return void 
+ *
+**/
+static void
+on_pref_thes_toggle(GtkCellRendererToggle *cell, gchar *path_str, gpointer data) {
+  GtkTreeModel *model = (GtkTreeModel *)data;
+  GtkTreeIter  iter;
+  GtkTreePath *path = gtk_tree_path_new_from_string (path_str);
+  gboolean fixed;
+  gint i;
+  enum {
+	COLUMN_THES_FIXED,
+	COLUMN_THES_DESCRIPTION,
+	COLUMN_THES_NUM,
+	NUM_THES_COLUMNS
+  };
+		
+  /* get toggled iter */
+  gtk_tree_model_get_iter (model, &iter, path);
+  gtk_tree_model_get (model, &iter, 
+  	COLUMN_THES_FIXED, &fixed, 
+  	COLUMN_THES_NUM, &i,
+  -1);
+  // toggle flag and store back
+  fixed ^= 1;
+  set_model_bool(i, fixed);
+
+  gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_THES_FIXED, fixed, -1);
+  gtk_tree_path_free (path);
+}
+
+/**
+ *
+ * @doc gtk-callback - called inside the preferences dialog.
+ *      Toggle flag for use or not use a selected language for
+ *      translation. This means that only languages, that was selected 
+ *      will also show inside the combo-box for dictionay selction
+ *      into the main win toolbar.
+ *
+ * @parameter cell - pointer to the widget, that was toggled
+ * 
+ * @parameter path_str - treeview path to selected cell
+ *
+ * @parameter data - pointer to the listview data model 
+ *
+ * @return void 
+ *
+**/
+static void
+on_pref_dict_toggle(GtkCellRendererToggle *cell, gchar *path_str, gpointer data) {
+  GtkTreeModel *model = (GtkTreeModel *)data;
+  GtkTreeIter  iter;
+  GtkTreePath *path = gtk_tree_path_new_from_string (path_str);
+  gboolean fixed;
+  gint i;
+  enum {
+	COLUMN_DICT_FIXED,
+	COLUMN_DICT_DESCRIPTION,
+	COLUMN_DICT_NUM,
+	NUM_DICT_COLUMNS
+  };
+		
+  //  get toggled iter 
+  gtk_tree_model_get_iter (model, &iter, path);
+  gtk_tree_model_get (model, &iter, 
+  	COLUMN_DICT_FIXED, &fixed, 
+  	COLUMN_DICT_NUM, &i,
+  -1);
+  // toggle flag and store back
+  fixed ^= 1;
+  set_model_bool(i, fixed);
+
+  gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_DICT_FIXED, fixed, -1);
+  gtk_tree_path_free (path);
+}
+
+
+/**
+ *
+ * @doc gtk-callback - close the prefereces-dialog, store
+ *      back all unsaved settings and refresh main window.
+ *
+ * @parameter dialog - pointer to the preferences dialog
+ *
+ * @parameter user_data -  unused
+ *
+ * @return void 
+ *
+ * @see on_pref_dialog_destroy
+ *
+**/
+void on_pref_dialog_close(GtkDialog *dialog, gpointer user_data) {
+	gtk_widget_destroy(pref_dlg);
+	pref_dlg = NULL;
+}
+
+
+/**
+ *
+ * @doc gtk-callback - close the prefereces-dialog, store
+ *      back all unsaved settings and refresh main window.
+ *
+ * @parameter onject - pointer to the preferences dialog
+ *
+ * @parameter user_data -  unused
+ *
+ * @return void 
+ *
+ * @see on_pref_dialog_close
+**/
+void on_pref_dialog_destroy(GtkObject *object, gpointer user_data) {
+	gtk_widget_destroy(pref_dlg);
+	pref_dlg = NULL;
+}
+
+/**
+ *
+ * @doc gtk-callback - called if user press 'ok' button and 
+ *      close the preferences dialog.
+ *      Store back all unsaved data to internal data model
+ *      like {color, font} and refresh the main window
+ *
+ * @parameter button - pointer to the button widget of the dialog
+ *
+ * @parameter user_data - unused
+ *
+ * @return void 
+ *
+**/
+void on_pref_dialog_ok_clicked(GtkButton *button, gpointer user_data) {
+	
+	GtkWidget *text_font = NULL;
+	GtkWidget *text_color1 = NULL; // text color
+	GtkWidget *text_color2 = NULL; // highlight color
+	GdkColor color;
+	guint16 color_r = 0;
+	guint16 color_g = 0;
+	guint16 color_b = 0;
+	guint16 color_a = 0;
+	text_font = lookup_widget( GTK_WIDGET(button), "fontpicker1");
+	text_color1 = lookup_widget( GTK_WIDGET(button), "colorpicker1");
+	text_color2 = lookup_widget( GTK_WIDGET(button), "colorpicker2");
+	// get text color
+	gnome_color_picker_get_i16 (GNOME_COLOR_PICKER (text_color1),
+				    &color_r, &color_g, &color_b, &color_a);
+	color.red = color_r;
+	color.green = color_g;
+	color.blue = color_b;
+	set_model_char(MAIN_COLOR1, gdk_color_to_string (color) );
+    // get highlight color
+	gnome_color_picker_get_i16 (GNOME_COLOR_PICKER (text_color2),
+				    &color_r, &color_g, &color_b, &color_a);
+	color.red = color_r;
+	color.green = color_g;
+	color.blue = color_b;
+	set_model_char(MAIN_COLOR2, gdk_color_to_string (color) );
+
+	// get text font
+	set_model_char(MAIN_FONT, 
+		(gchar*)gnome_font_picker_get_font_name(GNOME_FONT_PICKER(text_font)));
+
+	// close dialog
+	gtk_widget_destroy(pref_dlg);
+	pref_dlg = NULL;
+	// reset search combo 
+	on_search_combobox_fill( get_mainwin() );
+	on_treeview_set_font( get_mainwin() );
+	on_treeview_set_color1( get_mainwin() );
+} // on_okbutton1_clicked (preferences dialog)
+
+
+/**
+ *
+ * @doc gtk-callback - called if user toggled 'exact search' inside
+ *     the preferences dialog
+ *
+ * @parameter togglebutton - pointer to widget 
+ * 
+ * @parameter user_data - unused
+ *
+ * @return void 
+ *
+**/
+void on_pref_grep_word_toggled(GtkToggleButton *togglebutton, gpointer user_data) {
+	GtkWidget *exact_word = NULL;
+	exact_word = lookup_widget(pref_dlg, "grep_word");
+	set_model_bool(MAIN_EXACT, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (exact_word) ) );
+}
+
+/**
+ *
+ * @doc gtk-callback - called if user toggled 'case-sensitive' inside
+ *     the preferences dialog
+ *
+ * @parameter togglebutton - pointer to widget 
+ * 
+ * @parameter user_data - unused
+ *
+ * @return void 
+ *
+**/
+void on_pref_grep_case_toggled(GtkToggleButton *togglebutton, gpointer user_data) {
+	GtkWidget *case_sense = NULL;
+	case_sense = lookup_widget(pref_dlg, "grep_case");
+	set_model_bool(MAIN_CASE , gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (case_sense) ) );
+}
+
+/**
+ *
+ * @doc gtk-callback - called if user change suggestion mode by 
+ *       changing the slider inside the preferences dialog
+ *
+ * @parameter range - the adjustment (value) of the slider
+ * 
+ * @parameter user_data - unused
+ *
+ * @return void 
+ *
+**/
+void
+on_pref_aspell_suggest_value_changed        (GtkRange        *range,
+                                        gpointer         user_data)
+{
+	GtkAdjustment *adj;
+	adj = gtk_range_get_adjustment( range );
+	set_model_int(MAIN_SUGEST_MODE,  1 + (gint)( gtk_adjustment_get_value(adj) ));
+}
+
+
+/**
+ * 
+ * @doc gtk-callback - this function is called, if the user press
+ *      the reset button inside the preferences dialog to reset 
+ *      al settings of the internal data model 
+ *
+ * @parameter button - pointer to the button-widget of the dialog
+ *
+ * @parameter user_data - unused
+ *
+ * @return void 
+ *
+**/
+void
+on_button_reset_clicked                (GtkButton       *button,
+                                        gpointer         user_data)
+{
+	model_default();
+	gtk_widget_destroy( lookup_widget( GTK_WIDGET(button), "preferences1") ); 
+}
+
 
 
 /** 
  * start search
 **/
 void
-on_search(GtkWidget *widget)
-{
+on_search(GtkWidget *widget) {
  	GtkWidget *entry; 
     GtkWidget *select;
 	GtkWidget *win;
-	entry  = lookup_widget(widget, "suchinput");
+	entry  = lookup_widget(widget, "search_input");
 	select = lookup_widget(widget, "selection");
-	win    = lookup_widget(widget, "gnome_ding");
+	win    = lookup_widget(widget, "ding_mainwin");
 
 	/* get the user input */
     gchar *suchart = NULL;
@@ -566,24 +1278,25 @@ on_search(GtkWidget *widget)
 	suchart = g_strdup(gtk_entry_get_text( GTK_ENTRY (GTK_COMBO (select)->entry)));	
 	match   = g_strdup(gtk_entry_get_text( GTK_ENTRY(entry) ));
 
-	cleanup_status(widget);
+	on_statusbar_cleanup(widget);
                                                                                                        
     /* check for valid chars */
-	if( (strchr(match, '&')) ||
-        (strchr(match, '%'))||
-        (strchr(match, '$')) ||
-        (strchr(match, '/')) ||
-        (strchr(match, '(')) ||
-        (strchr(match, ')')) ||
-        (strchr(match, '=')) ||
-        (strchr(match, '#')) ||
-        (strchr(match, '\"'))||
-        (strchr(match, '!')) ||
+	if( (strchr(match, '&')) // ||
+        // (strchr(match, '%'))||
+        // (strchr(match, '$')) ||
+        // (strchr(match, '/')) ||
+        // (strchr(match, '(')) ||
+        // (strchr(match, ')')) ||
+        // (strchr(match, '=')) ||
+        // (strchr(match, '#')) ||
+        // (strchr(match, '\"'))||
+        // (strchr(match, '!')) ||
         /* (strchr(match, 'Paragraph')) || */
-        (strchr(match, '`')) ||
-        (strchr(match, '\'')) ) {
+        /* (strchr(match, 'quote')) || */
+        // (strchr(match, '\'')) 
+		) {
 			// show errormessage 
-            print_to_status(widget, _(" Please insert only characters !"));
+            on_statusbar_print(widget, _(" Please insert only characters !"));
 			g_free(suchart);
 			g_free(match);
             return;
@@ -593,7 +1306,7 @@ on_search(GtkWidget *widget)
     /* call function by user selection if valid input is there */
     if (strlen(gtk_entry_get_text(GTK_ENTRY(entry))) > 1) {
 		
-    	if (!gtk_window_get_resizable(GTK_WINDOW(win)))      unhide(win);
+    	if (!gtk_window_get_resizable(GTK_WINDOW(win)))      on_window_unhide(win);
 
 		wordlist = g_list_append (wordlist, g_strdup( gtk_entry_get_text(GTK_ENTRY(entry)) ) );
 		wordlist = g_list_first(wordlist);
@@ -604,24 +1317,64 @@ on_search(GtkWidget *widget)
 			g_free(foo);
 		}
 		wordlist = g_list_last(wordlist);
-		GtkWidget *prev_button = lookup_widget( widget, "button1");
-		GtkWidget *sub_button =  lookup_widget( widget, "submitbutton");
+		GtkWidget *prev_button = lookup_widget( widget, "button_back");
+		GtkWidget *sub_button =  lookup_widget( widget, "button_submit");
 		gtk_widget_set_sensitive (GTK_WIDGET(prev_button), TRUE);
 		
+		/*
 		gdk_threads_enter();
 		GdkCursor *my_cursor;
 		my_cursor = gdk_cursor_new( GDK_WATCH );
-		gdk_window_set_cursor ( (lookup_widget(widget, "gnome_ding"))->window, my_cursor);
+		gdk_window_set_cursor ( (lookup_widget(widget, "ding_mainwin"))->window, my_cursor);
 		gtk_widget_set_sensitive( sub_button, FALSE);
 		gtk_main_iteration(); 
 		gdk_threads_leave();
-		
+		*/ 
+		gtk_widget_set_sensitive( sub_button, FALSE);
+		while (gtk_events_pending () ) gtk_main_iteration ();
+
         if (SPELLIT_MACRO(_("Spellcheck (German)"), "de_DE") 
+		} else if (SPELLIT_MACRO( _("Spellcheck (Afrikaans)"), "af" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Bulgarian)"), "bg" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Breton)"), "br" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Catalan)"), "ca" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Czech)"), "cs" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Welsh)"), "cy" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Danish)"), "da" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (German, Swiss)"), "de_CH" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Esperanto)"), "eo" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Greek)"), "el" )
 		} else if (SPELLIT_MACRO( _("Spellcheck (Canadian)"), "en_CA" )
 		} else if (SPELLIT_MACRO( _("Spellcheck (American)"), "en_US" )
-		} else if (SPELLIT_MACRO( _("Spellcheck (French)"), "fr" )
-		} else if (SPELLIT_MACRO( _("Spellcheck (Spanish)"), "es" )
 		} else if (SPELLIT_MACRO( _("Spellcheck (British)"), "en_UK")
+		} else if (SPELLIT_MACRO( _("Spellcheck (Spanish)"), "es" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Faroese)"), "fo" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (French, France)"), "fr_FR" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (French, Swiss)"), "fr_CH" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Irish, Gaelic)"), "ga" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Gallegan)"), "gl" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Croatian)"), "hr" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Indonesian)"), "id" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Icelandic)"), "is" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Italian)"), "it" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Maori)"), "mi" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Makasar)"), "mk" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Malay)"), "ms" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Maltese)"), "mt" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Dutch)"), "nl" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Norwegian)"), "no" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Polish)"), "pl" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Portuguese)"), "pt" )
+		// } else if (SPELLIT_MACRO( _("Spellcheck (Portuguese, BR)"), "pt_BR" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Russian)"), "ru" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Romanian)"), "ro" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Slovak)"), "sk" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Slovenian)"), "sl" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Swedish)"), "sv" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Ukrainian)"), "uk" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Walloon)"), "wa" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Zulu)"), "zu" )
+		
 		/* more aspell languages to be test */
 		
 		} else if ( THESAURUS_MACRO(THES_DE, _("Thesaurus (German)")) 
@@ -630,14 +1383,17 @@ on_search(GtkWidget *widget)
 		} else if ( THESAURUS_MACRO(THES_EN, _("Thesaurus (English)")) 
 		} else if ( THESAURUS_MACRO(THES_PT, _("Thesaurus (Portuguese)")) 
 		} else if ( THESAURUS_MACRO(THES_IT, _("Thesaurus (Italian)")) 
+		} else if ( THESAURUS_MACRO(THES_PL, _("Thesaurus (Polish)")) 
 		
 		} else if ( TRANSLATION_MACRO( _("Latin <--> German") , _("Latin"), _("German") , DICT_LAT_DE ) 
+		} else if ( TRANSLATION_MACRO( _("English <--> Latin") , _("English"), _("Latin") , DICT_EN_LAT ) 
 		
 		} else if ( TRANSLATION_MACRO( _("German <--> English"), _("German"), _("English"), DICT_DE_EN )
 		} else if ( TRANSLATION_MACRO( _("German <--> Spanish"), _("German"), _("Spanish"), DICT_DE_ES )
 		} else if ( TRANSLATION_MACRO( _("German <--> French"), _("German"), _("French"), DICT_DE_FR )
 		} else if ( TRANSLATION_MACRO( _("German <--> Italian"), _("German"), _("Italian"), DICT_DE_IT )
 		} else if ( TRANSLATION_MACRO( _("German <--> Portuguese"), _("German"), _("Portuguese"), DICT_DE_PT )
+		} else if ( TRANSLATION_MACRO( _("German <--> Dutch"), _("German"), _("Dutch"), DICT_DE_NL )
 		
 		} else if ( TRANSLATION_MACRO( _("English <--> German"), _("English"), _("German"), DICT_EN_DE )
 		} else if ( TRANSLATION_MACRO( _("English <--> Spanish"), _("English"), _("Spanish"), DICT_EN_ES )
@@ -645,18 +1401,40 @@ on_search(GtkWidget *widget)
 		} else if ( TRANSLATION_MACRO( _("English <--> French"), _("English"), _("French"), DICT_EN_FR )
 		} else if ( TRANSLATION_MACRO( _("English <--> Portuguese"), _("English"), _("Portuguese"), DICT_EN_PT )
 		} else if ( TRANSLATION_MACRO( _("English <--> Norwegian"), _("English"), _("Norwegian"), DICT_EN_NO )
+		} else if ( TRANSLATION_MACRO( _("English <--> Arabic"), _("English"), _("Arabic"), DICT_EN_AR )
+		} else if ( TRANSLATION_MACRO( _("English <--> Swedish"), _("English"), _("Swedish"), DICT_EN_SV )
+		
+		} else if ( TRANSLATION_MACRO( _("French <--> German"), _("French"), _("German"), DICT_FR_DE )
+		} else if ( TRANSLATION_MACRO( _("French <--> English"), _("French"), _("English"), DICT_FR_EN )
+		} else if ( TRANSLATION_MACRO( _("French <--> Spanish"), _("French"), _("Spanish"), DICT_FR_ES )
+		} else if ( TRANSLATION_MACRO( _("French <--> Italian"), _("French"), _("Italian"), DICT_FR_IT )
+		} else if ( TRANSLATION_MACRO( _("French <--> Portuguese"), _("French"), _("Portuguese"), DICT_FR_PT )
+		
+		} else if ( TRANSLATION_MACRO( _("Spanish <--> German"), _("Spanish"), _("German"), DICT_ES_DE )
+		} else if ( TRANSLATION_MACRO( _("Spanish <--> English"), _("Spanish"), _("English"), DICT_ES_EN )
+		} else if ( TRANSLATION_MACRO( _("Spanish <--> French"), _("Spanish"), _("French"), DICT_ES_FR )
+		} else if ( TRANSLATION_MACRO( _("Spanish <--> Italian"), _("Spanish"), _("Italian"), DICT_ES_IT )
+		} else if ( TRANSLATION_MACRO( _("Spanish <--> Portuguese"), _("Spanish"), _("Portuguese"), DICT_ES_PT )
+		
+		} else if ( TRANSLATION_MACRO( _("Italian <--> German"), _("Italian"), _("German"), DICT_IT_DE )
+		} else if ( TRANSLATION_MACRO( _("Italian <--> English"), _("Italian"), _("English"), DICT_IT_EN )
+		} else if ( TRANSLATION_MACRO( _("Italian <--> Spanish"), _("Italian"), _("Spanish"), DICT_IT_ES )
+		} else if ( TRANSLATION_MACRO( _("Italian <--> Italian"), _("Italian"), _("French"), DICT_IT_FR )
+		} else if ( TRANSLATION_MACRO( _("Italian <--> Portuguese"), _("Italian"), _("Portuguese"), DICT_IT_PT )
+		
 		} else if ( TRANSLATION_MACRO( _("Norwegian <--> English"), _("Norwegian"), _("English"), DICT_NO_EN )
 		} else if ( get_debug() ) {
 			g_print("unknown selection in combo box\n");
 		}
-		
+		/*
 		my_cursor = gdk_cursor_new( GDK_LAST_CURSOR );
-		gdk_window_set_cursor ( (lookup_widget(widget, "gnome_ding"))->window, my_cursor);
+		gdk_window_set_cursor ( (lookup_widget(widget, "ding_mainwin"))->window, my_cursor);
+		*/
 		gtk_widget_set_sensitive (GTK_WIDGET(sub_button), TRUE);
 		
 	} else {
 		/* else print error to statusbar */
-        print_to_status(widget, _("Your entry is to short!") );
+        on_statusbar_print(widget, _("Your entry is to short!") );
 	}
 	
 	
@@ -665,20 +1443,20 @@ on_search(GtkWidget *widget)
 	g_free(match);
 }
 
+
 /**
- * submit search
+ *
+ * @doc a helper function to fill the combo box of the main window
+ *     with the dictionaries that the user prefere to use.
+ *     This function is called on startup and on close a preferences
+ *     dialog.
+ *
+ * @parameter mainwin - a pointer to the main window
+ *
+ * @return void 
+ *
 **/
-void
-on_submitbutton_clicked                (GtkButton       *button,
-                                        gpointer         user_data)
-{
-	on_search( GTK_WIDGET(button) );
-}
-
-
-void
-fill_combo( GtkWidget *mainwin ) 
-{
+void on_search_combobox_fill( GtkWidget *mainwin ) {
 	if (mainwin == NULL) return;
 	GtkWidget *entry;
 	GList *combo_entry = NULL;
@@ -689,6 +1467,7 @@ fill_combo( GtkWidget *mainwin )
 	COMBO_MACRO2(DICT_DE_IT, _("German <--> Italian") )
 	COMBO_MACRO2(DICT_DE_FR, _("German <--> French") )
 	COMBO_MACRO2(DICT_DE_PT, _("German <--> Portuguese") )
+	COMBO_MACRO2(DICT_DE_NL, _("German <--> Dutch") )
 	
 	COMBO_MACRO2(DICT_EN_DE, _("English <--> German") )
 	COMBO_MACRO2(DICT_EN_ES, _("English <--> Spanish") )
@@ -696,9 +1475,30 @@ fill_combo( GtkWidget *mainwin )
 	COMBO_MACRO2(DICT_EN_FR, _("English <--> French") )
 	COMBO_MACRO2(DICT_EN_IT, _("English <--> Italian") )
 	COMBO_MACRO2(DICT_EN_NO, _("English <--> Norwegian") )
+	COMBO_MACRO2(DICT_EN_AR, _("English <--> Arabic") )
+	COMBO_MACRO2(DICT_EN_SV, _("English <--> Swedish") )
+	
+	COMBO_MACRO2(DICT_FR_EN, _("French <--> English") )
+	COMBO_MACRO2(DICT_FR_ES, _("French <--> Spanish") )
+	COMBO_MACRO2(DICT_FR_IT, _("French <--> Italian") )
+	COMBO_MACRO2(DICT_FR_DE, _("French <--> German") )
+	COMBO_MACRO2(DICT_FR_PT, _("French <--> Portuguese") )
+	
+	COMBO_MACRO2(DICT_ES_EN, _("Spanish <--> English") )
+	COMBO_MACRO2(DICT_ES_FR, _("Spanish <--> French") )
+	COMBO_MACRO2(DICT_ES_IT, _("Spanish <--> Italian") )
+	COMBO_MACRO2(DICT_ES_DE, _("Spanish <--> German") )
+	COMBO_MACRO2(DICT_ES_PT, _("Spanish <--> Portuguese") )
+	
+	COMBO_MACRO2(DICT_IT_EN, _("Italian <--> English") )
+	COMBO_MACRO2(DICT_IT_ES, _("Italian <--> Spanish") )
+	COMBO_MACRO2(DICT_IT_FR, _("Italian <--> French") )
+	COMBO_MACRO2(DICT_IT_DE, _("Italian <--> German") )
+	COMBO_MACRO2(DICT_IT_PT, _("Italian <--> Portuguese") )
 	
 	COMBO_MACRO2(DICT_NO_EN, _("Norwegian <--> English") )
 	COMBO_MACRO2(DICT_LAT_DE, _("Latin <--> German") )
+	COMBO_MACRO2(DICT_EN_LAT, _("English <--> Latin") )
 	
 	COMBO_MACRO2(THES_DE, _("Thesaurus (German)") )
 	COMBO_MACRO2(THES_ES, _("Thesaurus (Spanish)") ) 
@@ -706,10 +1506,8 @@ fill_combo( GtkWidget *mainwin )
 	COMBO_MACRO2(THES_IT, _("Thesaurus (Italian)") ) 
 	COMBO_MACRO2(THES_FR, _("Thesaurus (French)") )
 	COMBO_MACRO2(THES_PT, _("Thesaurus (Portuguese)") )
+	COMBO_MACRO2(THES_PT, _("Thesaurus (Polish)") )
 
-
-	
-	
 #ifdef USE_ASPELL
 	AspellConfig *spell_config;
 	AspellDictInfoList * dlist;
@@ -721,71 +1519,53 @@ fill_combo( GtkWidget *mainwin )
 	
 	dels = aspell_dict_info_list_elements(dlist);
 
-		
-	/*
-	possible languages:
-	de, de_CH, de_DE
-	en, en_CA, en_CA-w-accents, en_GB, en_GB-w-accents, en_US, en_US-w-accents
-	es
-	fr, fr_CH, fr_FR
-af     Afrikaans
-bg     Bulgarian
-br     Breton
-ca     Catalan/Valencian
-cs     Czech
-cy     Welsh
-da     Danish
-el     Greek
-eo     Esperanto
-fo     Faroese
-ga     Irish
-gl     Gallegan
-hr     Croatian
-it     Italian
-nl     Dutch
-pl     Polish
-pt     Portuguese
-ro     Romanian
-ru     Russian
-sk     Slovak
-sl     Slovenian
-sv     Swedish
-uk     Ukrainian
-wa     Walloon
-zu     Zulu
-	
-	*/
-	
-	
   	while ( (entryd = aspell_dict_info_enumeration_next(dels)) != 0) {
 		if( get_debug() ) {
-			g_print("aspell language available: %s\n",entryd->name); 
+			g_print("aspell language available: '%s'\n",entryd->name); 
 		}
     	if ( COMBO_MACRO(ASPELL_DE, "de_DE", _("Spellcheck (German)") )
-		} else if (COMBO_MACRO(ASPELL_DECH, "de_CH", _("Spellcheck (Swiss, German)") )
+		} else if (COMBO_MACRO(ASPELL_AF, "af", _("Spellcheck (Afrikaans)") )
+		} else if (COMBO_MACRO(ASPELL_BG, "bg", _("Spellcheck (Bulgarian)") )
+		} else if (COMBO_MACRO(ASPELL_BR, "br", _("Spellcheck (Breton)") )
+		} else if (COMBO_MACRO(ASPELL_CA, "ca", _("Spellcheck (Catalan)") )
+		} else if (COMBO_MACRO(ASPELL_CS, "cs", _("Spellcheck (Czech)") )
+		} else if (COMBO_MACRO(ASPELL_CY, "cy", _("Spellcheck (Welsh)") )
+		} else if (COMBO_MACRO(ASPELL_DA, "da", _("Spellcheck (Danish)") )
+		} else if (COMBO_MACRO(ASPELL_CH, "de_CH", _("Spellcheck (German, Swiss)") )
 		} else if (COMBO_MACRO(ASPELL_GB, "en_GB", _("Spellcheck (British)") )
 		} else if (COMBO_MACRO(ASPELL_UC, "en_CA", _("Spellcheck (Canadian)") )
 		} else if (COMBO_MACRO(ASPELL_US, "en_US", _("Spellcheck (American)") )
-		} else if (COMBO_MACRO(ASPELL_GA, "ga", _("Spellcheck (Irish)") )
-		} else if (COMBO_MACRO(ASPELL_FR, "fr_FR", _("Spellcheck (French)") )
-		/* } else if (COMBO_MACRO(ASPELL_FRCH, "fr_CH", _("Spellcheck (Swiss, French)") ) */
+		} else if (COMBO_MACRO(ASPELL_EO, "eo", _("Spellcheck (Esperanto)") )
+		} else if (COMBO_MACRO(ASPELL_EL, "el", _("Spellcheck (Greek)") )
 		} else if (COMBO_MACRO(ASPELL_ES, "es", _("Spellcheck (Spanish)") )
+		} else if (COMBO_MACRO(ASPELL_FO, "fo", _("Spellcheck (Faroese)") )
+		} else if (COMBO_MACRO(ASPELL_FR, "fr_FR", _("Spellcheck (French, France)") )
+		} else if (COMBO_MACRO(ASPELL_FRCH, "fr_CH", _("Spellcheck (French, Swiss)") ) 
+		} else if (COMBO_MACRO(ASPELL_GA, "ga", _("Spellcheck (Irish, Gaelic)") )
+		} else if (COMBO_MACRO(ASPELL_GL, "gl", _("Spellcheck (Gallegan)") )
+		} else if (COMBO_MACRO(ASPELL_HR, "hr", _("Spellcheck (Croatian)") )
+		} else if (COMBO_MACRO(ASPELL_ID, "id", _("Spellcheck (Indonesian)") )
 		} else if (COMBO_MACRO(ASPELL_IT, "it", _("Spellcheck (Italian)") )
-		} else if (COMBO_MACRO(ASPELL_DA, "da", _("Spellcheck (Danish)") )
+		} else if (COMBO_MACRO(ASPELL_IS, "is", _("Spellcheck (Icelandic)") )
+		} else if (COMBO_MACRO(ASPELL_MI, "mi", _("Spellcheck (Maori)") )
+		} else if (COMBO_MACRO(ASPELL_MK, "mk", _("Spellcheck (Makasar)") )
+		} else if (COMBO_MACRO(ASPELL_MS, "ms", _("Spellcheck (Malay)") )
+		} else if (COMBO_MACRO(ASPELL_MT, "mt", _("Spellcheck (Maltese)") )
 		} else if (COMBO_MACRO(ASPELL_NL, "nl", _("Spellcheck (Dutch)") )
 		} else if (COMBO_MACRO(ASPELL_NO, "no", _("Spellcheck (Norwegian)") )
-		} else if (COMBO_MACRO(ASPELL_PT, "pt", _("Spellcheck (Portuguese)") ) /*pt versus pt_BR, check this */
-		} else if (COMBO_MACRO(ASPELL_SV, "sv", _("Spellcheck (Swedish)") )
-		/* follow parts are untested */
-		} else if (COMBO_MACRO(ASPELL_BG, "bg", _("Spellcheck (Bulgarian)") )
-		} else if (COMBO_MACRO(ASPELL_EL, "el", _("Spellcheck (Greek)") )
-		} else if (COMBO_MACRO(ASPELL_HR, "hr", _("Spellcheck (Croatian)") )
-		} else if (COMBO_MACRO(ASPELL_IS, "is", _("Spellcheck (Icelandic)") )
+		} else if (COMBO_MACRO(ASPELL_PL, "pl", _("Spellcheck (Polish)") )
 		} else if (COMBO_MACRO(ASPELL_PT, "pt", _("Spellcheck (Portuguese)") )
+		// } else if (COMBO_MACRO(ASPELL_PT_BR, "pt_BR", _("Spellcheck (Portuguese, BR)") ) 
 		} else if (COMBO_MACRO(ASPELL_RU, "ru", _("Spellcheck (Russian)") )
+		} else if (COMBO_MACRO(ASPELL_RO, "ro", _("Spellcheck (Romanian)") )
+		} else if (COMBO_MACRO(ASPELL_SV, "sv", _("Spellcheck (Swedish)") )
+		} else if (COMBO_MACRO(ASPELL_SL, "sl", _("Spellcheck (Slovenian)") )
+		} else if (COMBO_MACRO(ASPELL_SK, "sk", _("Spellcheck (Slovak)") )
+		} else if (COMBO_MACRO(ASPELL_UK, "uk", _("Spellcheck (Ukrainian)") )
+		} else if (COMBO_MACRO(ASPELL_WA, "wa", _("Spellcheck (Walloon)") )
+		} else if (COMBO_MACRO(ASPELL_ZU, "zu", _("Spellcheck (Zulu)") )
 		} 
   	}
-	
 	delete_aspell_config(spell_config);
    	delete_aspell_dict_info_enumeration(dels);
 	
@@ -793,96 +1573,392 @@ zu     Zulu
 
 	gtk_combo_set_popdown_strings (GTK_COMBO (entry), combo_entry);
     g_list_free (combo_entry);
-
-	
 }
 
+/**
+ * 
+ * @doc helper function - set the user defined font for the list view
+ *
+ * @parameter widget - a pointer to the main window
+ * 
+ * @return void 
+ *
+**/
+void on_treeview_set_font(GtkWidget *widget) {
+	GtkWidget *view = lookup_widget(widget, "list");
+	if( get_model_bool( MAIN_FONT_DEFAULT) == TRUE ) {
+		// use theme font
+		GtkRcStyle *rc_style;
+		rc_style = gtk_widget_get_modifier_style (view);
+		if (rc_style->font_desc) {
+			pango_font_description_free (rc_style->font_desc);
+		}
+		rc_style->font_desc = NULL;
+		gtk_widget_modify_style (view, rc_style);
+	} else {
+		//	 use own font
+		PangoFontDescription *font_desc = NULL;
+		gchar *fontname = NULL;
+		fontname = get_model_char(MAIN_FONT);
+		if ( fontname != NULL) {
+			font_desc = pango_font_description_from_string (get_model_char(MAIN_FONT));
+			gtk_widget_modify_font (view, font_desc);
+			pango_font_description_free (font_desc);
+		} // if 
+	}
+}
+
+
+/**
+ *
+ * @doc a helper function to set the text color of the list view 
+ *
+ * @parameter widget - a pointer to the main window
+ *
+ * @return void 
+ *
+**/
+void on_treeview_set_color1(GtkWidget * widget)
+{
+	GtkWidget *view = lookup_widget (widget, "list");
+	if( get_model_bool(MAIN_COLOR_DEFAULT) == TRUE ) {
+		GtkRcStyle *rc_style;
+		GdkColor color;
+		rc_style = gtk_widget_get_modifier_style (view);
+		rc_style->color_flags[GTK_STATE_NORMAL] = 0;
+		rc_style->color_flags[GTK_STATE_SELECTED] = 0;
+		rc_style->color_flags[GTK_STATE_ACTIVE] = 0;
+		gtk_widget_modify_style (view, rc_style);
+		
+		set_model_char(MAIN_COLOR2, "#00000000ffff");
+	} else {
+		GdkColor color;
+		gdk_color_parse (get_model_char(MAIN_COLOR1), &color);
+		gtk_widget_modify_text (view, GTK_STATE_NORMAL, &color);
+	}
+} // on_treeview_set_color1
+
+
+/**
+ *
+ * @doc gtk-callback - called, if inside the preferences dialog 
+ *     the user hav toggled the button 'use default font'
+ *     If enable, then disable the fontpicker.
+ *
+ * @parameter togglebutton - a pointer to the widget 
+ *
+ * @parameter user_data  - unused 
+ *
+ * @return void 
+ *
+**/
+void
+on_pref_font_default_toggled           (GtkToggleButton *togglebutton,
+                                        gpointer         user_data)
+{
+	GtkWidget *font_sel = NULL;
+	gboolean value = FALSE;
+	font_sel = lookup_widget(GTK_WIDGET(togglebutton), "fontpicker1" );
+	
+	value = gtk_toggle_button_get_active ( togglebutton );
+	set_model_bool(MAIN_FONT_DEFAULT , value );
+	
+	if( value == TRUE ) {
+		// disable fontpicker
+		gtk_widget_set_sensitive (font_sel, FALSE);
+	} else {
+		// enable fontpicker
+		gtk_widget_set_sensitive (font_sel, TRUE);
+	}
+} // on_pref_font_default_toggled
+
+
+/**
+ *
+ * @doc gtk-callback - called, if inside the preferences dialog 
+ *     the user have toggled the button 'use theme color'
+ *     If enable, then disable the colorpicker1 and colorpicker2.
+ *
+ * @parameter togglebutton - a pointer to the widget 
+ *
+ * @parameter user_data  - unused 
+ *
+ * @return void 
+ *
+**/
+void
+on_pref_default_color_toggled          (GtkToggleButton *togglebutton,
+                                        gpointer         user_data)
+{
+	GtkWidget *color1_sel = NULL;
+	GtkWidget *color2_sel = NULL;
+	gboolean value = FALSE;
+	color1_sel = lookup_widget( GTK_WIDGET(togglebutton) , "colorpicker1" );
+	color2_sel = lookup_widget( GTK_WIDGET(togglebutton) , "colorpicker2" );
+	
+	value = gtk_toggle_button_get_active ( togglebutton );
+	set_model_bool(MAIN_COLOR_DEFAULT , value );
+	
+	if( value == TRUE ) {
+		// disable colorpicker
+		gtk_widget_set_sensitive (color1_sel, FALSE);
+		gtk_widget_set_sensitive (color2_sel, FALSE);
+	} else {
+		// enable colorpicker
+		gtk_widget_set_sensitive (color1_sel, TRUE);
+		gtk_widget_set_sensitive (color2_sel, TRUE);
+	}
+} // on_pref_default_color_toggled
 
 
 
 /**
- * hide/unhide the mainwindow if the logo is clicked
+ * 
+ * @doc gtk-callback - called from the list view if the cursor change
+ *      then we store back a current setting to prepare contex copy.
+ *
+ * @parameter treeview - a pointer to the listview 
+ *
+ * @parameter user_data - unused 
+ * 
+ * @return void - inside the internal data model, the strings
+ *        column1 and column2 are filled
+ *
+**/
+void on_list_cursor_changed(GtkTreeView *treeview, gpointer user_data) {
+	GtkTreeIter iter;
+	GtkTreeModel *model = gtk_tree_view_get_model (treeview);
+	GtkTreeSelection *selection = gtk_tree_view_get_selection (treeview);
+	if (gtk_tree_selection_get_selected (selection, NULL, &iter)) {
+        gint i;
+ 		GtkTreePath *path;
+		GString colum1;
+		GString colum2;
+		path = gtk_tree_model_get_path (model, &iter);
+        i = gtk_tree_path_get_indices (path)[0];
+ 
+		if ( get_model_int(MAIN_COLUMN_NUM) == 1 ) {
+			gtk_tree_model_get( model, &iter,
+                        0, &colum1,
+                        -1 );
+			set_model_char(MAIN_COLUMN1, colum1.str);
+			set_model_char(MAIN_COLUMN2, "");
+		} else {
+			gtk_tree_model_get( model, &iter,
+                        0, &colum1,
+		  				1, &colum2,
+                        -1 );
+			set_model_char(MAIN_COLUMN1, colum1.str);
+			set_model_char(MAIN_COLUMN2, colum2.str);
+		}
+		
+		gtk_tree_path_free(path);
+	} // if
+}
+
+// kill all format-tags from  content
+// we have global vars 'clumn1' and 'column2'
+/**
+ * @doc helper function - called to prepare the copy from to 
+ *      listview content to the clipboard. To do this, we strip
+ *      out from the string all pango-descriptions
+ *
+ * @parameter value - define, if we use column1 (left) or 
+ *          column2 (right)
+ *
+ * @return void 
+ *
+**/
+void on_contex_prepare(gint value) {
+	gchar *help = NULL;
+	gchar *myout = NULL;
+	gint i = 0;
+	gint j = 0;
+	gint mynext = 0;
+	gsize mylen = 0;
+	if ( value == 1) {
+		help = g_strdup( get_model_char(MAIN_COLUMN1) );
+	} else {
+		help = g_strdup( get_model_char(MAIN_COLUMN2) );
+	}
+	mylen = strlen(help);
+	myout = g_strnfill(mylen, 0x0);
+	for( i=0; i<(gint)mylen; i++) {
+		if ( ( mynext == 0 ) && (help[i] == '<')  ) {
+			// begin tag  (i, span)
+			mynext = ( (help[i+1] == 's') || (help[i+2] == 's') ) ? 2 : 1 ;  // <span>-tag
+		} else if ( ( mynext == 2 ) && (help[i] == '>') )  {
+			// last tag (I hope)
+			mynext = 0;
+		} else if ( ( mynext == 1 ) && (help[i] == '>') )  {
+			// first tag
+			mynext = 2;
+		} else if ( ( mynext == 0 ) && (
+			(help[i] == '|') || (help[i] == '[' ) || (help[i] == ']' )
+			) ) {
+			// do nothing
+		}  else if ( ( mynext == 0 ) && (help[i] == '\r') ) {
+			myout[j] = '*';
+			j++;
+		}  else if ( ( ( i == 0 ) || ( i == ((gint)mylen - 1)) ) && (help[i] == ' ') ) {
+			// kill it
+		} else if (mynext == 0) {
+			myout[j] = help[i];
+			j++;
+		} else {
+			// nothing
+		}
+	}
+	// copy back
+	if ( value == 1) {
+		set_model_char(MAIN_COLUMN1, myout);
+	} else {
+		set_model_char(MAIN_COLUMN2, myout);
+	}
+	if( get_model_bool(MAIN_DEBUG) ) {
+		g_print("copy prepare result '%s'\n", myout);
+	}
+	g_free(help);
+	g_free(myout);
+}
+
+
+/**
+ *
+ * @doc gtk-callback - called form main menu or from list-view-contex-menu
+ *     to copy the right cell part from the listview column to the clipboard
+ *
+ * @parameter menuitem - pointer to the menu widget 
+ *
+ * @parameter user_data - unused
+ *
+ * @return void 
+ *
+**/
+void on_contex_copy_r(GtkMenuItem *menuitem, gpointer user_data) {
+	GtkClipboard *clipboard = NULL;
+	on_contex_prepare(2);
+	clipboard = gtk_clipboard_get (GDK_NONE);
+ 	gtk_clipboard_set_text(clipboard, get_model_char(MAIN_COLUMN2), strlen(get_model_char(MAIN_COLUMN2)) );
+} 
+
+
+/**
+ *
+ * @doc gtk-callback - called form main menu or from list-view-contex-menu
+ *     to copy the left cell part from the listview column to the clipboard
+ *
+ * @parameter menuitem - pointer to the menu widget 
+ *
+ * @parameter user_data - unused
+ *
+ * @return void 
+ *
+**/
+void on_contex_copy_l(GtkMenuItem *menuitem, gpointer user_data) {
+	GtkClipboard *clipboard = NULL;
+	on_contex_prepare(1);
+	clipboard = gtk_clipboard_get (GDK_NONE);
+ 	gtk_clipboard_set_text(clipboard, get_model_char(MAIN_COLUMN1), strlen(get_model_char(MAIN_COLUMN1)) );
+} 
+
+
+// build contex-menu
+/**
+ * 
+ * @doc gtk-callback - called if a button event is catch from the
+ *      list view.
+ *      If the left button is pressed, then create a contex menu
+ *      for copy the cell entry 
+ *      This function create the contex menu, if we have two 
+ *      columns then we create a second menu entry for it.
+ *      Every contex menuitem become a callback connection.
+ *
+ * @parameter widget - pointer to the listview widget 
+ *
+ * @parameter event - contain the button event contex 
+ * 
+ * @parameter user_data - unused 
+ *
+ * @return void 
+ *
 **/
 gboolean
-on_eventbox1_button_press_event        (GtkWidget       *widget,
+on_list_button_press_event             (GtkWidget       *widget,
                                         GdkEventButton  *event,
                                         gpointer         user_data)
 {
-	GtkWidget *list;
-	GtkWidget *menu;
-	GtkWidget *status;
-	GtkWidget *win;
-                                                                                         
-    list = lookup_widget(GTK_WIDGET(widget), "vbox7");
-    menu = lookup_widget(GTK_WIDGET(widget), "menubar1");
-    status = lookup_widget(GTK_WIDGET(widget), "statusbar");
-    win = lookup_widget(GTK_WIDGET(widget), "gnome_ding");
-	if (win != NULL) {
-		if (gtk_window_get_resizable(GTK_WINDOW(win))) {
-			if( list != NULL) gtk_widget_hide(list);
-			if( menu != NULL) gtk_widget_hide(menu);
-			if (status != NULL) gtk_widget_hide(status);
-			gtk_window_resize(GTK_WINDOW(win), get_model_int(MAIN_SIZE_X), 40);
-			if( win != NULL) gtk_window_set_resizable(GTK_WINDOW(win), 0);
+	if ( event->button == 3) {
+		// right mouse click
+		GtkWidget *menu = NULL;
+		GnomeUIInfo contex2[] = {
+			/* GNOMEUIINFO_ITEM_DATA will not work proper*/
+			GNOMEUIINFO_ITEM( N_("Copy left column"), NULL, on_contex_copy_l, NULL ), 
+			GNOMEUIINFO_ITEM( N_("Copy right column"), NULL, on_contex_copy_r, NULL ),
+			GNOMEUIINFO_ITEM( N_("As new search word"), NULL, on_menu_search_word_activate, NULL ),
+			GNOMEUIINFO_END
+		};
+		GnomeUIInfo contex1[] = {
+			/* GNOMEUIINFO_ITEM_DATA will not work proper*/
+			GNOMEUIINFO_ITEM( N_("Copy column"), NULL, on_contex_copy_l, NULL ), 
+			GNOMEUIINFO_ITEM( N_("As new search word"), NULL, on_menu_search_word_activate, NULL ),
+			GNOMEUIINFO_END
+		};
+		if ( get_model_int(MAIN_COLUMN_NUM) == 1) {
+			menu = gnome_popup_menu_new(contex1);
 		} else {
-			unhide(widget);
+			menu = gnome_popup_menu_new(contex2);
 		}
+		gnome_popup_menu_do_popup(menu, NULL, NULL, NULL, NULL, widget);
 	}
-  	return FALSE;
-}
-
-
-
-/* history back/forward for search-sting */
-void
-on_button_back_clicked                 (GtkButton       *button,
-                                        gpointer         user_data)
-{
-	on_go_back(GTK_WIDGET(button)); 
-}
-
-
-/* history back/forward for search-sting */
-void
-on_button_vor_clicked                  (GtkButton       *button,
-                                        gpointer         user_data)
-{
-	on_go_forward(GTK_WIDGET(button));
-}
-
-
-/* history back/forward for search-sting */
-void
-on_back1_activate                      (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	on_go_back(GTK_WIDGET(menuitem));
-}
-
-/* history back/forward for search-sting */
-void
-on_forward1_activate                   (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	on_go_forward(GTK_WIDGET(menuitem));
+  return FALSE;
 }
 
 
 /**
- * start serach form menu
+ *
+ * @doc helper function - enabel/disable sensitive
+ * 
+ * @parameter widget - a pointer to the main window
+ * 
+ * @return void 
+ *
 **/
-void
-on_search1_activate                    (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	on_search( GTK_WIDGET(menuitem) );
+void on_contex_menu_show(GtkWidget *widget) {
+	GtkWidget *menu1 = NULL;
+	GtkWidget *menu2 = NULL;	
+	menu1 = lookup_widget(widget, "on_menu_copy_left");
+	menu2 = lookup_widget(widget, "on_menu_copy_right");
+	
+	if ( get_model_int(MAIN_COLUMN_NUM) > 0 ) {
+		if ( get_model_int(MAIN_COLUMN_NUM) == 1 ) {
+			gtk_widget_set_sensitive(menu1, TRUE);
+			gtk_widget_set_sensitive(menu2, FALSE);
+		} else {
+			gtk_widget_set_sensitive(menu1, TRUE);
+			gtk_widget_set_sensitive(menu2, TRUE);
+		}
+	} else {
+		gtk_widget_set_sensitive(menu1, FALSE);
+		gtk_widget_set_sensitive(menu2, FALSE);
+	}
 }
 
+
 /**
- * dialog-window preferences for search 
+ *
+ * @doc gtk-callback - called from main menu, open preferences 
+ *      dialog
+ *
+ * @parameter menuitem - pointer to the menu widget 
+ *
+ * @parameter user_data - unused
+ *
+ * @return void
+ *
 **/
 void
-on_preferences1_activate               (GtkMenuItem     *menuitem,
+on_menu_preferences_activate           (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	if ( pref_dlg == NULL ) {
@@ -912,42 +1988,14 @@ on_preferences1_activate               (GtkMenuItem     *menuitem,
 		GtkTreeViewColumn *sp_THES_TOG, *sp_THES_LANG, *sp_THES_INT;
 		GtkTreeViewColumn *sp_DICT_TOG, *sp_DICT_LANG, *sp_DICT_INT;
 		gint i = 0;
+		GdkColor color;
+		GtkWidget *text_font = NULL;
+		GtkWidget *text_color1 = NULL;
+		GtkWidget *text_color2 = NULL;
+		GtkWidget *text_font_def = NULL;
+		GtkWidget *text_color_def = NULL;
 		struct stat my_stat;
-		
-		enum {
-  			COLUMN_ASPELL_FIXED,
-  			COLUMN_ASPELL_DESCRIPTION,
-			COLUMN_ASPELL_NUM,
-  			NUM_ASPELL_COLUMNS
-		};
-		enum {
-  			COLUMN_THES_FIXED,
-  			COLUMN_THES_DESCRIPTION,
-			COLUMN_THES_NUM,
-  			NUM_THES_COLUMNS
-		};
-		enum {
-  			COLUMN_DICT_FIXED,
-  			COLUMN_DICT_DESCRIPTION,
-			COLUMN_DICT_NUM,
-  			NUM_DICT_COLUMNS
-		};
-		typedef struct {
-  			const gboolean  fixed;
-  			const gchar    *description;
-			const guint     number;
-		} ASPELL_TREE; 
-		typedef struct {
-  			const gboolean  fixed;
-  			const gchar    *description;
-			const guint     number;
-		} THES_TREE; 
-		typedef struct {
-  			const gboolean  fixed;
-  			const gchar    *description;
-			const guint     number;
-		} DICT_TREE; 
-		
+
 		case_sense = lookup_widget(pref_dlg, "grep_case");
 		exact_word = lookup_widget(pref_dlg, "grep_word");
 		aspell_sug  = lookup_widget(pref_dlg, "aspell_suggest");
@@ -957,12 +2005,17 @@ on_preferences1_activate               (GtkMenuItem     *menuitem,
 		tree_thes = lookup_widget( pref_dlg, "treeview_thes");
 		tree_dict = lookup_widget( pref_dlg, "treeview_dict");
 		
+		text_font_def = lookup_widget( pref_dlg, "pref_font_default");
+		text_color_def = lookup_widget( pref_dlg, "pref_default_color");
+		
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (case_sense), get_model_bool(MAIN_CASE) );
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (exact_word), get_model_bool(MAIN_EXACT) );
 	
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (text_font_def), get_model_bool(MAIN_FONT_DEFAULT) );
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (text_color_def), get_model_bool(MAIN_COLOR_DEFAULT) );
+		
 		gtk_adjustment_set_value(gtk_range_get_adjustment( GTK_RANGE(aspell_sug )),
 			(gdouble)(get_model_int(MAIN_SUGEST_MODE) - 1 ) );
-		
 		
 #if !USE_ASPELL		
 	// disable view 
@@ -987,22 +2040,51 @@ on_preferences1_activate               (GtkMenuItem     *menuitem,
 		dels = aspell_dict_info_list_elements(dlist);
 		
 		while ( (entryd = aspell_dict_info_enumeration_next(dels)) != 0) {
-			g_print("check for %s\n", entryd->name);
+			if( get_debug() ) {
+				g_print("check for %s\n", entryd->name);
+			}
 		
 			if( PREF_SPELL_MACRO( ASPELL_DE, "de_DE", _("German (German)") ) 
-			/* } else if (PREF_SPELL_MACRO( ASPELL_DECH, "de_CH", _("German (Swiss)") )  */
+			} else if (PREF_SPELL_MACRO( ASPELL_CH, "de_CH", _("German (Swiss)") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_AF, "af", _("Afrikaans") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_BG, "bg", _("Bulgarian") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_BR, "br", _("Breton") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_CA, "ca", _("Catalan") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_CS, "cs", _("Czech") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_CY, "cy", _("Welsh") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_DA, "da", _("Danish") )
+			} else if (PREF_SPELL_MACRO( ASPELL_EO, "eo", _("Esperanto") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_DA, "el", _("Greek") ) 
 			} else if (PREF_SPELL_MACRO( ASPELL_GB, "en_GB", _("English (British)") ) 
 			} else if (PREF_SPELL_MACRO( ASPELL_CA, "en_CA", _("English (Canadian)") ) 
-			} else if (PREF_SPELL_MACRO( ASPELL_US, "en_US", _("English (American)") ) 
-			} else if (PREF_SPELL_MACRO( ASPELL_GA, "ga", _("Irish") ) 
-			} else if (PREF_SPELL_MACRO( ASPELL_FR, "fr_FR", _("French") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_US, "en_US", _("English (American)") )
 			} else if (PREF_SPELL_MACRO( ASPELL_ES, "es", _("Spanish") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_FR, "fr_FR", _("French, France") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_FRCH, "fr_CH", _("French, Swiss") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_FO, "fo", _("Faroese") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_GA, "ga", _("Irish, Gaelic") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_GL, "gl", _("Gallegan") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_HR, "hr", _("Croatian") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_ID, "id", _("Indonesian") )
 			} else if (PREF_SPELL_MACRO( ASPELL_IT, "it", _("Italian") ) 
-			} else if (PREF_SPELL_MACRO( ASPELL_DA, "da", _("Danish") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_IS, "is", _("Icelandic") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_MI, "mi", _("Maori") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_MK, "mk", _("Makasar") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_MS, "ms", _("Malay") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_MT, "mt", _("Maltese") ) 
 			} else if (PREF_SPELL_MACRO( ASPELL_NL, "nl", _("Dutch") ) 
 			} else if (PREF_SPELL_MACRO( ASPELL_NO, "no", _("Norwegian") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_PT, "pt", _("Portuguese") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_PL, "pl", _("Polish") ) 
+			/* } else if (PREF_SPELL_MACRO( ASPELL_GA, "pt_BR", _("Portuguese") )  */
+			} else if (PREF_SPELL_MACRO( ASPELL_RU, "ru", _("Russian") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_RO, "ro", _("Romanian") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_SL, "sl", _("Slovenian") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_SK, "sk", _("Slovak") ) 
 			} else if (PREF_SPELL_MACRO( ASPELL_SV, "sv", _("Swedish") ) 
-			} else if (PREF_SPELL_MACRO( ASPELL_BR, "br", _("Portuguese") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_SV, "uk", _("Ukrainian") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_WA, "wa", _("Walloon") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_ZU, "zu", _("Zulu") ) 
 			}
 		
 		}
@@ -1014,7 +2096,7 @@ on_preferences1_activate               (GtkMenuItem     *menuitem,
 					   
 		textrenderer = gtk_cell_renderer_text_new ();
 		togglerenderer = gtk_cell_renderer_toggle_new ();
-		g_signal_connect (togglerenderer, "toggled", G_CALLBACK (on_spell_toggle), store_aspell);
+		g_signal_connect (togglerenderer, "toggled", G_CALLBACK (on_pref_spell_toggle), store_aspell);
 		
 		sp_ASPELL_TOG  = gtk_tree_view_column_new_with_attributes( _("active") , togglerenderer, "active", COLUMN_ASPELL_FIXED, NULL);
 		sp_ASPELL_LANG = gtk_tree_view_column_new_with_attributes( _("Language") , textrenderer, "text", COLUMN_ASPELL_DESCRIPTION, NULL);
@@ -1045,6 +2127,7 @@ on_preferences1_activate               (GtkMenuItem     *menuitem,
 		if (PREF_THES_MACRO( THES_FR, _("French") )  	} 
 		if (PREF_THES_MACRO( THES_IT, _("Italian") )  	}
 		if (PREF_THES_MACRO( THES_PT, _("Portuguese") )  	}
+		if (PREF_THES_MACRO( THES_PL, _("Polish") )  	}
 
 		g_object_set (GTK_TREE_VIEW(tree_thes), "model", store_thes, NULL);
 		gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (tree_thes), TRUE);
@@ -1053,7 +2136,7 @@ on_preferences1_activate               (GtkMenuItem     *menuitem,
 					   
 		textrenderer2 = gtk_cell_renderer_text_new ();
 		togglerenderer2 = gtk_cell_renderer_toggle_new ();
-		g_signal_connect (togglerenderer2, "toggled", G_CALLBACK (on_thes_toggle), store_thes);
+		g_signal_connect (togglerenderer2, "toggled", G_CALLBACK (on_pref_thes_toggle), store_thes);
 		
 		sp_THES_TOG  = gtk_tree_view_column_new_with_attributes( _("active") , togglerenderer2, "active", COLUMN_THES_FIXED, NULL);
 		sp_THES_LANG = gtk_tree_view_column_new_with_attributes( _("Language") , textrenderer2, "text", COLUMN_THES_DESCRIPTION, NULL);
@@ -1077,6 +2160,7 @@ on_preferences1_activate               (GtkMenuItem     *menuitem,
 		if (PREF_DICT_MACRO( DICT_DE_FR, _("German <--> French") ) 	}
 		if (PREF_DICT_MACRO( DICT_DE_PT, _("German <--> Portuguese") ) 	}
 		if (PREF_DICT_MACRO( DICT_DE_IT, _("German <--> Italian") ) 	}
+		if (PREF_DICT_MACRO( DICT_DE_NL, _("German <--> Dutch") ) 	}
 		
 		if (PREF_DICT_MACRO( DICT_EN_DE, _("English <--> German") ) 	}
 		if (PREF_DICT_MACRO( DICT_EN_FR, _("English <--> French") ) 	}
@@ -1084,9 +2168,30 @@ on_preferences1_activate               (GtkMenuItem     *menuitem,
 		if (PREF_DICT_MACRO( DICT_EN_PT, _("English <--> Portuguese") ) 	}
 		if (PREF_DICT_MACRO( DICT_EN_ES, _("English <--> Spanish") ) 	}
 		if (PREF_DICT_MACRO( DICT_EN_NO, _("English <--> Norwegian") ) 	}
-				
+		if (PREF_DICT_MACRO( DICT_EN_AR, _("English <--> Arabic") ) 	}
+		if (PREF_DICT_MACRO( DICT_EN_SV, _("English <--> Swedish") ) 	}
+		
+		if( PREF_DICT_MACRO( DICT_FR_EN, _("French <--> English") )  } 
+		if (PREF_DICT_MACRO( DICT_FR_ES, _("French <--> Spanish") ) 	} 
+		if (PREF_DICT_MACRO( DICT_FR_DE, _("French <--> German") ) 	}
+		if (PREF_DICT_MACRO( DICT_FR_PT, _("French <--> Portuguese") ) 	}
+		if (PREF_DICT_MACRO( DICT_FR_IT, _("French <--> Italian") ) 	}
+		
+		if( PREF_DICT_MACRO( DICT_ES_EN, _("Spanish <--> English") )  } 
+		if (PREF_DICT_MACRO( DICT_ES_FR, _("Spanish <--> French") ) 	} 
+		if (PREF_DICT_MACRO( DICT_ES_DE, _("Spanish <--> German") ) 	}
+		if (PREF_DICT_MACRO( DICT_ES_PT, _("Spanish <--> Portuguese") ) 	}
+		if (PREF_DICT_MACRO( DICT_ES_IT, _("Spanish <--> Italian") ) 	}
+		
+		if( PREF_DICT_MACRO( DICT_IT_EN, _("Italian <--> English") )  } 
+		if (PREF_DICT_MACRO( DICT_IT_ES, _("Italian <--> Spanish") ) 	} 
+		if (PREF_DICT_MACRO( DICT_IT_DE, _("Italian <--> German") ) 	}
+		if (PREF_DICT_MACRO( DICT_IT_PT, _("Italian <--> Portuguese") ) 	}
+		if (PREF_DICT_MACRO( DICT_IT_FR, _("Italian <--> French") ) 	}
+		
 		if (PREF_DICT_MACRO( DICT_NO_EN, _("Norwegian <--> English") ) 	}
 		if (PREF_DICT_MACRO( DICT_LAT_DE, _("Latin <--> German") )   } 
+		if (PREF_DICT_MACRO( DICT_EN_LAT, _("English <--> Latin") )   } 
 		
 		g_object_set (GTK_TREE_VIEW(tree_dict), "model", store_dict, NULL);
 		gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (tree_dict), TRUE);
@@ -1095,7 +2200,7 @@ on_preferences1_activate               (GtkMenuItem     *menuitem,
 					   
 		textrenderer3 = gtk_cell_renderer_text_new ();
 		togglerenderer3 = gtk_cell_renderer_toggle_new ();
-		g_signal_connect (togglerenderer3, "toggled", G_CALLBACK (on_dict_toggle), store_dict);
+		g_signal_connect (togglerenderer3, "toggled", G_CALLBACK (on_pref_dict_toggle), store_dict);
 		
 		sp_DICT_TOG  = gtk_tree_view_column_new_with_attributes( _("active") , togglerenderer3, "active", COLUMN_DICT_FIXED, NULL);
 		sp_DICT_LANG = gtk_tree_view_column_new_with_attributes( _("Language") , textrenderer3, "text", COLUMN_DICT_DESCRIPTION, NULL);
@@ -1107,405 +2212,58 @@ on_preferences1_activate               (GtkMenuItem     *menuitem,
 		gtk_tree_view_column_set_sort_column_id (sp_DICT_LANG, COLUMN_DICT_DESCRIPTION);
         gtk_tree_view_append_column( GTK_TREE_VIEW(tree_dict), sp_DICT_LANG);
 
+		// set color and font
+		text_color1 = lookup_widget(pref_dlg, "colorpicker1");
+		text_color2 = lookup_widget(pref_dlg, "colorpicker2");
+		text_font   = lookup_widget(pref_dlg, "fontpicker1");
+		
+		gdk_color_parse (get_model_char(MAIN_COLOR1), &color);
+		gnome_color_picker_set_i16 (GNOME_COLOR_PICKER (text_color1),
+				    color.red, color.green, color.blue, 0);
+		gdk_color_parse (get_model_char(MAIN_COLOR2), &color);
+		gnome_color_picker_set_i16 (GNOME_COLOR_PICKER (text_color2),
+				    color.red, color.green, color.blue, 0);
+				
+		if ( get_model_char(MAIN_FONT) != NULL) {
+			gnome_font_picker_set_font_name (
+				GNOME_FONT_PICKER(text_font),
+				get_model_char(MAIN_FONT) );
+		}
+	
 		gtk_widget_show(pref_dlg);
 	}
 }
 
-static void
-on_spell_toggle(GtkCellRendererToggle *cell, gchar *path_str, gpointer data) {
-  GtkTreeModel *model = (GtkTreeModel *)data;
-  GtkTreeIter  iter;
-  GtkTreePath *path = gtk_tree_path_new_from_string (path_str);
-  gboolean fixed;
-  gint i;
-  enum {
-	COLUMN_ASPELL_FIXED,
-	COLUMN_ASPELL_DESCRIPTION,
-	COLUMN_ASPELL_NUM,
-	NUM_ASPELL_COLUMNS
-  };
-		
-  /* get toggled iter */
-  gtk_tree_model_get_iter (model, &iter, path);
-  gtk_tree_model_get (model, &iter, 
-  	COLUMN_ASPELL_FIXED, &fixed, 
-  	COLUMN_ASPELL_NUM, &i,
-  -1);
-
-  fixed ^= 1;
-  set_model_bool(i, fixed);
-
-  gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_ASPELL_FIXED, fixed, -1);
-  gtk_tree_path_free (path);
-}
-
-static void
-on_thes_toggle(GtkCellRendererToggle *cell, gchar *path_str, gpointer data) {
-  GtkTreeModel *model = (GtkTreeModel *)data;
-  GtkTreeIter  iter;
-  GtkTreePath *path = gtk_tree_path_new_from_string (path_str);
-  gboolean fixed;
-  gint i;
-  enum {
-	COLUMN_THES_FIXED,
-	COLUMN_THES_DESCRIPTION,
-	COLUMN_THES_NUM,
-	NUM_THES_COLUMNS
-  };
-		
-  /* get toggled iter */
-  gtk_tree_model_get_iter (model, &iter, path);
-  gtk_tree_model_get (model, &iter, 
-  	COLUMN_THES_FIXED, &fixed, 
-  	COLUMN_THES_NUM, &i,
-  -1);
-
-  fixed ^= 1;
-  set_model_bool(i, fixed);
-
-  gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_THES_FIXED, fixed, -1);
-  gtk_tree_path_free (path);
-}
-
-static void
-on_dict_toggle(GtkCellRendererToggle *cell, gchar *path_str, gpointer data) {
-  GtkTreeModel *model = (GtkTreeModel *)data;
-  GtkTreeIter  iter;
-  GtkTreePath *path = gtk_tree_path_new_from_string (path_str);
-  gboolean fixed;
-  gint i;
-  enum {
-	COLUMN_DICT_FIXED,
-	COLUMN_DICT_DESCRIPTION,
-	COLUMN_DICT_NUM,
-	NUM_DICT_COLUMNS
-  };
-		
-  /* get toggled iter */
-  gtk_tree_model_get_iter (model, &iter, path);
-  gtk_tree_model_get (model, &iter, 
-  	COLUMN_DICT_FIXED, &fixed, 
-  	COLUMN_DICT_NUM, &i,
-  -1);
-
-  fixed ^= 1;
-  set_model_bool(i, fixed);
-
-  gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_DICT_FIXED, fixed, -1);
-  gtk_tree_path_free (path);
-}
-
 
 /**
- * switch windows to smaller display size
+ *
+ * @doc gtk-callback - called if the user start the search,
+ *      prepare new menusettings (centex copy entry)
+ *      and insert word into the history list 
+ *
+ * @parameter menuitem - pointer to the menu widget 
+ *
+ * @parameter user_data - unused 
+ *
 **/
 void
-on_mini_mode1_activate                 (GtkMenuItem     *menuitem,
+on_menu_search_word_activate           (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	GtkWidget *list;
-	GtkWidget *menu;
-	GtkWidget *status;
-	GtkWidget *win;
-
-    list = lookup_widget(GTK_WIDGET(menuitem), "output");
-    menu = lookup_widget(GTK_WIDGET(menuitem), "menubar1");
-    status = lookup_widget(GTK_WIDGET(menuitem), "statusbar");
-    win = lookup_widget(GTK_WIDGET(menuitem), "gnome_ding");
-
-	if (gtk_window_get_resizable(GTK_WINDOW(win))) {
-		gtk_widget_hide(list);
-		gtk_widget_hide(menu);
-		gtk_widget_hide(status);
-		gtk_window_resize(GTK_WINDOW(win), get_model_int(MAIN_SIZE_X), 40);
-		gtk_window_set_resizable(GTK_WINDOW(win), 0);
+	if( menuitem == NULL) {
+		return;
 	}
-}
-
-/**
- * switch windows to normal display size
-**/
-void
-on_window_mode1_activate               (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-   unhide(GTK_WIDGET(menuitem) );
-}
-
-/**
- * only close the prefereces-dialog, settings are global
-**/
-void
-on_preferences1_close                  (GtkDialog       *dialog,
-                                        gpointer         user_data)
-{
-	gtk_widget_destroy(pref_dlg);
-	pref_dlg = NULL;
-}
-
-/**
- * only close the prefereces-dialog
-**/
-void
-on_preferences1_destroy                (GtkObject       *object,
-                                        gpointer         user_data)
-{
-	gtk_widget_destroy(pref_dlg);
-	pref_dlg = NULL;
-}
-
-/**
- * close the prefereces-dialog and save back language settings
-**/
-void
-on_okbutton1_clicked                   (GtkButton       *button,
-                                        gpointer         user_data)
-{
+	GtkWidget *entry = NULL;
+	GtkWidget *mainwin = NULL;
+	mainwin = get_mainwin();
+	if ( mainwin != NULL) { 
+		entry = lookup_widget( mainwin, "search_input");
+        
+		on_contex_prepare(1);
 	
-	gtk_widget_destroy(pref_dlg);
-	pref_dlg = NULL;
-	
-	fill_combo( get_mainwin() );
-} // on_okbutton1_clicked (preferences dialog)
-
-
-/**
- * preferences-dialog : grep with/without exactly-word-match
-**/
-void
-on_grep_word_toggled                   (GtkToggleButton *togglebutton,
-                                        gpointer         user_data)
-{
-	GtkWidget *exact_word = NULL;
-	exact_word = lookup_widget(pref_dlg, "grep_word");
-	set_model_bool(MAIN_EXACT, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (exact_word) ) );
-}
-
-/**
- * preferences-dialog : grep with/without case-sensitive
-**/
-void
-on_grep_case_toggled                   (GtkToggleButton *togglebutton,
-                                        gpointer         user_data)
-{
-	GtkWidget *case_sense = NULL;
-	case_sense = lookup_widget(pref_dlg, "grep_case");
-	set_model_bool(MAIN_CASE , gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (case_sense) ) );
-}
-
-/**
- * preferences-dialog, scale for suggestion-mode (fast...bad-speller)
-**/
-void
-on_aspell_suggest_value_changed        (GtkRange        *range,
-                                        gpointer         user_data)
-{
-	GtkAdjustment *adj;
-	adj = gtk_range_get_adjustment( range );
-	set_model_int(MAIN_SUGEST_MODE,  1 + (gint)( gtk_adjustment_get_value(adj) ));
-}
-
-
-/**
- * count entries in dictionary 
-  less de-en.ding | grep -v '^#' | sed 's/:.*$//' | sed 's/|/\n/p' | wc -l
-**/
-
-
-/* delete this later
-void dummy() {
-	
-	char *languages = {
-	// "ab", _("Abkhazian"),
-	// "ae", _("Avestan"), 
-	"af", _("Afrikaans"),
-	// "an", -("Aragonese"),
-	// "ar", _("Arabic"), 
-	// "as", _("Assamese"),
-	// "ay",  _("Aymara"),  - unused
-	// "az",  _("Azerbaijani"),  - unused
-	// "ba",  _("Bashkir"), - unused
-	// "be",  _("Belarusian"), - unused
-	"bg",  _("Bulgarian"),
-	// "bh",  _("Bihari"), - unused
-	// "bn",  _("Bengali"), - unused
-	// "bo",  _("Tibetan"), - unused
-	"br",  _("Breton"),
-	// "bs",  _("Bosnian"), - unused
-	"ca",  _("Catalan/Valencian"),
-	// "ce",  _("Chechen"), - unused
-	"dech",  _("Swiss/German"),
-	// "co",  _("Corsican"),  - unused
-	// "cr",  _("Cree"), - unused
-	"cs",  _("Czech"),
-	"cy",  _("Welsh"),
-	"da",  _("Danish"),
-	"de",  _("German"),
-	// "dv",  _("Divehi"), - unused
-	// "dz",  _("Dzongkha"), - unused
-	"el",  _("Greek"),
-	"en",  _("English"),
-	"eo",  _("Esperanto"),
-	"es",  _("Spanish"),
-	// "et",  _("Estonian"), - unused
-	// "eu",  _("Basque"),  - unused
-	// "fa",  _("Persian"), - unused
-	// "fi",  _("Finnish"), - unused
-	// "fj",  _("Fijian"),  - unused
-	"fo",  _("Faroese"),
-	"fr",  _("France"),
-	// "fy",  _("Frisian"), - unused
-	"ga",  _("Irish"),
-	"gb",  _("English"), //  great brit.
-	// "gd",  _("Scottish Gaelic"),  - unused
-	"gl",  _("Gallegan"),
-	// "gn",  _("Guarani"), - unused
-	// "gu",  _("Gujarati"), - unused
-	// "gv",  _("Manx"), - unused
-	// "ha",  _("Hausa"),  - unused
-	// "he",  _("Hebrew"), - unused
-	// "hi",  _("Hindi"), - unused
-	"hr",  _("Croatian"),
-	// "hu",  _("Hungarian"), - unused
-	// "hy",  _("Armenian"), - unused
-	// "ia",  _("Interlingua"), - unused
-	// "id",  _("Indonesian"), - unused
-	// "io",  _("Ido"), - unused
-	"is",  _("Icelandic"),
-	"it",  _("Italian"),
-	// "iu",  _("Inuktitut"), - unused
-	// "ja",  -("Japanese"), - unused
-	// "ka",  _("Georgian"), - unused
-	// "kk",  _("Kazakh"), - unused
-	// "kl",  _("Kalaallisut/Greenlandic"), - unused
-	// "km",  _("Khmer"), - unused
-	// "kn",  _("Kannada"), - unused
-	// "ko",  _("Korean"),  - unused
-	// "kr",  _("Kanuri"),  - unused
-	// "ks",  _("Kashmiri"), - unused
-	// "ku",  _("Kurdish"),  - unused
-	// "kv",  _("Komi"),  - unused
-	// "kw",  _("Cornish"),  - unused
-	// "ky",  _("Kirghiz"), - unused
-	// "la",  _("Latin"), - unused
-	// "lo",  _("Lao"), - unused
-	// "lt",  _("Lithuanian"), - unused
-	// "lv",  _("Latvian"), - unused
-	// "mi",  _("Maori"), - unused
-	// "mk",  _("Makasar"), - unused
-	// "ml",  _("Malayalam"), - unused
-	// "mn",  _("Mongolian"), - unused
-	// "mo",  _("Moldavian"), - unused
-	// "mr",  _("Marathi"), - unused
-	// "ms",  _("Malay"), - unused
-	// "mt",  _("Maltese"), - unused
-	// "my",  _("Burmese"), - unused
-	// "nb",  _("Norwegian Bokmal"), - unused
-	// "ne",  _("Nepali"), - unused
-	"nl",  _("Dutch"),
-	// "nn",  _("Norwegian Nynorsk"), - unused
-	"no",  _("Norwegian"),
-	// "nv",  _("Navajo"), - unused
-	// "oc",  _("Occitan/Provencal"), - unused
-	// "oj",  _("Ojibwa"), - unused
-	// "or",  _("Oriya"), - unused
-	// "os",  _("Ossetic"), - unused
-	// "pa",  _("Punjabi"), - unused
-	// "pi",  _("Pali"), - unused
-	"pl",  _("Polish"),
-	// "ps",  _("Pushto"),	- unused
-	"pt",  _("Portuguese"),
-	// "qu",  _("Quechua"), - unused
-	// "rm",  _("Raeto-Romance"), - unused
-	// "ro",  _("Romanian"),
-	"ru",  _("Russian"),
-	// "sa",  _("Sanskrit"), - unused
-	// "sd",  _("Sindhi"), - unused
-	// "se",  _("Northern Sami"), - unused
-	"sk",  _("Slovak"),
-	"sl",  _("Slovenian"),
-	// "sn",  _("Shona"),  - unused
-	// "so",  _("Somali"), - unused
-	// "sq",  _("Albanian"), - unused
-	// "sr",  _("Serbian"), - unused
-	// "su",  _("Sundanese"), - unused
-	"sv",  _("Swedish"),
-	// "sw",  _("Swahili"),  - unused
-	// "ta",  _("Tamil"), -unused
-	// "te",  _("Telugu"), - unused
-	// "tg",  _("Tajik"), - unused
-	// "tk",  _("Turkmen"), - unused
-	// "tl",  _("Tagalog"),  - unused
-	// "tr",  _("Turkish"), - unused
-	// "tt",  _("Tatar"), - unused
-	// "ty",  _("Tahitian"), - unused
-	"uc",  _("English/Canadian"),
-	// "ug",  _("Uighur"), - unused
-	"uk",  _("Ukrainian"),
-	// "ur",  _("Urdu"), - unused
-	"us",  _("English/American"),
-	// "uz",  _("Uzbek"), - unused
-	// "vi",  _("Vietnamese"), - unused
-	// "vo",  _("Volapuk"), - unused
-	"wa",  _("Walloon"),
-	// "yi",  _("Yiddish"), - unused
-	// "yo",  _("Yoruba"), - unused
-	"zu",  _("Zulu")
-	// "aa", _("Afar"),
-	// "ak", _("Akan"),
-	// "av", _("Avaric"),
-	// "bi", _("Bislama"),
-	// "bm", _("Bambara"),
-	// "cu", _("Old Slavonic"),
-	// "ee", _("Ewe"),
-	// "ff", _("Fulah"),
-	// "ho", _("Hiri Motu"),
-	// "ht", _("Haitian Creole"),
-	// "hz", _("Herero"),
-	// "ie", _("Interlingue"),
-	// "ig", _("Igbo"),
-	// "ii", _("Sichuan Yi"),
-	// "ik", _("Inupiaq"),
-	// "kg", _("Kongo"),
-	// "ki", _("Kikuyu/Gikuyu"),
-	// "kj", _("Kwanyama"),
-	// "lb", _("Luxembourgish"),
-	// "lg", _("Ganda"),
-	// "li", _("Limburgan"),
-	// "ln", _("Lingala"),
-	// "lu", _("Luba-Katanga"),
-	// "mg", _("Malagasy"),
-	// "mh", _("Marshallese"),
-	// "na", _("Nauru"),
-	// "nd", _("North Ndebele"),
-	// "ng", _("Ndonga"),
-	// "nr", _("South Ndebele"),
-	// "ny", _("Nyanja"),
-	// "rn", _("Rundi"),
-	// "rw", _("Kinyarwanda"),
-	// "sc", _("Sardinian"),
-	// "sg", _("Sango"),
-	// "si", _("Sinhalese"),
-	// "sm", _("Samoan"),
-	// "ss", _("Swati"),
-	// "st", _("Southern Sotho"),
-	// "tn", _("Tswana"),
-	// "to", _("Tonga"),
-	// "ts", _("Tsonga"),
-	// "tw", _("Twi"),
-	// "ve", _("Venda"),
-	// "wo", _("Wolof"),
-	// "xh", _("Xhosa"),
-	// "za", _("Zhuang")
+		if ( strlen(get_model_char(MAIN_COLUMN1)) > 1 ) {
+			gtk_entry_set_text(GTK_ENTRY(entry), "");	
+			gtk_entry_set_text(GTK_ENTRY(entry), get_model_char(MAIN_COLUMN1));	
+		}
 	}
-	
-}
-*/
-
-void
-on_button_reset_clicked                (GtkButton       *button,
-                                        gpointer         user_data)
-{
-	model_default();
-	gtk_widget_destroy( lookup_widget( GTK_WIDGET(button), "preferences1") ); 
 }

@@ -26,393 +26,6 @@
 #define GLADE_HOOKUP_OBJECT_NO_REF(component,widget,name) \
   g_object_set_data (G_OBJECT (component), name, widget)
 
-static GnomeUIInfo dictionary1_menu_uiinfo[] =
-{
-  {
-    GNOME_APP_UI_ITEM, N_("Back"),
-    N_("go back (search history)"),
-    (gpointer) on_back1_activate, NULL, NULL,
-    GNOME_APP_PIXMAP_STOCK, "gtk-go-back",
-    0, (GdkModifierType) 0, NULL
-  },
-  {
-    GNOME_APP_UI_ITEM, N_("Forward"),
-    N_("go forward (search history)"),
-    (gpointer) on_forward1_activate, NULL, NULL,
-    GNOME_APP_PIXMAP_STOCK, "gtk-go-forward",
-    0, (GdkModifierType) 0, NULL
-  },
-  GNOMEUIINFO_SEPARATOR,
-  {
-    GNOME_APP_UI_ITEM, N_("Search"),
-    N_("start search for given word"),
-    (gpointer) on_search1_activate, NULL, NULL,
-    GNOME_APP_PIXMAP_STOCK, "gtk-find",
-    0, (GdkModifierType) 0, NULL
-  },
-  GNOMEUIINFO_MENU_PREFERENCES_ITEM (on_preferences1_activate, NULL),
-  GNOMEUIINFO_SEPARATOR,
-  GNOMEUIINFO_MENU_EXIT_ITEM (file_quit_activated, NULL),
-  GNOMEUIINFO_END
-};
-
-static GnomeUIInfo menuitem2_menu_uiinfo[] =
-{
-  GNOMEUIINFO_MENU_PASTE_ITEM (file_paste_activate, NULL),
-  GNOMEUIINFO_END
-};
-
-static GnomeUIInfo view1_menu_uiinfo[] =
-{
-  {
-    GNOME_APP_UI_ITEM, N_("Mini-Mode"),
-    N_("switch to small window size"),
-    (gpointer) on_mini_mode1_activate, NULL, NULL,
-    GNOME_APP_PIXMAP_NONE, NULL,
-    0, (GdkModifierType) 0, NULL
-  },
-  {
-    GNOME_APP_UI_ITEM, N_("Window-Mode"),
-    N_("swizch to normal window size"),
-    (gpointer) on_window_mode1_activate, NULL, NULL,
-    GNOME_APP_PIXMAP_NONE, NULL,
-    0, (GdkModifierType) 0, NULL
-  },
-  GNOMEUIINFO_END
-};
-
-static GnomeUIInfo menuitem4_menu_uiinfo[] =
-{
-  GNOMEUIINFO_HELP ("gnome-ding"),
-  GNOMEUIINFO_MENU_ABOUT_ITEM (on_info1_activate, NULL),
-  GNOMEUIINFO_END
-};
-
-static GnomeUIInfo menubar1_uiinfo[] =
-{
-  {
-    GNOME_APP_UI_SUBTREE, N_("Dictionary"),
-    NULL,
-    dictionary1_menu_uiinfo, NULL, NULL,
-    GNOME_APP_PIXMAP_NONE, NULL,
-    0, (GdkModifierType) 0, NULL
-  },
-  GNOMEUIINFO_MENU_EDIT_TREE (menuitem2_menu_uiinfo),
-  GNOMEUIINFO_MENU_VIEW_TREE (view1_menu_uiinfo),
-  GNOMEUIINFO_MENU_HELP_TREE (menuitem4_menu_uiinfo),
-  GNOMEUIINFO_END
-};
-
-GtkWidget*
-create_gnome_ding (void)
-{
-  GtkWidget *gnome_ding;
-  GdkPixbuf *gnome_ding_icon_pixbuf;
-  GtkWidget *vbox1;
-  GtkWidget *menubar1;
-  GtkWidget *hbox1;
-  GtkWidget *button1;
-  GtkWidget *alignment3;
-  GtkWidget *hbox4;
-  GtkWidget *image8;
-  GtkWidget *button_back;
-  GtkWidget *button_vor;
-  GtkWidget *image9;
-  GtkWidget *label_searchword;
-  GtkWidget *suchinput;
-  GtkWidget *selection;
-  GtkWidget *selection_combo;
-  GtkWidget *submitbutton;
-  GtkWidget *alignment1;
-  GtkWidget *hbox2;
-  GtkWidget *image1;
-  GtkWidget *label1;
-  GtkWidget *eventbox1;
-  AtkObject *atko;
-  GtkWidget *image7;
-  GtkWidget *vbox7;
-  GtkWidget *scrolledwindow2;
-  GtkWidget *list;
-  GtkWidget *result_entry;
-  GtkWidget *statusbar;
-  GtkAccelGroup *accel_group;
-  GtkTooltips *tooltips;
-
-  tooltips = gtk_tooltips_new ();
-
-  accel_group = gtk_accel_group_new ();
-
-  gnome_ding = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_widget_set_name (gnome_ding, "gnome_ding");
-  gtk_window_set_title (GTK_WINDOW (gnome_ding), _("gnome ding"));
-  gnome_ding_icon_pixbuf = create_pixbuf ("gnome-ding/gnome-ding.png");
-  if (gnome_ding_icon_pixbuf)
-    {
-      gtk_window_set_icon (GTK_WINDOW (gnome_ding), gnome_ding_icon_pixbuf);
-      gdk_pixbuf_unref (gnome_ding_icon_pixbuf);
-    }
-
-  vbox1 = gtk_vbox_new (FALSE, 0);
-  gtk_widget_set_name (vbox1, "vbox1");
-  gtk_widget_show (vbox1);
-  gtk_container_add (GTK_CONTAINER (gnome_ding), vbox1);
-
-  menubar1 = gtk_menu_bar_new ();
-  gtk_widget_set_name (menubar1, "menubar1");
-  gtk_widget_show (menubar1);
-  gtk_box_pack_start (GTK_BOX (vbox1), menubar1, FALSE, FALSE, 0);
-  gnome_app_fill_menu (GTK_MENU_SHELL (menubar1), menubar1_uiinfo,
-                       NULL, FALSE, 0);
-
-  gtk_widget_set_name (menubar1_uiinfo[0].widget, "dictionary1");
-
-  gtk_widget_set_name (dictionary1_menu_uiinfo[0].widget, "back1");
-
-  gtk_widget_set_name (dictionary1_menu_uiinfo[1].widget, "forward1");
-
-  gtk_widget_set_name (dictionary1_menu_uiinfo[2].widget, "separator2");
-
-  gtk_widget_set_name (dictionary1_menu_uiinfo[3].widget, "search1");
-
-  gtk_widget_set_name (dictionary1_menu_uiinfo[4].widget, "preferences1");
-
-  gtk_widget_set_name (dictionary1_menu_uiinfo[5].widget, "separator1");
-
-  gtk_widget_set_name (dictionary1_menu_uiinfo[6].widget, "beenden1");
-
-  gtk_widget_set_name (menubar1_uiinfo[1].widget, "menuitem2");
-
-  gtk_widget_set_name (menuitem2_menu_uiinfo[0].widget, "einf__gen1");
-
-  gtk_widget_set_name (menubar1_uiinfo[2].widget, "view1");
-
-  gtk_widget_set_name (view1_menu_uiinfo[0].widget, "mini_mode1");
-
-  gtk_widget_set_name (view1_menu_uiinfo[1].widget, "window_mode1");
-
-  gtk_widget_set_name (menubar1_uiinfo[3].widget, "menuitem4");
-
-  gtk_widget_set_name (menuitem4_menu_uiinfo[1].widget, "info1");
-
-  hbox1 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_set_name (hbox1, "hbox1");
-  gtk_widget_show (hbox1);
-  gtk_box_pack_start (GTK_BOX (vbox1), hbox1, FALSE, TRUE, 5);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox1), 2);
-
-  button1 = gtk_button_new ();
-  gtk_widget_set_name (button1, "button1");
-  gtk_widget_show (button1);
-  gtk_box_pack_start (GTK_BOX (hbox1), button1, FALSE, FALSE, 2);
-  gtk_widget_set_sensitive (button1, FALSE);
-  gtk_tooltips_set_tip (tooltips, button1, _("go back (search history)"), NULL);
-
-  alignment3 = gtk_alignment_new (0.5, 0.5, 0, 0);
-  gtk_widget_set_name (alignment3, "alignment3");
-  gtk_widget_show (alignment3);
-  gtk_container_add (GTK_CONTAINER (button1), alignment3);
-
-  hbox4 = gtk_hbox_new (FALSE, 2);
-  gtk_widget_set_name (hbox4, "hbox4");
-  gtk_widget_show (hbox4);
-  gtk_container_add (GTK_CONTAINER (alignment3), hbox4);
-
-  image8 = gtk_image_new_from_stock ("gtk-go-back", GTK_ICON_SIZE_BUTTON);
-  gtk_widget_set_name (image8, "image8");
-  gtk_widget_show (image8);
-  gtk_box_pack_start (GTK_BOX (hbox4), image8, FALSE, FALSE, 0);
-
-  button_back = gtk_label_new_with_mnemonic ("");
-  gtk_widget_set_name (button_back, "button_back");
-  gtk_widget_show (button_back);
-  gtk_box_pack_start (GTK_BOX (hbox4), button_back, FALSE, FALSE, 0);
-  gtk_label_set_justify (GTK_LABEL (button_back), GTK_JUSTIFY_LEFT);
-
-  button_vor = gtk_button_new ();
-  gtk_widget_set_name (button_vor, "button_vor");
-  gtk_widget_show (button_vor);
-  gtk_box_pack_start (GTK_BOX (hbox1), button_vor, FALSE, FALSE, 2);
-  gtk_widget_set_sensitive (button_vor, FALSE);
-  gtk_tooltips_set_tip (tooltips, button_vor, _("go forward (search history)"), NULL);
-
-  image9 = gtk_image_new_from_stock ("gtk-go-forward", GTK_ICON_SIZE_BUTTON);
-  gtk_widget_set_name (image9, "image9");
-  gtk_widget_show (image9);
-  gtk_container_add (GTK_CONTAINER (button_vor), image9);
-
-  label_searchword = gtk_label_new_with_mnemonic (_("_Word:"));
-  gtk_widget_set_name (label_searchword, "label_searchword");
-  gtk_box_pack_start (GTK_BOX (hbox1), label_searchword, FALSE, FALSE, 2);
-  gtk_label_set_justify (GTK_LABEL (label_searchword), GTK_JUSTIFY_LEFT);
-  gtk_misc_set_padding (GTK_MISC (label_searchword), 5, 0);
-
-  suchinput = gtk_entry_new ();
-  gtk_widget_set_name (suchinput, "suchinput");
-  gtk_widget_show (suchinput);
-  gtk_box_pack_start (GTK_BOX (hbox1), suchinput, FALSE, TRUE, 2);
-  gtk_tooltips_set_tip (tooltips, suchinput, _("specify the search string"), NULL);
-  gtk_entry_set_activates_default (GTK_ENTRY (suchinput), TRUE);
-
-  selection = gtk_combo_new ();
-  g_object_set_data (G_OBJECT (GTK_COMBO (selection)->popwin),
-                     "GladeParentKey", selection);
-  gtk_widget_set_name (selection, "selection");
-  gtk_widget_show (selection);
-  gtk_box_pack_start (GTK_BOX (hbox1), selection, TRUE, TRUE, 2);
-
-  selection_combo = GTK_COMBO (selection)->entry;
-  gtk_widget_set_name (selection_combo, "selection_combo");
-  gtk_widget_show (selection_combo);
-  gtk_tooltips_set_tip (tooltips, selection_combo, _("select the dictionary"), NULL);
-  gtk_editable_set_editable (GTK_EDITABLE (selection_combo), FALSE);
-  gtk_entry_set_text (GTK_ENTRY (selection_combo), _(" "));
-
-  submitbutton = gtk_button_new ();
-  gtk_widget_set_name (submitbutton, "submitbutton");
-  gtk_widget_show (submitbutton);
-  gtk_box_pack_start (GTK_BOX (hbox1), submitbutton, FALSE, FALSE, 2);
-  gtk_tooltips_set_tip (tooltips, submitbutton, _("start search for given word"), NULL);
-  gtk_widget_add_accelerator (submitbutton, "clicked", accel_group,
-                              GDK_Return, 0,
-                              GTK_ACCEL_VISIBLE);
-  gtk_button_set_relief (GTK_BUTTON (submitbutton), GTK_RELIEF_HALF);
-
-  alignment1 = gtk_alignment_new (0.5, 0.5, 0, 0);
-  gtk_widget_set_name (alignment1, "alignment1");
-  gtk_widget_show (alignment1);
-  gtk_container_add (GTK_CONTAINER (submitbutton), alignment1);
-
-  hbox2 = gtk_hbox_new (FALSE, 2);
-  gtk_widget_set_name (hbox2, "hbox2");
-  gtk_widget_show (hbox2);
-  gtk_container_add (GTK_CONTAINER (alignment1), hbox2);
-
-  image1 = gtk_image_new_from_stock ("gtk-find", GTK_ICON_SIZE_BUTTON);
-  gtk_widget_set_name (image1, "image1");
-  gtk_widget_show (image1);
-  gtk_box_pack_start (GTK_BOX (hbox2), image1, FALSE, FALSE, 0);
-
-  label1 = gtk_label_new_with_mnemonic (_("_Search"));
-  gtk_widget_set_name (label1, "label1");
-  gtk_widget_show (label1);
-  gtk_box_pack_start (GTK_BOX (hbox2), label1, FALSE, FALSE, 0);
-  gtk_label_set_justify (GTK_LABEL (label1), GTK_JUSTIFY_LEFT);
-
-  eventbox1 = gtk_event_box_new ();
-  gtk_widget_set_name (eventbox1, "eventbox1");
-  gtk_widget_show (eventbox1);
-  gtk_box_pack_start (GTK_BOX (hbox1), eventbox1, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, eventbox1, _("minimode/winmode"), NULL);
-
-  image7 = create_pixmap (gnome_ding, "gnome-ding/gnome-ding24.png");
-  gtk_widget_set_name (image7, "image7");
-  gtk_widget_show (image7);
-  gtk_container_add (GTK_CONTAINER (eventbox1), image7);
-  gtk_misc_set_alignment (GTK_MISC (image7), 0, 0);
-  gtk_misc_set_padding (GTK_MISC (image7), 5, 0);
-
-  vbox7 = gtk_vbox_new (FALSE, 0);
-  gtk_widget_set_name (vbox7, "vbox7");
-  gtk_widget_show (vbox7);
-  gtk_box_pack_start (GTK_BOX (vbox1), vbox7, TRUE, TRUE, 0);
-
-  scrolledwindow2 = gtk_scrolled_window_new (NULL, NULL);
-  gtk_widget_set_name (scrolledwindow2, "scrolledwindow2");
-  gtk_widget_show (scrolledwindow2);
-  gtk_box_pack_start (GTK_BOX (vbox7), scrolledwindow2, TRUE, TRUE, 2);
-  gtk_widget_set_size_request (scrolledwindow2, 250, 150);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow2), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolledwindow2), GTK_SHADOW_IN);
-
-  list = gtk_tree_view_new ();
-  gtk_widget_set_name (list, "list");
-  gtk_widget_show (list);
-  gtk_container_add (GTK_CONTAINER (scrolledwindow2), list);
-
-  result_entry = gtk_entry_new ();
-  gtk_widget_set_name (result_entry, "result_entry");
-  gtk_box_pack_start (GTK_BOX (vbox7), result_entry, FALSE, FALSE, 2);
-  gtk_tooltips_set_tip (tooltips, result_entry, _("Show the Result for copy and paste."), NULL);
-  gtk_editable_set_editable (GTK_EDITABLE (result_entry), FALSE);
-
-  statusbar = gtk_statusbar_new ();
-  gtk_widget_set_name (statusbar, "statusbar");
-  gtk_widget_show (statusbar);
-  gtk_box_pack_start (GTK_BOX (vbox1), statusbar, FALSE, FALSE, 0);
-
-  g_signal_connect ((gpointer) gnome_ding, "destroy",
-                    G_CALLBACK (gtk_main_quit),
-                    NULL);
-  g_signal_connect ((gpointer) button1, "clicked",
-                    G_CALLBACK (on_button_back_clicked),
-                    NULL);
-  g_signal_connect ((gpointer) button_vor, "clicked",
-                    G_CALLBACK (on_button_vor_clicked),
-                    NULL);
-  g_signal_connect ((gpointer) submitbutton, "clicked",
-                    G_CALLBACK (on_submitbutton_clicked),
-                    NULL);
-  g_signal_connect ((gpointer) eventbox1, "button_press_event",
-                    G_CALLBACK (on_eventbox1_button_press_event),
-                    NULL);
-
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label_searchword), suchinput);
-
-  atko = gtk_widget_get_accessible (eventbox1);
-  atk_object_set_description (atko, _("gnome-ding Homepage: http://www.grawert.net/software/"));
-
-
-  /* Store pointers to all widgets, for use by lookup_widget(). */
-  GLADE_HOOKUP_OBJECT_NO_REF (gnome_ding, gnome_ding, "gnome_ding");
-  GLADE_HOOKUP_OBJECT (gnome_ding, vbox1, "vbox1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, menubar1, "menubar1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, menubar1_uiinfo[0].widget, "dictionary1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, dictionary1_menu_uiinfo[0].widget, "back1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, dictionary1_menu_uiinfo[1].widget, "forward1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, dictionary1_menu_uiinfo[2].widget, "separator2");
-  GLADE_HOOKUP_OBJECT (gnome_ding, dictionary1_menu_uiinfo[3].widget, "search1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, dictionary1_menu_uiinfo[4].widget, "preferences1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, dictionary1_menu_uiinfo[5].widget, "separator1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, dictionary1_menu_uiinfo[6].widget, "beenden1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, menubar1_uiinfo[1].widget, "menuitem2");
-  GLADE_HOOKUP_OBJECT (gnome_ding, menuitem2_menu_uiinfo[0].widget, "einf__gen1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, menubar1_uiinfo[2].widget, "view1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, view1_menu_uiinfo[0].widget, "mini_mode1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, view1_menu_uiinfo[1].widget, "window_mode1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, menubar1_uiinfo[3].widget, "menuitem4");
-  GLADE_HOOKUP_OBJECT (gnome_ding, menuitem4_menu_uiinfo[1].widget, "info1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, hbox1, "hbox1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, button1, "button1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, alignment3, "alignment3");
-  GLADE_HOOKUP_OBJECT (gnome_ding, hbox4, "hbox4");
-  GLADE_HOOKUP_OBJECT (gnome_ding, image8, "image8");
-  GLADE_HOOKUP_OBJECT (gnome_ding, button_back, "button_back");
-  GLADE_HOOKUP_OBJECT (gnome_ding, button_vor, "button_vor");
-  GLADE_HOOKUP_OBJECT (gnome_ding, image9, "image9");
-  GLADE_HOOKUP_OBJECT (gnome_ding, label_searchword, "label_searchword");
-  GLADE_HOOKUP_OBJECT (gnome_ding, suchinput, "suchinput");
-  GLADE_HOOKUP_OBJECT (gnome_ding, selection, "selection");
-  GLADE_HOOKUP_OBJECT (gnome_ding, selection_combo, "selection_combo");
-  GLADE_HOOKUP_OBJECT (gnome_ding, submitbutton, "submitbutton");
-  GLADE_HOOKUP_OBJECT (gnome_ding, alignment1, "alignment1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, hbox2, "hbox2");
-  GLADE_HOOKUP_OBJECT (gnome_ding, image1, "image1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, label1, "label1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, eventbox1, "eventbox1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, image7, "image7");
-  GLADE_HOOKUP_OBJECT (gnome_ding, vbox7, "vbox7");
-  GLADE_HOOKUP_OBJECT (gnome_ding, scrolledwindow2, "scrolledwindow2");
-  GLADE_HOOKUP_OBJECT (gnome_ding, list, "list");
-  GLADE_HOOKUP_OBJECT (gnome_ding, result_entry, "result_entry");
-  GLADE_HOOKUP_OBJECT (gnome_ding, statusbar, "statusbar");
-  GLADE_HOOKUP_OBJECT_NO_REF (gnome_ding, tooltips, "tooltips");
-
-  gtk_widget_grab_focus (suchinput);
-  gtk_window_add_accel_group (GTK_WINDOW (gnome_ding), accel_group);
-
-  return gnome_ding;
-}
-
 GtkWidget*
 create_about_gnome_ding (void)
 {
@@ -430,7 +43,7 @@ create_about_gnome_ding (void)
 
   about_gnome_ding_logo_pixbuf = create_pixbuf ("gnome-ding/gnome-ding.png");
   about_gnome_ding = gnome_about_new ("gnome-ding", VERSION,
-                        _("(c) 2003 Heiko Abraham"),
+                        _("(c) 2003, 2004 Heiko Abraham"),
                         _("A translation- and spellchecking program for single words, inspired by \"ding\" and \"g2ding\"."),
                         authors,
                         documenters,
@@ -500,13 +113,26 @@ create_preferences1 (void)
   GtkWidget *image29;
   GtkWidget *label20;
   GtkWidget *vbox9;
-  GtkWidget *table3;
+  GtkWidget *vbox10;
+  GtkWidget *vbox11;
+  GtkWidget *label25;
+  GtkWidget *hbox16;
+  GtkWidget *label28;
+  GtkWidget *vbox12;
+  GtkWidget *pref_font_default;
+  GtkWidget *hbox14;
+  GtkWidget *label24;
+  GtkWidget *fontpicker1;
+  GtkWidget *label26;
+  GtkWidget *hbox15;
+  GtkWidget *label27;
+  GtkWidget *vbox13;
+  GtkWidget *pref_default_color;
+  GtkWidget *table4;
   GtkWidget *label22;
   GtkWidget *label23;
-  GtkWidget *label24;
   GtkWidget *colorpicker1;
   GtkWidget *colorpicker2;
-  GtkWidget *fontpicker1;
   GtkWidget *hbox13;
   GtkWidget *button_reset;
   GtkWidget *label21;
@@ -544,10 +170,11 @@ create_preferences1 (void)
   gtk_widget_show (image21);
   gtk_box_pack_start (GTK_BOX (hbox8), image21, FALSE, FALSE, 8);
 
-  label5 = gtk_label_new (_("Select some settings for use \nwith spellchecking (by aspell)."));
+  label5 = gtk_label_new (_("<b>Aspell Options</b>\n\nSelect some settings for use with spellchecking (by aspell)."));
   gtk_widget_set_name (label5, "label5");
   gtk_widget_show (label5);
   gtk_box_pack_start (GTK_BOX (hbox8), label5, TRUE, TRUE, 0);
+  gtk_label_set_use_markup (GTK_LABEL (label5), TRUE);
   gtk_label_set_justify (GTK_LABEL (label5), GTK_JUSTIFY_LEFT);
   gtk_misc_set_alignment (GTK_MISC (label5), 0, 0.5);
 
@@ -649,10 +276,11 @@ create_preferences1 (void)
   gtk_widget_show (image22);
   gtk_box_pack_start (GTK_BOX (hbox9), image22, FALSE, FALSE, 8);
 
-  label4 = gtk_label_new (_("Settings only use for translation (by grep)"));
+  label4 = gtk_label_new (_("<b>Translation Options</b>\n\nDefine some options for grep."));
   gtk_widget_set_name (label4, "label4");
   gtk_widget_show (label4);
   gtk_box_pack_start (GTK_BOX (hbox9), label4, FALSE, FALSE, 0);
+  gtk_label_set_use_markup (GTK_LABEL (label4), TRUE);
   gtk_label_set_justify (GTK_LABEL (label4), GTK_JUSTIFY_LEFT);
   gtk_label_set_line_wrap (GTK_LABEL (label4), TRUE);
   gtk_misc_set_alignment (GTK_MISC (label4), 0, 0.5);
@@ -711,10 +339,11 @@ create_preferences1 (void)
   gtk_widget_show (image28);
   gtk_box_pack_start (GTK_BOX (hbox10), image28, FALSE, FALSE, 8);
 
-  label14 = gtk_label_new (_("Select the languages that should be available."));
+  label14 = gtk_label_new (_("<b>Available Languages</b>\n\nDefine your favorites languages, that you wish to use."));
   gtk_widget_set_name (label14, "label14");
   gtk_widget_show (label14);
   gtk_box_pack_start (GTK_BOX (hbox10), label14, FALSE, FALSE, 0);
+  gtk_label_set_use_markup (GTK_LABEL (label14), TRUE);
   gtk_label_set_justify (GTK_LABEL (label14), GTK_JUSTIFY_LEFT);
   gtk_label_set_line_wrap (GTK_LABEL (label14), TRUE);
   gtk_misc_set_alignment (GTK_MISC (label14), 0, 0.5);
@@ -837,15 +466,16 @@ create_preferences1 (void)
   gtk_box_pack_start (GTK_BOX (vbox8), hbox12, FALSE, TRUE, 8);
   gtk_container_set_border_width (GTK_CONTAINER (hbox12), 2);
 
-  image29 = create_pixmap (preferences1, "gnome-ding/gnome-ding.png");
+  image29 = gtk_image_new_from_stock ("gtk-select-color", GTK_ICON_SIZE_DIALOG);
   gtk_widget_set_name (image29, "image29");
   gtk_widget_show (image29);
   gtk_box_pack_start (GTK_BOX (hbox12), image29, FALSE, FALSE, 8);
 
-  label20 = gtk_label_new (_("Define some settings for Gnome-Ding, like color, font ..."));
+  label20 = gtk_label_new (_("<b>Font &amp; Colors</b>"));
   gtk_widget_set_name (label20, "label20");
   gtk_widget_show (label20);
   gtk_box_pack_start (GTK_BOX (hbox12), label20, FALSE, FALSE, 0);
+  gtk_label_set_use_markup (GTK_LABEL (label20), TRUE);
   gtk_label_set_justify (GTK_LABEL (label20), GTK_JUSTIFY_LEFT);
   gtk_label_set_line_wrap (GTK_LABEL (label20), TRUE);
   gtk_misc_set_alignment (GTK_MISC (label20), 0, 0.5);
@@ -855,69 +485,138 @@ create_preferences1 (void)
   gtk_widget_show (vbox9);
   gtk_box_pack_start (GTK_BOX (vbox8), vbox9, TRUE, TRUE, 0);
 
-  table3 = gtk_table_new (3, 2, FALSE);
-  gtk_widget_set_name (table3, "table3");
-  gtk_widget_show (table3);
-  gtk_box_pack_start (GTK_BOX (vbox9), table3, TRUE, TRUE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (table3), 2);
-  gtk_table_set_row_spacings (GTK_TABLE (table3), 4);
-  gtk_table_set_col_spacings (GTK_TABLE (table3), 4);
+  vbox10 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_set_name (vbox10, "vbox10");
+  gtk_widget_show (vbox10);
+  gtk_box_pack_start (GTK_BOX (vbox9), vbox10, TRUE, TRUE, 0);
 
-  label22 = gtk_label_new (_("Textcolor:"));
-  gtk_widget_set_name (label22, "label22");
-  gtk_widget_show (label22);
-  gtk_table_attach (GTK_TABLE (table3), label22, 0, 1, 0, 1,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_label_set_justify (GTK_LABEL (label22), GTK_JUSTIFY_LEFT);
-  gtk_misc_set_alignment (GTK_MISC (label22), 0, 0.5);
-  gtk_misc_set_padding (GTK_MISC (label22), 12, 0);
+  vbox11 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_set_name (vbox11, "vbox11");
+  gtk_widget_show (vbox11);
+  gtk_box_pack_start (GTK_BOX (vbox10), vbox11, TRUE, TRUE, 0);
 
-  label23 = gtk_label_new (_("Hightlight Color:"));
-  gtk_widget_set_name (label23, "label23");
-  gtk_widget_show (label23);
-  gtk_table_attach (GTK_TABLE (table3), label23, 0, 1, 1, 2,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_label_set_justify (GTK_LABEL (label23), GTK_JUSTIFY_LEFT);
-  gtk_misc_set_alignment (GTK_MISC (label23), 0, 0.5);
-  gtk_misc_set_padding (GTK_MISC (label23), 12, 0);
+  label25 = gtk_label_new (_("<b>Font</b>"));
+  gtk_widget_set_name (label25, "label25");
+  gtk_widget_show (label25);
+  gtk_box_pack_start (GTK_BOX (vbox11), label25, FALSE, FALSE, 0);
+  gtk_label_set_use_markup (GTK_LABEL (label25), TRUE);
+  gtk_label_set_justify (GTK_LABEL (label25), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_alignment (GTK_MISC (label25), 0, 0.5);
+  gtk_misc_set_padding (GTK_MISC (label25), 4, 4);
+
+  hbox16 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_set_name (hbox16, "hbox16");
+  gtk_widget_show (hbox16);
+  gtk_box_pack_start (GTK_BOX (vbox11), hbox16, TRUE, TRUE, 0);
+
+  label28 = gtk_label_new (_(" "));
+  gtk_widget_set_name (label28, "label28");
+  gtk_widget_show (label28);
+  gtk_box_pack_start (GTK_BOX (hbox16), label28, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label28), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_padding (GTK_MISC (label28), 6, 0);
+
+  vbox12 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_set_name (vbox12, "vbox12");
+  gtk_widget_show (vbox12);
+  gtk_box_pack_start (GTK_BOX (hbox16), vbox12, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox12), 4);
+
+  pref_font_default = gtk_check_button_new_with_mnemonic (_("Use default theme font"));
+  gtk_widget_set_name (pref_font_default, "pref_font_default");
+  gtk_widget_show (pref_font_default);
+  gtk_box_pack_start (GTK_BOX (vbox12), pref_font_default, FALSE, FALSE, 0);
+
+  hbox14 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_set_name (hbox14, "hbox14");
+  gtk_widget_show (hbox14);
+  gtk_box_pack_start (GTK_BOX (vbox12), hbox14, FALSE, TRUE, 0);
 
   label24 = gtk_label_new (_("Textfont:"));
   gtk_widget_set_name (label24, "label24");
   gtk_widget_show (label24);
-  gtk_table_attach (GTK_TABLE (table3), label24, 0, 1, 2, 3,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
+  gtk_box_pack_start (GTK_BOX (hbox14), label24, FALSE, FALSE, 0);
   gtk_label_set_justify (GTK_LABEL (label24), GTK_JUSTIFY_LEFT);
   gtk_misc_set_alignment (GTK_MISC (label24), 0, 0.5);
-  gtk_misc_set_padding (GTK_MISC (label24), 12, 0);
+
+  fontpicker1 = gnome_font_picker_new ();
+  gtk_widget_set_name (fontpicker1, "fontpicker1");
+  gtk_widget_show (fontpicker1);
+  gtk_box_pack_start (GTK_BOX (hbox14), fontpicker1, TRUE, TRUE, 2);
+  gnome_font_picker_set_title (GNOME_FONT_PICKER (fontpicker1), _("Choose the font color"));
+  gnome_font_picker_set_mode (GNOME_FONT_PICKER (fontpicker1),
+                              GNOME_FONT_PICKER_MODE_FONT_INFO);
+
+  label26 = gtk_label_new (_("<b>Color</b>"));
+  gtk_widget_set_name (label26, "label26");
+  gtk_widget_show (label26);
+  gtk_box_pack_start (GTK_BOX (vbox10), label26, FALSE, FALSE, 0);
+  gtk_label_set_use_markup (GTK_LABEL (label26), TRUE);
+  gtk_label_set_justify (GTK_LABEL (label26), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_alignment (GTK_MISC (label26), 0, 0.5);
+  gtk_misc_set_padding (GTK_MISC (label26), 4, 4);
+
+  hbox15 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_set_name (hbox15, "hbox15");
+  gtk_widget_show (hbox15);
+  gtk_box_pack_start (GTK_BOX (vbox10), hbox15, TRUE, TRUE, 0);
+
+  label27 = gtk_label_new (_(" "));
+  gtk_widget_set_name (label27, "label27");
+  gtk_widget_show (label27);
+  gtk_box_pack_start (GTK_BOX (hbox15), label27, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label27), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_padding (GTK_MISC (label27), 6, 0);
+
+  vbox13 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_set_name (vbox13, "vbox13");
+  gtk_widget_show (vbox13);
+  gtk_box_pack_start (GTK_BOX (hbox15), vbox13, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox13), 4);
+
+  pref_default_color = gtk_check_button_new_with_mnemonic (_("Use default theme color"));
+  gtk_widget_set_name (pref_default_color, "pref_default_color");
+  gtk_widget_show (pref_default_color);
+  gtk_box_pack_start (GTK_BOX (vbox13), pref_default_color, FALSE, FALSE, 0);
+
+  table4 = gtk_table_new (2, 2, FALSE);
+  gtk_widget_set_name (table4, "table4");
+  gtk_widget_show (table4);
+  gtk_box_pack_start (GTK_BOX (vbox13), table4, TRUE, TRUE, 0);
+
+  label22 = gtk_label_new (_("Textcolor:"));
+  gtk_widget_set_name (label22, "label22");
+  gtk_widget_show (label22);
+  gtk_table_attach (GTK_TABLE (table4), label22, 0, 1, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_label_set_justify (GTK_LABEL (label22), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_alignment (GTK_MISC (label22), 0, 0.5);
+
+  label23 = gtk_label_new (_("Hightlight Color:"));
+  gtk_widget_set_name (label23, "label23");
+  gtk_widget_show (label23);
+  gtk_table_attach (GTK_TABLE (table4), label23, 0, 1, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_label_set_justify (GTK_LABEL (label23), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_alignment (GTK_MISC (label23), 0, 0.5);
 
   colorpicker1 = gnome_color_picker_new ();
   gtk_widget_set_name (colorpicker1, "colorpicker1");
   gtk_widget_show (colorpicker1);
-  gtk_table_attach (GTK_TABLE (table3), colorpicker1, 1, 2, 0, 1,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
+  gtk_table_attach (GTK_TABLE (table4), colorpicker1, 1, 2, 0, 1,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_SHRINK | GTK_FILL),
+                    (GtkAttachOptions) (0), 2, 2);
   gnome_color_picker_set_title (GNOME_COLOR_PICKER (colorpicker1), _("Choose the text color"));
 
   colorpicker2 = gnome_color_picker_new ();
   gtk_widget_set_name (colorpicker2, "colorpicker2");
   gtk_widget_show (colorpicker2);
-  gtk_table_attach (GTK_TABLE (table3), colorpicker2, 1, 2, 1, 2,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gnome_color_picker_set_title (GNOME_COLOR_PICKER (colorpicker2), _("Choose the color for highlight "));
-
-  fontpicker1 = gnome_font_picker_new ();
-  gtk_widget_set_name (fontpicker1, "fontpicker1");
-  gtk_widget_show (fontpicker1);
-  gtk_table_attach (GTK_TABLE (table3), fontpicker1, 1, 2, 2, 3,
+  gtk_table_attach (GTK_TABLE (table4), colorpicker2, 1, 2, 1, 2,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_SHRINK | GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gnome_font_picker_set_title (GNOME_FONT_PICKER (fontpicker1), _("Choose the font color"));
-  gnome_font_picker_set_mode (GNOME_FONT_PICKER (fontpicker1),
-                              GNOME_FONT_PICKER_MODE_FONT_INFO);
+                    (GtkAttachOptions) (0), 2, 2);
+  gnome_color_picker_set_title (GNOME_COLOR_PICKER (colorpicker2), _("Choose the color for highlight "));
 
   hbox13 = gtk_hbox_new (FALSE, 0);
   gtk_widget_set_name (hbox13, "hbox13");
@@ -953,25 +652,31 @@ create_preferences1 (void)
   GTK_WIDGET_SET_FLAGS (okbutton1, GTK_CAN_DEFAULT);
 
   g_signal_connect ((gpointer) preferences1, "close",
-                    G_CALLBACK (on_preferences1_close),
+                    G_CALLBACK (on_pref_dialog_close),
                     NULL);
   g_signal_connect ((gpointer) preferences1, "destroy",
-                    G_CALLBACK (on_preferences1_destroy),
+                    G_CALLBACK (on_pref_dialog_destroy),
                     NULL);
   g_signal_connect ((gpointer) aspell_suggest, "value_changed",
-                    G_CALLBACK (on_aspell_suggest_value_changed),
+                    G_CALLBACK (on_pref_aspell_suggest_value_changed),
                     NULL);
   g_signal_connect ((gpointer) grep_word, "toggled",
-                    G_CALLBACK (on_grep_word_toggled),
+                    G_CALLBACK (on_pref_grep_word_toggled),
                     NULL);
   g_signal_connect ((gpointer) grep_case, "toggled",
-                    G_CALLBACK (on_grep_case_toggled),
+                    G_CALLBACK (on_pref_grep_case_toggled),
+                    NULL);
+  g_signal_connect ((gpointer) pref_font_default, "toggled",
+                    G_CALLBACK (on_pref_font_default_toggled),
+                    NULL);
+  g_signal_connect ((gpointer) pref_default_color, "toggled",
+                    G_CALLBACK (on_pref_default_color_toggled),
                     NULL);
   g_signal_connect ((gpointer) button_reset, "clicked",
                     G_CALLBACK (on_button_reset_clicked),
                     NULL);
   g_signal_connect ((gpointer) okbutton1, "clicked",
-                    G_CALLBACK (on_okbutton1_clicked),
+                    G_CALLBACK (on_pref_dialog_ok_clicked),
                     NULL);
 
   /* Store pointers to all widgets, for use by lookup_widget(). */
@@ -1027,13 +732,26 @@ create_preferences1 (void)
   GLADE_HOOKUP_OBJECT (preferences1, image29, "image29");
   GLADE_HOOKUP_OBJECT (preferences1, label20, "label20");
   GLADE_HOOKUP_OBJECT (preferences1, vbox9, "vbox9");
-  GLADE_HOOKUP_OBJECT (preferences1, table3, "table3");
+  GLADE_HOOKUP_OBJECT (preferences1, vbox10, "vbox10");
+  GLADE_HOOKUP_OBJECT (preferences1, vbox11, "vbox11");
+  GLADE_HOOKUP_OBJECT (preferences1, label25, "label25");
+  GLADE_HOOKUP_OBJECT (preferences1, hbox16, "hbox16");
+  GLADE_HOOKUP_OBJECT (preferences1, label28, "label28");
+  GLADE_HOOKUP_OBJECT (preferences1, vbox12, "vbox12");
+  GLADE_HOOKUP_OBJECT (preferences1, pref_font_default, "pref_font_default");
+  GLADE_HOOKUP_OBJECT (preferences1, hbox14, "hbox14");
+  GLADE_HOOKUP_OBJECT (preferences1, label24, "label24");
+  GLADE_HOOKUP_OBJECT (preferences1, fontpicker1, "fontpicker1");
+  GLADE_HOOKUP_OBJECT (preferences1, label26, "label26");
+  GLADE_HOOKUP_OBJECT (preferences1, hbox15, "hbox15");
+  GLADE_HOOKUP_OBJECT (preferences1, label27, "label27");
+  GLADE_HOOKUP_OBJECT (preferences1, vbox13, "vbox13");
+  GLADE_HOOKUP_OBJECT (preferences1, pref_default_color, "pref_default_color");
+  GLADE_HOOKUP_OBJECT (preferences1, table4, "table4");
   GLADE_HOOKUP_OBJECT (preferences1, label22, "label22");
   GLADE_HOOKUP_OBJECT (preferences1, label23, "label23");
-  GLADE_HOOKUP_OBJECT (preferences1, label24, "label24");
   GLADE_HOOKUP_OBJECT (preferences1, colorpicker1, "colorpicker1");
   GLADE_HOOKUP_OBJECT (preferences1, colorpicker2, "colorpicker2");
-  GLADE_HOOKUP_OBJECT (preferences1, fontpicker1, "fontpicker1");
   GLADE_HOOKUP_OBJECT (preferences1, hbox13, "hbox13");
   GLADE_HOOKUP_OBJECT (preferences1, button_reset, "button_reset");
   GLADE_HOOKUP_OBJECT (preferences1, label21, "label21");
@@ -1042,5 +760,453 @@ create_preferences1 (void)
   GLADE_HOOKUP_OBJECT (preferences1, okbutton1, "okbutton1");
 
   return preferences1;
+}
+
+static GnomeUIInfo on_menu_dictionary_menu_uiinfo[] =
+{
+  {
+    GNOME_APP_UI_ITEM, N_("_Back"),
+    N_("Go back (search history)"),
+    (gpointer) on_menu_back_activate, NULL, NULL,
+    GNOME_APP_PIXMAP_STOCK, "gtk-go-back",
+    GDK_1, (GdkModifierType) GDK_CONTROL_MASK, NULL
+  },
+  {
+    GNOME_APP_UI_ITEM, N_("_Forward"),
+    N_("Go forward (search history)"),
+    (gpointer) on_menu_forward_activate, NULL, NULL,
+    GNOME_APP_PIXMAP_STOCK, "gtk-go-forward",
+    GDK_2, (GdkModifierType) GDK_CONTROL_MASK, NULL
+  },
+  GNOMEUIINFO_SEPARATOR,
+  {
+    GNOME_APP_UI_ITEM, N_("_Search"),
+    N_("Start search for given word"),
+    (gpointer) on_menu_search_activate, NULL, NULL,
+    GNOME_APP_PIXMAP_STOCK, "gtk-find",
+    GDK_Return, (GdkModifierType) 0, NULL
+  },
+  {
+    GNOME_APP_UI_ITEM, N_("_Preferences"),
+    N_("Configure this application"),
+    (gpointer) on_menu_preferences_activate, NULL, NULL,
+    GNOME_APP_PIXMAP_STOCK, "gtk-preferences",
+    0, (GdkModifierType) 0, NULL
+  },
+  GNOMEUIINFO_SEPARATOR,
+  {
+    GNOME_APP_UI_ITEM, N_("_Quit"),
+    N_("Quit the program"),
+    (gpointer) on_menu_quit_activate, NULL, NULL,
+    GNOME_APP_PIXMAP_STOCK, "gtk-quit",
+    GDK_Q, (GdkModifierType) GDK_CONTROL_MASK, NULL
+  },
+  GNOMEUIINFO_END
+};
+
+static GnomeUIInfo on_menu_edit_menu_uiinfo[] =
+{
+  {
+    GNOME_APP_UI_ITEM, N_("_Paste"),
+    N_("Copy clipbard to search entry"),
+    (gpointer) on_menu_paste_activate, NULL, NULL,
+    GNOME_APP_PIXMAP_STOCK, "gtk-paste",
+    GDK_V, (GdkModifierType) GDK_CONTROL_MASK, NULL
+  },
+  {
+    GNOME_APP_UI_ITEM, N_("Copy left column"),
+    N_("Copy cell content to clipboard"),
+    (gpointer) on_menu_copy_left_activate, NULL, NULL,
+    GNOME_APP_PIXMAP_STOCK, "gtk-copy",
+    GDK_C, (GdkModifierType) GDK_CONTROL_MASK, NULL
+  },
+  {
+    GNOME_APP_UI_ITEM, N_("Copy right column"),
+    N_("Copy cell content to clipboard"),
+    (gpointer) on_menu_copy_right_activate, NULL, NULL,
+    GNOME_APP_PIXMAP_STOCK, "gtk-copy",
+    0, (GdkModifierType) 0, NULL
+  },
+  GNOMEUIINFO_SEPARATOR,
+  {
+    GNOME_APP_UI_ITEM, N_("Use as search word"),
+    N_("Use column entry as new search word."),
+    (gpointer) on_menu_search_word_activate, NULL, NULL,
+    GNOME_APP_PIXMAP_STOCK, "gtk-jump-to",
+    GDK_X, (GdkModifierType) GDK_CONTROL_MASK, NULL
+  },
+  GNOMEUIINFO_END
+};
+
+static GnomeUIInfo on_menu_mini_mode_uiinfo[] =
+{
+  {
+    GNOME_APP_UI_ITEM, N_("_Mini-Mode"),
+    NULL,
+    (gpointer) on_menu_mini_mode_activate, NULL, NULL,
+    GNOME_APP_PIXMAP_NONE, NULL,
+    GDK_M, (GdkModifierType) GDK_CONTROL_MASK, NULL
+  },
+  {
+    GNOME_APP_UI_ITEM, N_("_Window-Mode"),
+    NULL,
+    (gpointer) on_menu_window_mode_activate, NULL, NULL,
+    GNOME_APP_PIXMAP_NONE, NULL,
+    GDK_W, (GdkModifierType) GDK_CONTROL_MASK, NULL
+  },
+  GNOMEUIINFO_END
+};
+
+static GnomeUIInfo on_menu_view_menu_uiinfo[] =
+{
+  {
+    GNOME_APP_UI_RADIOITEMS, NULL, NULL, on_menu_mini_mode_uiinfo,
+    NULL, NULL, GNOME_APP_PIXMAP_NONE, NULL, 0,
+    (GdkModifierType) 0, NULL
+  },
+  GNOMEUIINFO_END
+};
+
+static GnomeUIInfo help1_menu_uiinfo[] =
+{
+  GNOMEUIINFO_HELP ("gnome-ding"),
+  GNOMEUIINFO_MENU_ABOUT_ITEM (on_menu_about_activate, NULL),
+  GNOMEUIINFO_END
+};
+
+static GnomeUIInfo menubar2_uiinfo[] =
+{
+  {
+    GNOME_APP_UI_SUBTREE, N_("_Dictionary"),
+    NULL,
+    on_menu_dictionary_menu_uiinfo, NULL, NULL,
+    GNOME_APP_PIXMAP_NONE, NULL,
+    0, (GdkModifierType) 0, NULL
+  },
+  {
+    GNOME_APP_UI_SUBTREE, N_("_Edit"),
+    NULL,
+    on_menu_edit_menu_uiinfo, NULL, NULL,
+    GNOME_APP_PIXMAP_NONE, NULL,
+    0, (GdkModifierType) 0, NULL
+  },
+  {
+    GNOME_APP_UI_SUBTREE, N_("_View"),
+    NULL,
+    on_menu_view_menu_uiinfo, NULL, NULL,
+    GNOME_APP_PIXMAP_NONE, NULL,
+    0, (GdkModifierType) 0, NULL
+  },
+  GNOMEUIINFO_MENU_HELP_TREE (help1_menu_uiinfo),
+  GNOMEUIINFO_END
+};
+
+GtkWidget*
+create_ding_mainwin (void)
+{
+  GtkWidget *ding_mainwin;
+  GdkPixbuf *ding_mainwin_icon_pixbuf;
+  GtkWidget *bonobodock1;
+  GtkWidget *vbox14;
+  GtkWidget *hbox19;
+  GtkWidget *button_back;
+  GtkWidget *alignment5;
+  GtkWidget *hbox20;
+  GtkWidget *image52;
+  GtkWidget *label31;
+  GtkWidget *button_forward;
+  GtkWidget *image53;
+  GtkWidget *label32;
+  GtkWidget *search_input;
+  GtkWidget *selection;
+  GtkWidget *selection_combo;
+  GtkWidget *button_submit;
+  GtkWidget *alignment6;
+  GtkWidget *hbox21;
+  GtkWidget *image54;
+  GtkWidget *label33;
+  GtkWidget *eventbox1;
+  GtkWidget *image55;
+  GtkWidget *scrolledwindow1;
+  GtkWidget *list;
+  GtkWidget *appbar1;
+  GtkAccelGroup *accel_group;
+  GtkTooltips *tooltips;
+
+  tooltips = gtk_tooltips_new ();
+
+  accel_group = gtk_accel_group_new ();
+
+  ding_mainwin = gnome_app_new ("gnome-ding", _("gnome-ding"));
+  gtk_widget_set_name (ding_mainwin, "ding_mainwin");
+  ding_mainwin_icon_pixbuf = create_pixbuf ("gnome-ding/gnome-ding.png");
+  if (ding_mainwin_icon_pixbuf)
+    {
+      gtk_window_set_icon (GTK_WINDOW (ding_mainwin), ding_mainwin_icon_pixbuf);
+      gdk_pixbuf_unref (ding_mainwin_icon_pixbuf);
+    }
+
+  bonobodock1 = GNOME_APP (ding_mainwin)->dock;
+  gtk_widget_set_name (bonobodock1, "bonobodock1");
+  gtk_widget_show (bonobodock1);
+
+  gnome_app_create_menus (GNOME_APP (ding_mainwin), menubar2_uiinfo);
+
+  gtk_widget_set_name (menubar2_uiinfo[0].widget, "on_menu_dictionary");
+
+  gtk_widget_set_name (on_menu_dictionary_menu_uiinfo[0].widget, "on_menu_back");
+
+  gtk_widget_set_name (on_menu_dictionary_menu_uiinfo[1].widget, "on_menu_forward");
+
+  gtk_widget_set_name (on_menu_dictionary_menu_uiinfo[2].widget, "trennlinie1");
+
+  gtk_widget_set_name (on_menu_dictionary_menu_uiinfo[3].widget, "on_menu_search");
+
+  gtk_widget_set_name (on_menu_dictionary_menu_uiinfo[4].widget, "on_menu_preferences");
+
+  gtk_widget_set_name (on_menu_dictionary_menu_uiinfo[5].widget, "separator3");
+
+  gtk_widget_set_name (on_menu_dictionary_menu_uiinfo[6].widget, "on_menu_quit");
+
+  gtk_widget_set_name (menubar2_uiinfo[1].widget, "on_menu_edit");
+
+  gtk_widget_set_name (on_menu_edit_menu_uiinfo[0].widget, "on_menu_paste");
+
+  gtk_widget_set_name (on_menu_edit_menu_uiinfo[1].widget, "on_menu_copy_left");
+
+  gtk_widget_set_name (on_menu_edit_menu_uiinfo[2].widget, "on_menu_copy_right");
+
+  gtk_widget_set_name (on_menu_edit_menu_uiinfo[3].widget, "trennlinie2");
+
+  gtk_widget_set_name (on_menu_edit_menu_uiinfo[4].widget, "use_as_search_word1");
+
+  gtk_widget_set_name (menubar2_uiinfo[2].widget, "on_menu_view");
+
+  gtk_widget_set_name (on_menu_mini_mode_uiinfo[0].widget, "on_menu_mini_mode");
+
+  gtk_widget_set_name (on_menu_mini_mode_uiinfo[1].widget, "on_menu_window_mode");
+  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (on_menu_mini_mode_uiinfo[1].widget), TRUE);
+
+  gtk_widget_set_name (menubar2_uiinfo[3].widget, "help1");
+
+  gtk_widget_set_name (help1_menu_uiinfo[1].widget, "on_menu_about");
+
+  vbox14 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_set_name (vbox14, "vbox14");
+  gtk_widget_show (vbox14);
+  gnome_app_set_contents (GNOME_APP (ding_mainwin), vbox14);
+
+  hbox19 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_set_name (hbox19, "hbox19");
+  gtk_widget_show (hbox19);
+  gtk_box_pack_start (GTK_BOX (vbox14), hbox19, FALSE, TRUE, 0);
+
+  button_back = gtk_button_new ();
+  gtk_widget_set_name (button_back, "button_back");
+  gtk_widget_show (button_back);
+  gtk_box_pack_start (GTK_BOX (hbox19), button_back, FALSE, FALSE, 2);
+  gtk_widget_set_sensitive (button_back, FALSE);
+  gtk_tooltips_set_tip (tooltips, button_back, _("Go back (search history)"), NULL);
+
+  alignment5 = gtk_alignment_new (0.5, 0.5, 0, 0);
+  gtk_widget_set_name (alignment5, "alignment5");
+  gtk_widget_show (alignment5);
+  gtk_container_add (GTK_CONTAINER (button_back), alignment5);
+
+  hbox20 = gtk_hbox_new (FALSE, 2);
+  gtk_widget_set_name (hbox20, "hbox20");
+  gtk_widget_show (hbox20);
+  gtk_container_add (GTK_CONTAINER (alignment5), hbox20);
+
+  image52 = gtk_image_new_from_stock ("gtk-go-back", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_set_name (image52, "image52");
+  gtk_widget_show (image52);
+  gtk_box_pack_start (GTK_BOX (hbox20), image52, FALSE, FALSE, 0);
+
+  label31 = gtk_label_new_with_mnemonic ("");
+  gtk_widget_set_name (label31, "label31");
+  gtk_widget_show (label31);
+  gtk_box_pack_start (GTK_BOX (hbox20), label31, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label31), GTK_JUSTIFY_LEFT);
+
+  button_forward = gtk_button_new ();
+  gtk_widget_set_name (button_forward, "button_forward");
+  gtk_widget_show (button_forward);
+  gtk_box_pack_start (GTK_BOX (hbox19), button_forward, FALSE, FALSE, 2);
+  gtk_widget_set_sensitive (button_forward, FALSE);
+  gtk_tooltips_set_tip (tooltips, button_forward, _("Go forward (search history)"), NULL);
+
+  image53 = gtk_image_new_from_stock ("gtk-go-forward", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_set_name (image53, "image53");
+  gtk_widget_show (image53);
+  gtk_container_add (GTK_CONTAINER (button_forward), image53);
+
+  label32 = gtk_label_new_with_mnemonic (_("_Word:"));
+  gtk_widget_set_name (label32, "label32");
+  gtk_box_pack_start (GTK_BOX (hbox19), label32, FALSE, FALSE, 2);
+  gtk_label_set_justify (GTK_LABEL (label32), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_padding (GTK_MISC (label32), 5, 0);
+
+  search_input = gtk_entry_new ();
+  gtk_widget_set_name (search_input, "search_input");
+  gtk_widget_show (search_input);
+  gtk_box_pack_start (GTK_BOX (hbox19), search_input, FALSE, TRUE, 2);
+  gtk_tooltips_set_tip (tooltips, search_input, _("Specify the search string"), NULL);
+  gtk_entry_set_activates_default (GTK_ENTRY (search_input), TRUE);
+
+  selection = gtk_combo_new ();
+  g_object_set_data (G_OBJECT (GTK_COMBO (selection)->popwin),
+                     "GladeParentKey", selection);
+  gtk_widget_set_name (selection, "selection");
+  gtk_widget_show (selection);
+  gtk_box_pack_start (GTK_BOX (hbox19), selection, TRUE, TRUE, 2);
+
+  selection_combo = GTK_COMBO (selection)->entry;
+  gtk_widget_set_name (selection_combo, "selection_combo");
+  gtk_widget_show (selection_combo);
+  gtk_tooltips_set_tip (tooltips, selection_combo, _("Select the dictionary"), NULL);
+  gtk_editable_set_editable (GTK_EDITABLE (selection_combo), FALSE);
+  gtk_entry_set_text (GTK_ENTRY (selection_combo), _(" "));
+
+  button_submit = gtk_button_new ();
+  gtk_widget_set_name (button_submit, "button_submit");
+  gtk_widget_show (button_submit);
+  gtk_box_pack_start (GTK_BOX (hbox19), button_submit, FALSE, FALSE, 2);
+  gtk_tooltips_set_tip (tooltips, button_submit, _("start search for given word"), NULL);
+  gtk_widget_add_accelerator (button_submit, "clicked", accel_group,
+                              GDK_Return, 0,
+                              GTK_ACCEL_VISIBLE);
+  gtk_button_set_relief (GTK_BUTTON (button_submit), GTK_RELIEF_HALF);
+
+  alignment6 = gtk_alignment_new (0.5, 0.5, 0, 0);
+  gtk_widget_set_name (alignment6, "alignment6");
+  gtk_widget_show (alignment6);
+  gtk_container_add (GTK_CONTAINER (button_submit), alignment6);
+
+  hbox21 = gtk_hbox_new (FALSE, 2);
+  gtk_widget_set_name (hbox21, "hbox21");
+  gtk_widget_show (hbox21);
+  gtk_container_add (GTK_CONTAINER (alignment6), hbox21);
+
+  image54 = gtk_image_new_from_stock ("gtk-find", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_set_name (image54, "image54");
+  gtk_widget_show (image54);
+  gtk_box_pack_start (GTK_BOX (hbox21), image54, FALSE, FALSE, 0);
+
+  label33 = gtk_label_new_with_mnemonic (_("_Search"));
+  gtk_widget_set_name (label33, "label33");
+  gtk_widget_show (label33);
+  gtk_box_pack_start (GTK_BOX (hbox21), label33, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label33), GTK_JUSTIFY_LEFT);
+
+  eventbox1 = gtk_event_box_new ();
+  gtk_widget_set_name (eventbox1, "eventbox1");
+  gtk_widget_show (eventbox1);
+  gtk_box_pack_start (GTK_BOX (hbox19), eventbox1, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, eventbox1, _("minimode/winmode"), NULL);
+
+  image55 = create_pixmap (ding_mainwin, "gnome-ding/gnome-ding24.png");
+  gtk_widget_set_name (image55, "image55");
+  gtk_widget_show (image55);
+  gtk_container_add (GTK_CONTAINER (eventbox1), image55);
+  gtk_misc_set_alignment (GTK_MISC (image55), 0, 0);
+  gtk_misc_set_padding (GTK_MISC (image55), 5, 0);
+
+  scrolledwindow1 = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_set_name (scrolledwindow1, "scrolledwindow1");
+  gtk_widget_show (scrolledwindow1);
+  gtk_box_pack_start (GTK_BOX (vbox14), scrolledwindow1, TRUE, TRUE, 0);
+  gtk_widget_set_size_request (scrolledwindow1, 250, 150);
+  gtk_container_set_border_width (GTK_CONTAINER (scrolledwindow1), 2);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow1), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolledwindow1), GTK_SHADOW_IN);
+
+  list = gtk_tree_view_new ();
+  gtk_widget_set_name (list, "list");
+  gtk_widget_show (list);
+  gtk_container_add (GTK_CONTAINER (scrolledwindow1), list);
+
+  appbar1 = gnome_appbar_new (FALSE, TRUE, GNOME_PREFERENCES_NEVER);
+  gtk_widget_set_name (appbar1, "appbar1");
+  gtk_widget_show (appbar1);
+  gnome_app_set_statusbar (GNOME_APP (ding_mainwin), appbar1);
+  gtk_container_set_border_width (GTK_CONTAINER (appbar1), 2);
+
+  g_signal_connect ((gpointer) ding_mainwin, "destroy",
+                    G_CALLBACK (on_mainwin_destroy),
+                    NULL);
+  gnome_app_install_menu_hints (GNOME_APP (ding_mainwin), menubar2_uiinfo);
+  g_signal_connect ((gpointer) button_back, "clicked",
+                    G_CALLBACK (on_button_back_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) button_forward, "clicked",
+                    G_CALLBACK (on_button_vor_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) button_submit, "clicked",
+                    G_CALLBACK (on_submitbutton_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) eventbox1, "button_press_event",
+                    G_CALLBACK (on_eventbox1_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) list, "cursor_changed",
+                    G_CALLBACK (on_list_cursor_changed),
+                    NULL);
+  g_signal_connect ((gpointer) list, "button_press_event",
+                    G_CALLBACK (on_list_button_press_event),
+                    NULL);
+
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label32), search_input);
+
+  /* Store pointers to all widgets, for use by lookup_widget(). */
+  GLADE_HOOKUP_OBJECT_NO_REF (ding_mainwin, ding_mainwin, "ding_mainwin");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, bonobodock1, "bonobodock1");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, menubar2_uiinfo[0].widget, "on_menu_dictionary");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, on_menu_dictionary_menu_uiinfo[0].widget, "on_menu_back");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, on_menu_dictionary_menu_uiinfo[1].widget, "on_menu_forward");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, on_menu_dictionary_menu_uiinfo[2].widget, "trennlinie1");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, on_menu_dictionary_menu_uiinfo[3].widget, "on_menu_search");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, on_menu_dictionary_menu_uiinfo[4].widget, "on_menu_preferences");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, on_menu_dictionary_menu_uiinfo[5].widget, "separator3");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, on_menu_dictionary_menu_uiinfo[6].widget, "on_menu_quit");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, menubar2_uiinfo[1].widget, "on_menu_edit");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, on_menu_edit_menu_uiinfo[0].widget, "on_menu_paste");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, on_menu_edit_menu_uiinfo[1].widget, "on_menu_copy_left");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, on_menu_edit_menu_uiinfo[2].widget, "on_menu_copy_right");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, on_menu_edit_menu_uiinfo[3].widget, "trennlinie2");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, on_menu_edit_menu_uiinfo[4].widget, "use_as_search_word1");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, menubar2_uiinfo[2].widget, "on_menu_view");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, on_menu_mini_mode_uiinfo[0].widget, "on_menu_mini_mode");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, on_menu_mini_mode_uiinfo[1].widget, "on_menu_window_mode");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, menubar2_uiinfo[3].widget, "help1");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, help1_menu_uiinfo[1].widget, "on_menu_about");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, vbox14, "vbox14");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, hbox19, "hbox19");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, button_back, "button_back");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, alignment5, "alignment5");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, hbox20, "hbox20");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, image52, "image52");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, label31, "label31");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, button_forward, "button_forward");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, image53, "image53");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, label32, "label32");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, search_input, "search_input");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, selection, "selection");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, selection_combo, "selection_combo");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, button_submit, "button_submit");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, alignment6, "alignment6");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, hbox21, "hbox21");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, image54, "image54");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, label33, "label33");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, eventbox1, "eventbox1");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, image55, "image55");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, scrolledwindow1, "scrolledwindow1");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, list, "list");
+  GLADE_HOOKUP_OBJECT (ding_mainwin, appbar1, "appbar1");
+  GLADE_HOOKUP_OBJECT_NO_REF (ding_mainwin, tooltips, "tooltips");
+
+  gtk_widget_grab_focus (search_input);
+  gtk_window_add_accel_group (GTK_WINDOW (ding_mainwin), accel_group);
+
+  return ding_mainwin;
 }
 

@@ -1,4 +1,4 @@
-figdir = figures
+figdir = 
 docname = gnome-ding
 lang = de
 omffile = gnome-ding-de.omf

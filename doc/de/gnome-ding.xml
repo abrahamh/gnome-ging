@@ -3,7 +3,7 @@
 <!-- replace with actual application  version number-->
 <!ENTITY mdash ";"> 
 <!ENTITY legal SYSTEM "legal.xml">
-<!ENTITY appversion "2.0"> 
+<!ENTITY appversion "2.2"> 
 <!ENTITY date "April 2003"> 
 <!ENTITY manrevision "2.0">
 <!ENTITY mymail "abrahamh@web.de">
@@ -32,7 +32,7 @@
  <articleinfo>
    <title>&app; - Benutzerhandbuch</title>
    <copyright>
-     <year>2003</year>
+     <year>2003-2004</year>
      <holder>Heiko Abraham</holder>
    </copyright>
    <releaseinfo>
@@ -52,21 +52,19 @@
         verwendet &app; ein eigenes, vom ding-Projekt abgeleitetes W&ouml;rterbuch.
    </para>
    <para>
-   Die Programmversionen 1.0 und 1.2 von &app; wurden von Oliver Grawert ( 
-   <ulink type="help" url="http://www.grawert.net/software/">http://www.grawert.net/software/</ulink>)
-   erstellt.
-   Version 2.0 von &app; wurden komplett neu von H. Abraham erstellt und erweitert.
+   Inspiriert wurde &app; von gding2 von Oliver Grawert ( 
+   <ulink type="help" url="http://www.grawert.net/software/">http://www.grawert.net/software/</ulink>),
+   sowie xsteak und ding.
    </para>	 
    <para>
-	Dieses Handbuch beschreibt nur kurz wichtige und interessante 
-        Fragen zur Benutzung von &app;.   
+	Dieses Handbuch beschreibt kurz wichtige und interessante Fragen zur Benutzung von &app;.   
     </para>
     </abstract>
 
     <authorgroup>
 	<author>
 	  <firstname>Heiko</firstname> <surname>Abraham</surname>
-	  <affiliation><orgname>University of Freiburg, Germany</orgname>
+	  <affiliation><orgname>Freiburg, Germany</orgname>
 	  <address> <email>&mymail;</email> </address>
 	  </affiliation>
 	</author> 
@@ -76,7 +74,7 @@
     <legalnotice id="feedback">
        <title>Feedback</title>
        <para>
-       Falls sie einen Fehler gefunden haben und Ihn melden m&ouml;chten oder zum Projekt oder 
+       Falls Sie einen Fehler gefunden haben und ihn melden m&ouml;chten oder zum Projekt oder 
        dem Handbuch Beitrag leisten wollen, wenden Sie sich bitte an den Autor.
        </para>
     </legalnotice>
@@ -92,14 +90,46 @@
 
 <sect1 id="introduction">
 <title>Einleitung</title>
-<para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+<para><graphic fileref="../C/figures/gnome-ding.png" format="PNG"></graphic></para> 
    
 <para>
         &app; ist ein grafisches Werkzeug zur Rechtschreibpr&uuml;fung sowie zum
         &uuml;bersetzen einzelner eingegebener Worte. &app; ist f&uuml;r die 
         Verwendung mit <acronym>Gtk2+</acronym> und <acronym>GNOME2</acronym> ausgelegt.
-        Zur Rechtschreibpr&uuml;fung verwendet &app; aspell. Zum &uuml;bersetzen
+        Zur Rechtschreibpr&uuml;fung verwendet &app; aspell (Version 0.5). Zum &uuml;bersetzen
         verwendet &app; ein eigenes, vom ding-Projekt abgeleitetes W&ouml;rterbuch.
+</para>
+
+<para>
+		In der Version 2.2 unterst&uuml;tzt &app; derzeit eine Reihe von Sprachen. 
+		
+		<itemizedlist>
+			<listitem>
+     		<para>Rechtschreibung (Aspell) - abh&auml;ngig von den installierten 
+			Aspell-W&ouml;rterb&uuml;chern 
+			af, bg, br, ca, de_ch, cs, cy, da, de_DE, el, eo, es, fo, fr_CH,
+			ga, en_GB, gl, id, is, it, mi, mk, ms, mt, nl, pl, pt, ro, ru, sk, 
+			sl, sv, en_CA, uk, en_US, wa, zu.
+			</para>
+    		</listitem>	 
+			
+			<listitem>
+     		<para>Thesaurus - de, es</para>
+    		</listitem>	 
+
+			<listitem>
+     		<para>W&ouml;rterbuch - abgeleitet von ding-Projekt bzw. von freedict.org - 
+			de-en, de-fr, de-it, de-nl,
+			en-ar, en-de, en-es, en-fr, en-no, en-pt,
+			fr-de, no-en
+			</para>
+    		</listitem>	 
+    </itemizedlist>
+</para>
+
+<para>
+Weitere W&ouml;rterb&uuml;cher k&ouml;nnen einfach aktiviert werden. Sehen Sie 
+hierzu ggf. im entsprechenden gconf-Eintrag nach. (gconf-editor app/gnome-ding).
 </para>
 
 <para>
@@ -112,7 +142,7 @@
 <!-- ################################################################# -->
 <sect1 id="getting-started">
 <title>Erste Schritte mit &app;</title>
-<para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+<para><graphic fileref="../C/figures/gnome-ding.png" format="PNG"></graphic></para> 
 
 <sect2 id="getting-started-gnome-ding-to-start">
        <title>&app; starten</title> 
@@ -141,6 +171,11 @@
 	<para>
         Falls Sie &app; jetzt das erste Mal starten, werden alle Konfigurationen automatisch 
         durchgef&uuml;rt.
+	</para>
+	<para>
+		Falls Sie zu einen sp&auml;teren Zeitpunkt &app; in diesen Initialzustand
+		zur&uuml;ck versetzen wollen, verwenden Sie hierzu die Funktion Reset 
+		auf dem Dialog Einstellungen.
 	</para>	
 
 </sect2> <!-- gnome-ding-to-start -->
@@ -152,9 +187,8 @@
    <figure>
    <title>&app; main window</title>
      <screenshot><mediaobject> 
-	    <imageobject><imagedata fileref="figures/trans1.2.png" format="PNG"/></imageobject>
+	    <imageobject><imagedata fileref="../C/figures/trans1.2.png" format="PNG"/></imageobject>
 	    <textobject><phrase>Bildschirmfoto vom &app; Hauptfenster.</phrase></textobject>
-
      </mediaobject></screenshot>
    </figure>
 
@@ -189,7 +223,7 @@
        <varlistentry><term>Statusleiste</term>
              <listitem>
                  <para>
-		 Die Statusleiste zeigt Informationen zum aktuellen Programmstatus bzw. Kontexbezogene
+		 Die Statusleiste zeigt Informationen zum aktuellen Programmstatus bzw. kontexbezogene
                  Informationen oder Fehlermeldungen an.
                  </para>
              </listitem>
@@ -211,13 +245,13 @@
 <!-- ################################################################# -->
 <sect1 id="win-main">
 <title>Hauptfenster</title>
-<para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+<para><graphic fileref="../C/figures/gnome-ding.png" format="PNG"></graphic></para> 
 
 <para>
  <figure>
    <title>&app; Hauptfenster</title>
      <screenshot><mediaobject> 
-	    <imageobject><imagedata fileref="figures/trans1.2.png" format="PNG"/></imageobject>
+	    <imageobject><imagedata fileref="../C/figures/trans1.2.png" format="PNG"/></imageobject>
 	    <textobject><phrase>Bildschirmfoto vom &app; Hauptfenster.</phrase></textobject>
 
      </mediaobject></screenshot>
@@ -261,8 +295,16 @@ Das &app; Hauptfenster enth&auml;lt folgende Elemente:
    <title>Suchleiste</title>
    <para>
    Die Suchleiste ist in Ihrer Funktion analog zu einer Werkzeugleiste. Sie beinhaltet alle
-   zentral notwendigen Kommandos. Hier geben Sie den zu Suchenden Begriff, bzw. das zu pr&uuml;fenden
+   zentral notwendigen Kommandos. Hier geben Sie den zu suchenden Begriff, bzw. das zu pr&uuml;fenden
    Wort ein. Weiter k&ouml;nnen Sie hier das zu verwendenen W&ouml;rterbuch ausw&auml;hlen.
+   </para>
+   <para>
+   Tipp: Der eingegebene Suchbegriff kann auch sogenannte Platzhalter enthalten. Hierzu verwenden Sie
+   pro Zeichen jeweils einen Punkt.
+   </para>
+   <para>
+   Innerhalb der Suchleiste k&ouml;nnen Sie die Auswahlliste verwenden, um festzulegen, welches 
+   W&ouml;rterbuch f&uuml;r die Suchen nach dem eingegebenen Suchebegriff verwendet werden soll.
    </para>
    <para>
    Zum Start der Suche dr&uuml;cken Sie die 'Suchen'-Schaltfl&auml;che oder w&auml;hlen Sie 'Suchen'
@@ -281,16 +323,22 @@ Das &app; Hauptfenster enth&auml;lt folgende Elemente:
 
     <para>    
     Falls Sie eine Rechtschreibpr&uuml;fung ausgew&auml;hlt haben, wird das Ergebnis-Fenster entweder
-    die korrekte Schreibweise des eingegebenen Suchwortes best&auml;tigen, oder, sofern M&ouml;glich
+    die korrekte Schreibweise des eingegebenen Suchwortes best&auml;tigen, oder, sofern m&ouml;glich
     eine Liste von Vorschl&auml;gen zur korrekten Schreibweise enthalten.
     </para>
 
     <para>
-    Falls Sie &app; zum &uuml;bersetzen verwenden, z.B. Deutsch Englisch, wird das Ergebnis-Fenster
+    Falls Sie &app; zum &uuml;bersetzen verwenden, z.B. Deutsch-Englisch, wird das Ergebnis-Fenster
     eine Liste von m&ouml;glichen Treffern enthalten. Hierbei sind einzelne Worte, aber auch 
     &uuml;bersetzungen zum Kontex enthalten. Beachten Sie die hierbei zur weiteren Beschreibung
-    Verwendeten Abk&uuml;rzungen.
+    verwendeten Abk&uuml;rzungen.
     </para>
+
+	<para>
+	Ein Resultat aus dem Ergebnis-Fenster k&ouml;nnen Sie in die Zwischenablage kopieren. 
+	Benutzen Sie hierzu entweder den Men&uuml;eintrag unter Bearbeiten, oder das Kontexmen&uuml;
+	des Ergebnis-Fensters.
+	</para>
 
 </sect2>
 
@@ -311,27 +359,102 @@ Das &app; Hauptfenster enth&auml;lt folgende Elemente:
 <!-- ################################################################# -->
 <sect1 id="win-usage">
 <title>Verwendung</title>
-<para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+<para><graphic fileref="../C/figures/gnome-ding.png" format="PNG"></graphic></para> 
 
 <para>
-Die Verwendung von &app; ist sehr einfach. Geben Sie ein Wort in das Eingabefeld der 
-Suchleiste ein, welches &app; f&uuml;r Sie pr&uuml;fen soll. W&auml;hlen Sie dann
-das zu verwendende W&ouml;rterbuch aus, also beispielsweise 'Rechtschreibpr&uuml;fung (Deutsch)'.
-Dr&uuml;cken Sie dann die 'Suchen'-Schaltfl&auml;che und wenig sp&auml;ter wird, sofern
-M&ouml;glich das Ergebnis im Ergebnis-Fenster dargestellt.
+Die Verwendung von &app; gestaltet sich recht einfach. Hierzu wird innerhalb der 
+Suchleiste einfach der zu suchende Begriff eingegeben, das zu verwendende 
+W&ouml;rterbuch ausgew&auml;hlt und die Suche gestartet. Entspricht das 
+Ergebnis der Suche nicht den gew&uuml;nschtem Resultat, kann das Suchverhalten 
+in Grenzen durch den Dialog Einstellungen variiert werden.
 </para>
 
-<para>
-Beachten Sie, dass &app; nicht entwickelt wurde um S&auml;tze oder mehrere Worte gleichzeitig
-zu &uuml;bersetzen. Geben Sie gleichzeitig mehrere Worte ein, so wird die als unmittelbar
-zusammenh&auml;gende Anfrage gewertet und nur selten ein erwartetes Suchergebnis liefern.
-</para>
+<sect2 id="win-usage-search">
+   <title>Suchen</title>
+   <para>
+	Die Verwendung von &app; ist sehr einfach. Geben Sie ein Wort in das Eingabefeld der 
+	Suchleiste ein, welches &app; f&uuml;r Sie pr&uuml;fen soll. W&auml;hlen Sie dann
+	das zu verwendende W&ouml;rterbuch aus, also beispielsweise 'Rechtschreibpr&uuml;fung (Deutsch)'.
+	Dr&uuml;cken Sie dann die 'Suchen'-Schaltfl&auml;che und wenig sp&auml;ter wird, sofern
+	m&ouml;glich, das Resultat im Ergebnis-Fenster dargestellt.
+   </para>
+   
+   <para>
+	Beachten Sie, dass &app; nicht entwickelt wurde um S&auml;tze oder mehrere Worte gleichzeitig
+	zu &uuml;bersetzen bzw. nachzuschlagen. Geben Sie gleichzeitig mehrere Worte ein, so werden diese 
+	als unmittelbar zusammenh&auml;ngende Anfrage gewertet und nur selten das erwartete Suchresultat 
+	liefern.
+	</para>
 
-<para>
-Beachten Sie bitte, &app; wurde entwickelt um Offline arbeiten zu k&ouml;nnen. Es ist
-daher notwendig, das die von Ihnen gew&uuml;nschten W&ouml;rterb&uuml;cher lokal auf Ihren
-Rechner installiert sind. Dies sind in wenigen F&auml;llen vielleicht nicht installiert.
-</para>
+	<para>
+	Eine Sucheingabe kann auch sogenannte Platzhalter enthalten, verwenden Sie hierzu f&uuml;r
+	jedes solche Zeichen einen Punkt.
+	</para>
+	
+	<para>
+	Beachten Sie bitte, &app; wurde entwickelt um Offline arbeiten zu k&ouml;nnen. Es ist
+	daher notwendig, das die von Ihnen gew&uuml;nschten W&ouml;rterb&uuml;cher lokal auf Ihren
+	Rechner installiert sind. Diese sind in wenigen F&auml;llen vielleicht nicht installiert.
+	</para>
+</sect2>
+
+<sect2 id="win-usage-results">
+   <title>Resultate</title>
+   <para>
+	Nach erfolgter Suche werden im Ergebnis-Fenster die Resultate der Suche dargestellt.
+	Diese Darstellung ist orientiert an einer Liste. Eine Zeile eines Eintrages kann
+	auch selektiert werden, um z.B. deren Inhalt in die Zwischenablage zu speichern.
+	</para>
+	<para>
+	Wenn Sie ein W&ouml;rterbuch zum &uuml;bersetzen eines Begriffes nutzen, wird das 
+	Ergebnis-Fenster einen zweispaltige Liste als Resultat darstellen. Innerhalb dieser 
+	Darstellung k&ouml;nnen auch bestimmte Abk&uuml;rzungen zur Beschreibung Verwendung 
+	finde. Bitte sehen Sie hierzu im Kapitel Ank&uuml;rzungen nach.
+	</para>
+	
+</sect2>
+
+<sect2 id="win-usage-preferences">
+   <title>Einstellungen</title>
+   <para>
+   Der Dialog Einstellungen dient dazu, bestimmte Konfigurationen zum Verhalten von 
+   &app; einzustellen.
+   </para>
+   
+   <para>
+   &app; verwendet f&uuml;r die Rechtschreibpr&uuml;fung aspell. Wurde ein 
+   Suchbegriff nicht gefunden oder ist ein Wort falsch geschrieben, so wird 
+   Aspell Verschl&auml;ge anbieten. Die Empfindlichkeit f&uuml;r diesen 
+   Vorschlag-Modus k&ouml;nnen Sie in f&uuml;nf Stufen einstellen.
+   </para>
+   
+   <para>
+   F&uuml;r Suchen im Thesaurus oder zur &Uuml;bersetzung kann angegeben werden,
+   wie der Suchbegriff treffen soll.
+	Die Option "Eingabe stimmt Wortgenau" bedeutet, das ein Suchbegriff genau 
+	ein Wort treffen soll und nicht ein Teilwort darstellt.
+
+	Die Option "Gross/Kleinschreibung beachten" erlaubt nur Treffer, wo sie 
+	Schreibweise genau stimmt.
+   </para>
+   
+   <para>
+   Die innerhalb der Suchleiste ausw&auml;hlbaren W&ouml;rterb&uuml;cher werden 
+   ebenfalls im Dialog Einstellungen festgelegt. Hierzu bietet die Karteikarte 
+   Sprache eine Auswahl aller installierten und verwendbaren Sprachen an.
+   </para>
+   
+   <para>
+   Die Karteikarte Allgemein des Einstellungs-Dialoges enth&auml;t Optionen zur
+   Darstellung innherhalb des Ergebnis-Fensters, wie die zu verwendende 
+   Schriftart oder deren Farbe. Dar&uuml;ber hinaus gibt es hier noch die Option 
+   alle internen Konfigurationen auf einen Standard-Wert zur&uuml;ck zu setzen.
+   Dies ist sinnvoll, wenn ggf. einige W&ouml;rterb&uuml;cher neu installiert 
+   wurden und &app; diese nicht erkennt oder sonstige Probleme auftreten.
+   </para>
+
+</sect2>
+
  
 </sect1>  <!-- usage -->
 
@@ -341,7 +464,7 @@ Rechner installiert sind. Dies sind in wenigen F&auml;llen vielleicht nicht inst
 <!-- ################################################################# -->
 <sect1 id="win-abbre">
 <title>Abk&uuml;rzungen</title>
-  <para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+  <para><graphic fileref="../C/figures/gnome-ding.png" format="PNG"></graphic></para> 
 
 <para>
 Falls Sie &app; im &uuml;bersetzungsmodus (zusammen mit dem ding-W&ouml;rterbuch) verwenden,
@@ -640,13 +763,13 @@ Abk&uuml;rzung zur Beschreibung bestimmter Fachgebiete, bez&uuml;glich der Wortv
 <!--  SECTION: Known Bugs and Limitations -->
 <sect1 id="win-bugs">
 <title>Beschr&auml;nkungen</title>
-  <para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+  <para><graphic fileref="../C/figures/gnome-ding.png" format="PNG"></graphic></para> 
 
 <para>
 &app; verwendet f&uuml;r die die Rechtschreibpr&uuml;fung im Hintergrund aspell. Aspell ist
-neuer und Leistungsf&auml;higer wie psell oder ispell. 
+neuer und leistungsf&auml;higer wie pspell oder ispell. 
 &app; verwendet zur Kommunikation mit aspell eine C-API, so kann &app; direkt mit aspell 
-arbeiten (verus &uuml;ber pipe-Mechanismen). Dies hat jedoch den Nachteil, dass wenn die
+arbeiten (versus &uuml;ber pipe-Mechanismen). Dies hat jedoch den Nachteil, dass wenn die
 C-API zu aspell ver&auml;ndert wird, wird &app; vielleicht nichtmehr korrekt arbeiten.
 Dies kann der Fall sein, wenn Sie eine aspell-Version neuer wie 0.5 verwenden.
 Bislang ebenfalls nicht getestet sind besondere Zeichenkodierungen, wie KOI8.
@@ -667,7 +790,7 @@ gute Ausgabe zu liefern.
 <!--  SECTION: AUTHORS -->
 <sect1 id="authors">
   <title>Autoren</title>
-  <para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
+  <para><graphic fileref="../C/figures/gnome-ding.png" format="PNG"></graphic></para> 
   <para>
     &app; wird aktuell von folgenden Autoren entwickelt (in alphabetischer Reihenfolge):
     <itemizedlist>
@@ -676,7 +799,7 @@ gute Ausgabe zu liefern.
      <para>Heiko Abraham (<email>abrahamh@web.de</email>)</para>
     </listitem>	 
     <listitem>
-     <para>Oliver Gerwing (Programmversion 1.0 und 1.2, <email>hostmaster@grawert.net</email>) </para> 
+     <para>Oliver Gerwing (Programm gding2, <email>hostmaster@grawert.net</email>) </para> 
     </listitem>
    
     </itemizedlist>

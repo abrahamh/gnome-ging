@@ -6,6 +6,7 @@
 # This word list was converted to TEI format for www.freedict.de and stand
 # original under the Copyright (C) 2000 Horst Eyermann (Horst@freedict.de)
 # original word list found at :: http://www.freedict.de
+
 abacus :: Abakus;Kugelmaschine; Rechenmaschine; Rechenbrett; Büfett; Schankraum
 abætere :: abreisen; fortgehen
 abavus :: Urahn; Urgroßvater; Ahn; Vorfahr; Urahn
@@ -13,6 +14,7 @@ abbas :: Abt
 abbatia :: Abtei
 abbreviare :: abkürzen; verkürzen
 abdere :: abräumen; fortnehmen; entziehen; fortnehmen; wegnehmen; bergen; hehlen; verbergen; verhehlen; verheimlichen; verstecken
+abhibeo :: vom Leibe halten 
 abiectus :: abgedroschen; banal; fade
 abies :: Fichte; Tanne; Lanze; Speer; Schiff
 abigere :: austreiben; ausweisen; fortjagen; vertreiben; wegjagen; entwenden; stehlen
@@ -764,8 +766,8 @@ demens :: irre; toll; verrückt; wahnsinnig
 dementia :: Wahnsinn
 dens :: Zacken; Zahn; Zinke
 desperatio :: Verzweiflung
-deus :: Gott
 Deus :: Gott
+deus :: Gott
 dicere :: erwähnen; sagen
 dictator :: Diktator
 dies :: Tag
@@ -1732,7 +1734,6 @@ vacatio :: das Freisein
 vacat :: steht frei
 vaccae :: Kuh
 vacca :: Kuh
-vacca :: Kuh
 vaccinium :: Hyazinthe
 vaccula :: kleine Kuh
 vacerra :: Pfeiler; Pfosten
@@ -1822,7 +1823,6 @@ vapidum :: schal
 vapidus :: kahmig; schal
 vaporarium :: Dampfrohr
 vaporatio :: Ausdünstung
-vapor :: Dampf
 vapor :: Dampf
 vaporo :: dampfen
 vaporosa :: dunstig
@@ -1988,7 +1988,6 @@ venefica :: Zauberin
 veneficium :: Giftmischerei
 veneficus :: zauberisch
 venenare :: vergiften
-venenare :: vergiften
 venenarius :: Giftmischer
 venenata :: giftig
 venenatum :: giftig
@@ -2013,7 +2012,6 @@ venetus :: meerfarbig
 venia :: Gefälligkeit :: Nachsicht :: Verzeihung
 veniam petere :: um Erlaubnis bitten
 venio :: kommen
-venire :: kommen
 venire :: kommen
 veni vidi vici :: ich kam, ich sah, ich siegte
 vennuncula :: eine Weintraube
@@ -2126,7 +2124,6 @@ verrinus :: Schweinebrühe
 verris :: Eber
 verro :: kehren
 verruca :: Warze
-verruca :: Warze
 verrucosus :: voller Warzen
 verrunco :: sich wenden
 versabilis :: beweglich
@@ -2195,7 +2192,6 @@ vesica :: Blase
 vesica :: Blase; die Blase
 vesicula :: Bläschen
 Vesontio :: Besancon
-vespa :: Wespe
 vespa :: Wespe
 vespera :: Abend
 vesper :: Abendstern; Abend
@@ -2669,7 +2665,6 @@ vomitio :: das Erbrechen
 vomitor :: der Speier
 vomito :: sich erbrechen
 vomitus :: das Erbrechen
-abhibeo :: vom Leibe halten 
 vomo :: sich erbrechen
 von :: ab
 voracitas :: Gefräsigkeit
@@ -2703,13 +2698,11 @@ vulnificus :: Wunden schlagend
 vulnus :: Wunde
 vulpecula :: Füchslein
 vulpes :: Fuchs
-vulpes :: Fuchs
 vulpinus :: des Fuchses
 vulpis :: Fuchs
 vulsus :: bartlos
 vulticulus :: Miene
 vultuosus :: von finsterem Gesichtsausdruck
-vultur :: Geier
 vultur :: Geier
 vulturinus :: Geier...
 vulturius :: Geier
@@ -2735,7 +2728,6 @@ xystici :: die Athleten
 xystus :: Terrasse
 Zabulus :: Satanas; Teufel
 Zama :: Stadt in Numidien
-zamia :: Verlust
 zamia :: Verlust
 Zancle :: Messina
 zaplutus :: überschwenglich; üppig

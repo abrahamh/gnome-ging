@@ -1,10 +1,10 @@
 %define prefix 	/usr
-%define ver    	2.1
+%define ver    	@VERSION@
 Summary:   	GNOME ding translation- and spellchecking for GNOME
 Summary(de):   	GNOME ding ist ein Uebersetzungs- und Rechtschreibpruefprogramm
 Name:      	gnome-ding
 Version:   	%ver
-Release:   	2
+Release:   	3
 Copyright: 	GPL
 Packager:  	Heiko Abraham  <abrahamh@web.de>
 Group:     	Applications/System
@@ -85,9 +85,24 @@ rm -rf $RPM_BUILD_ROOT/*
 %files dict
 /usr/share/dict/thesaurus-es.ding
 /usr/share/dict/lat-de.ding
+/usr/share/dict/lat-en.ding
+/usr/share/dict/de-fr.ding
+/usr/share/dict/de-it.ding
+/usr/share/dict/de-nl.ding
+/usr/share/dict/de-pt.ding
 /usr/share/dict/en-es.ding
+/usr/share/dict/en-de.ding
 /usr/share/dict/en-fr.ding
+/usr/share/dict/en-ar.ding
+/usr/share/dict/en-pt.ding
+/usr/share/dict/en-it.ding
+/usr/share/dict/en-sv.ding
 /usr/share/dict/no-en.ding
+/usr/share/dict/fr-de.ding
+/usr/share/dict/es-de.ding
 /usr/share/dict/en-no.ding
+/usr/share/dict/en-lat.ding
+/usr/share/dict/it-de.ding
+/usr/share/dict/it-en.ding
 
 

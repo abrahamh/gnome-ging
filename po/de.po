@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ding 2.1\n"
-"POT-Creation-Date: 2004-07-01 19:05+0200\n"
-"PO-Revision-Date: 2004-07-01 19:07+0200\n"
+"POT-Creation-Date: 2004-08-03 18:57+0200\n"
+"PO-Revision-Date: 2004-08-03 19:00+0200\n"
 "Last-Translator: h.abraham <abrahamh@web.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,97 +16,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Report-Msgid-Bugs-To: (null)\n"
 
-#: src/main.c:861
+#: src/main.c:1347
 msgid "write config, exit"
 msgstr "Schreibe Konfiguration..."
 
-#: src/interface.c:32
-msgid "Back"
-msgstr "Zurück"
-
-#: src/interface.c:33 src/interface.c:208
-msgid "go back (search history)"
-msgstr "gehe zurück (Such-Chronik)"
-
-#: src/interface.c:39
-msgid "Forward"
-msgstr "Vorwärts"
-
-#: src/interface.c:40 src/interface.c:236
-msgid "go forward (search history)"
-msgstr "gehe vorwärts (Such-Chronik)"
+#: src/interface.c:46
+msgid "(c) 2003, 2004 Heiko Abraham"
+msgstr "(c) 2003, 2004 Heiko Abraham"
 
 #: src/interface.c:47
-msgid "Search"
-msgstr "Suchen"
-
-#: src/interface.c:48 src/interface.c:274
-msgid "start search for given word"
-msgstr "Starte Suche mit gegebenen Wort"
-
-#: src/interface.c:68
-msgid "Mini-Mode"
-msgstr "Mini-Modus"
-
-#: src/interface.c:69
-msgid "switch to small window size"
-msgstr "Schaltet zur kleineren Fensterdarstellung"
-
-#: src/interface.c:75
-msgid "Window-Mode"
-msgstr "Windows-Modus"
-
-#: src/interface.c:76
-msgid "swizch to normal window size"
-msgstr "Schaltet zur normalen Fensterdarstellung"
-
-#: src/interface.c:94
-msgid "Dictionary"
-msgstr "Wörterbuch"
-
-#: src/interface.c:147
-msgid "gnome ding"
-msgstr "GNOME-Ding"
-
-#: src/interface.c:243
-msgid "_Word:"
-msgstr "_Wort:"
-
-#: src/interface.c:253
-msgid "specify the search string"
-msgstr "Zu suchendes Wort"
-
-#: src/interface.c:266
-msgid "select the dictionary"
-msgstr "Auswahl des zu verwendenden Wörterbuches"
-
-#: src/interface.c:268 src/interface.c:560 src/interface.c:665
-#: src/interface.c:686 src/interface.c:727 src/callbacks.c:1021
-#: src/callbacks.c:1060 src/callbacks.c:1102
-msgid " "
-msgstr " "
-
-#: src/interface.c:295
-msgid "_Search"
-msgstr "_Suchen"
-
-#: src/interface.c:305
-msgid "minimode/winmode"
-msgstr "Mini- bzw. Fenstermodus"
-
-#: src/interface.c:335
-msgid "Show the Result for copy and paste."
-msgstr "Suchresultate für 'Copy&Paste' anzeigen."
-
-#: src/interface.c:362
-msgid "gnome-ding Homepage: http://www.grawert.net/software/"
-msgstr "GNOME-Ding Web-Seite: http://www.abe-si.de/gnome-ding.html"
-
-#: src/interface.c:433
-msgid "(c) 2003 Heiko Abraham"
-msgstr "(c) 2003 Heiko Abraham"
-
-#: src/interface.c:434
 msgid ""
 "A translation- and spellchecking program for single words, inspired by \"ding"
 "\" and \"g2ding\"."
@@ -114,375 +32,827 @@ msgstr ""
 "Ein Programm zur Übersetzungen und zur Rechtschreibprüfung für Gnome2, "
 "inspiriert von \"ding\" und aspell."
 
-#: src/interface.c:519
+#: src/interface.c:145
 msgid "gnome-ding - preferences"
 msgstr "Gnome-ding - Einstellungen"
 
-#: src/interface.c:547
+#: src/interface.c:173
 msgid ""
-"Select some settings for use \n"
-"with spellchecking (by aspell)."
+"<b>Aspell Options</b>\n"
+"\n"
+"Select some settings for use with spellchecking (by aspell)."
 msgstr ""
-"Einstellungen zur Rechtschreib-\n"
-"prüfung (per aspell)"
+"<b>Aspell Optionen</b>\n"
+"\n"
+"<small>Einstellungen zur Rechtschreibprüfung (per aspell) angeben</small>"
 
-#: src/interface.c:574
+#: src/interface.c:187 src/interface.c:293 src/interface.c:314
+#: src/interface.c:356 src/interface.c:512 src/interface.c:564
+#: src/interface.c:1069 src/callbacks.c:2103 src/callbacks.c:2143
+#: src/callbacks.c:2207
+msgid " "
+msgstr " "
+
+#: src/interface.c:201
 msgid "Charset:"
 msgstr "Zeichenkodierung:"
 
-#: src/interface.c:590
+#: src/interface.c:217
 msgid "<small>(low)</small>"
 msgstr "<small>(niedrig)</small>"
 
-#: src/interface.c:604
+#: src/interface.c:231
 msgid "<small>(high)</small>"
 msgstr "<small>(hoch)</small>"
 
-#: src/interface.c:618
+#: src/interface.c:245
 msgid "UTF8"
 msgstr "UTF8"
 
-#: src/interface.c:620
+#: src/interface.c:247
 msgid "Suggestion Mode:"
 msgstr "Vorschlag-Modus:"
 
-#: src/interface.c:629
+#: src/interface.c:256
 msgid "_Spellchecker"
 msgstr "_Rechtschreibprüfung"
 
-#: src/interface.c:652
-msgid "Settings only use for translation (by grep)"
-msgstr "Einstellungen zum Übersetzen (per grep)"
+#: src/interface.c:279
+msgid ""
+"<b>Translation Options</b>\n"
+"\n"
+"Define some options for grep."
+msgstr ""
+"<b>Übersetzungsoptionen</b>\n"
+"\n"
+"<small>Geben Sie Optionen für grep an...</small>"
 
-#: src/interface.c:676
+#: src/interface.c:304
 msgid "search only exact words"
 msgstr "Eingabe stimmt Wortgenau (exakt)"
 
-#: src/interface.c:681
+#: src/interface.c:309
 msgid "case sensitive"
 msgstr "Groß/Kleinschreibung beachten"
 
-#: src/interface.c:692
+#: src/interface.c:320
 msgid "_Translation"
 msgstr "Ü_bersetzung"
 
-#: src/interface.c:714
-msgid "Select the languages that should be available."
-msgstr "Auswahl der Verfügbaren Sprachen."
+#: src/interface.c:342
+msgid ""
+"<b>Available Languages</b>\n"
+"\n"
+"Define your favorites languages, that you wish to use."
+msgstr ""
+"<b>Verfügbare Sprachen</b>\n"
+"\n"
+"<small>Wählen Sie die Sprachen aus, die Sie verwenden wollen</small>"
 
-#: src/interface.c:746
+#: src/interface.c:375
 msgid "Dictionary:"
 msgstr "Wörterbuch:"
 
-#: src/interface.c:755
+#: src/interface.c:384
 msgid "Thesaurus:"
 msgstr "Thesaurus:"
 
-#: src/interface.c:764
+#: src/interface.c:393
 msgid "Spellchecker:"
 msgstr "Rechtschreibprüfung:"
 
-#: src/interface.c:823
+#: src/interface.c:452
 msgid "_Languages"
 msgstr "_Sprache"
 
-#: src/interface.c:845
-msgid "Define some settings for Gnome-Ding, like color, font ..."
-msgstr "Zukünftig: Einige Einstellungen wie Schriftart, Farbe ...."
+#: src/interface.c:474
+msgid "<b>Font &amp; Colors</b>"
+msgstr "<b>Schrift &amp; Farben</b>"
 
-#: src/interface.c:866
-msgid "Textcolor:"
-msgstr "Textfarbe:"
+#: src/interface.c:498
+msgid "<b>Font</b>"
+msgstr "<b>Schrift</b>"
 
-#: src/interface.c:876
-msgid "Hightlight Color:"
-msgstr "Farbe für Treffer:"
+#: src/interface.c:525
+msgid "Use default theme font"
+msgstr "Vorgegebene Themenschrift verwenden."
 
-#: src/interface.c:886
+#: src/interface.c:535
 msgid "Textfont:"
-msgstr "Schriftart:"
+msgstr "Textschrift:"
 
-#: src/interface.c:902
-msgid "Choose the text color"
-msgstr "Wählen Sie die Farbe..."
-
-#: src/interface.c:910
-msgid "Choose the color for highlight "
-msgstr "Wählen Sie die Farbe..."
-
-#: src/interface.c:918
+#: src/interface.c:546
 msgid "Choose the font color"
 msgstr "Wählen Sie die Schriftart..."
 
-#: src/interface.c:927
+#: src/interface.c:550
+msgid "<b>Color</b>"
+msgstr "<b>Farbe</b>"
+
+#: src/interface.c:577
+msgid "Use default theme color"
+msgstr "Vorgegebene Themenfarbe verwenden."
+
+#: src/interface.c:587
+msgid "Textcolor:"
+msgstr "Textfarbe:"
+
+#: src/interface.c:596
+msgid "Hightlight Color:"
+msgstr "Farbe für Treffer:"
+
+#: src/interface.c:611
+msgid "Choose the text color"
+msgstr "Wählen Sie die Farbe..."
+
+#: src/interface.c:619
+msgid "Choose the color for highlight "
+msgstr "Wählen Sie die Farbe..."
+
+#: src/interface.c:626
 msgid "Reset"
 msgstr "Rücksetzen"
 
-#: src/interface.c:932
+#: src/interface.c:631
 msgid "Reset internel date model to store user defined settings."
 msgstr "Alle Benutzerspezifische Einstellungen zurücksetzen."
 
-#: src/interface.c:938
+#: src/interface.c:637
 msgid "_General"
 msgstr "_Allgemein"
 
-#: src/callbacks.c:348
+#: src/interface.c:768
+msgid "_Back"
+msgstr "_Zurück"
+
+#: src/interface.c:769 src/interface.c:1009
+msgid "Go back (search history)"
+msgstr "Gehe zurück (Such-Chronik)"
+
+#: src/interface.c:775
+msgid "_Forward"
+msgstr "_Vorwärts"
+
+#: src/interface.c:776 src/interface.c:1037
+msgid "Go forward (search history)"
+msgstr "Gehe vorwärts (Such-Chronik)"
+
+#: src/interface.c:783 src/interface.c:1096
+msgid "_Search"
+msgstr "_Suchen"
+
+#: src/interface.c:784
+msgid "Start search for given word"
+msgstr "Starte Suche mit gegebenen Wort"
+
+#: src/interface.c:790
+msgid "_Preferences"
+msgstr "_Einstellungen"
+
+#: src/interface.c:791
+msgid "Configure this application"
+msgstr "Die Anwendung konfigurieren"
+
+#: src/interface.c:798
+msgid "_Quit"
+msgstr "_Beenden"
+
+#: src/interface.c:799
+msgid "Quit the program"
+msgstr "Die Anwendung beenden"
+
+#: src/interface.c:810
+msgid "_Paste"
+msgstr "E_infügen"
+
+#: src/interface.c:811
+msgid "Copy clipbard to search entry"
+msgstr "Den Inhalt der Zwischenablage als Suchwort verwenden"
+
+#. GNOMEUIINFO_ITEM_DATA will not work proper
+#: src/interface.c:817 src/callbacks.c:1896
+msgid "Copy left column"
+msgstr "Kopiere linken Spalteninhalt"
+
+#: src/interface.c:818 src/interface.c:825
+msgid "Copy cell content to clipboard"
+msgstr "Kopiere linken Spalteninhalt in die Zwischenablage."
+
+#: src/interface.c:824 src/callbacks.c:1897
+msgid "Copy right column"
+msgstr "Kopiere rechten Spalteninhalt"
+
+#: src/interface.c:832
+msgid "Use as search word"
+msgstr "Als neues Suchwort"
+
+#: src/interface.c:833
+msgid "Use column entry as new search word."
+msgstr "Zeileneintrag als neues Suchwort verwenden."
+
+#: src/interface.c:844
+msgid "_Mini-Mode"
+msgstr "_Mini-Modus"
+
+#: src/interface.c:851
+msgid "_Window-Mode"
+msgstr "_Fenster-Modus"
+
+#: src/interface.c:880
+msgid "_Dictionary"
+msgstr "_Wörterbuch"
+
+#: src/interface.c:887
+msgid "_Edit"
+msgstr "_Bearbeiten"
+
+#: src/interface.c:894
+msgid "_View"
+msgstr "_Ansicht"
+
+#: src/interface.c:940
+msgid "gnome-ding"
+msgstr "GNOME-Ding"
+
+#: src/interface.c:1044
+msgid "_Word:"
+msgstr "_Wort:"
+
+#: src/interface.c:1054
+msgid "Specify the search string"
+msgstr "Zu suchendes Wort"
+
+#: src/interface.c:1067
+msgid "Select the dictionary"
+msgstr "Auswahl des zu verwendenden Wörterbuches"
+
+#: src/interface.c:1075
+msgid "start search for given word"
+msgstr "Starte Suche mit gegebenen Wort"
+
+#: src/interface.c:1106
+msgid "minimode/winmode"
+msgstr "Mini- bzw. Fenstermodus"
+
+#: src/callbacks.c:683
 msgid "No match found"
 msgstr "Kein Treffer gefunden"
 
-#: src/callbacks.c:349
+#: src/callbacks.c:684
 msgid "No match"
 msgstr "Kein Treffer"
 
-#: src/callbacks.c:451 src/thesaurus.c:124
+#: src/callbacks.c:791 src/thesaurus.c:156
 #, c-format
 msgid "%i matches found to '%s'"
 msgstr "%i Treffer für '%s'"
 
 #. show errormessage
-#: src/callbacks.c:586
+#: src/callbacks.c:1299
 msgid " Please insert only characters !"
 msgstr "Bitte keine Sonderzeichen eingeben!"
 
-#: src/callbacks.c:619 src/callbacks.c:764
+#: src/callbacks.c:1336 src/callbacks.c:1526
 msgid "Spellcheck (German)"
 msgstr "Rechtschreibung (Deutsch)"
 
-#: src/callbacks.c:620 src/callbacks.c:767
+#: src/callbacks.c:1337 src/callbacks.c:1527
+msgid "Spellcheck (Afrikaans)"
+msgstr "Rechtschreibung (Afrikanisch)"
+
+#: src/callbacks.c:1338 src/callbacks.c:1528
+msgid "Spellcheck (Bulgarian)"
+msgstr "Rechtschreibung (Bulgarisch)"
+
+#: src/callbacks.c:1339 src/callbacks.c:1529
+msgid "Spellcheck (Breton)"
+msgstr "Rechtschreibung (Bretonisch)"
+
+#: src/callbacks.c:1340 src/callbacks.c:1530
+msgid "Spellcheck (Catalan)"
+msgstr "Rechtschreibung (katalanisch)"
+
+#: src/callbacks.c:1341 src/callbacks.c:1531
+msgid "Spellcheck (Czech)"
+msgstr "Rechtschreibung (Tschechisch)"
+
+#: src/callbacks.c:1342 src/callbacks.c:1532
+msgid "Spellcheck (Welsh)"
+msgstr "Rechtschreibung (Welsch)"
+
+#: src/callbacks.c:1343 src/callbacks.c:1533
+msgid "Spellcheck (Danish)"
+msgstr "Rechtschreibung (Dänisch)"
+
+#: src/callbacks.c:1344 src/callbacks.c:1534
+msgid "Spellcheck (German, Swiss)"
+msgstr "Rechtschreibung (Deutsch, Schweiz)"
+
+#: src/callbacks.c:1345 src/callbacks.c:1538
+msgid "Spellcheck (Esperanto)"
+msgstr "Rechtschreibung (Esperanto)"
+
+#: src/callbacks.c:1346 src/callbacks.c:1539
+msgid "Spellcheck (Greek)"
+msgstr "Rechtschreibung (Griechisch)"
+
+#: src/callbacks.c:1347 src/callbacks.c:1536
 msgid "Spellcheck (Canadian)"
 msgstr "Rechtschreibung (Kanadisch)"
 
-#: src/callbacks.c:621 src/callbacks.c:768
+#: src/callbacks.c:1348 src/callbacks.c:1537
 msgid "Spellcheck (American)"
 msgstr "Rechtschreibung (Amerikanisch)"
 
-#: src/callbacks.c:622 src/callbacks.c:770
-msgid "Spellcheck (French)"
-msgstr "Rechtschreibung (Französisch)"
-
-#. } else if (COMBO_MACRO(ASPELL_FRCH, "fr_CH", _("Spellcheck (Swiss, French)") )
-#: src/callbacks.c:623 src/callbacks.c:772
-msgid "Spellcheck (Spanish)"
-msgstr "Rechtschreibung (Spanisch)"
-
-#: src/callbacks.c:624 src/callbacks.c:766
+#: src/callbacks.c:1349 src/callbacks.c:1535
 msgid "Spellcheck (British)"
 msgstr "Rechtschreibung (Britisch)"
 
+#: src/callbacks.c:1350 src/callbacks.c:1540
+msgid "Spellcheck (Spanish)"
+msgstr "Rechtschreibung (Spanisch)"
+
+#: src/callbacks.c:1351 src/callbacks.c:1541
+msgid "Spellcheck (Faroese)"
+msgstr "Rechtschreibung (Farörisch)"
+
+#: src/callbacks.c:1352 src/callbacks.c:1542
+msgid "Spellcheck (French, France)"
+msgstr "Rechtschreibung (Französisch, Frankreich)"
+
+#: src/callbacks.c:1353 src/callbacks.c:1543
+msgid "Spellcheck (French, Swiss)"
+msgstr "Rechtschreibung (Französisch, Schweiz)"
+
+#: src/callbacks.c:1354 src/callbacks.c:1544
+msgid "Spellcheck (Irish, Gaelic)"
+msgstr "Rechtschreibung (Irisch, Gälisch)"
+
+#: src/callbacks.c:1355 src/callbacks.c:1545
+msgid "Spellcheck (Gallegan)"
+msgstr "Rechtschreibung (Galligien)"
+
+#: src/callbacks.c:1356 src/callbacks.c:1546
+msgid "Spellcheck (Croatian)"
+msgstr "Rechtschreibung (Kroatisch)"
+
+#: src/callbacks.c:1357 src/callbacks.c:1547
+msgid "Spellcheck (Indonesian)"
+msgstr "Rechtschreibung (Indonesisch)"
+
+#: src/callbacks.c:1358 src/callbacks.c:1549
+msgid "Spellcheck (Icelandic)"
+msgstr "Rechtschreibung (Isländisch)"
+
+#: src/callbacks.c:1359 src/callbacks.c:1548
+msgid "Spellcheck (Italian)"
+msgstr "Rechtschreibung (Itatenisch)"
+
+#: src/callbacks.c:1360 src/callbacks.c:1550
+msgid "Spellcheck (Maori)"
+msgstr "Rechtschreibung (Maorisch)"
+
+#: src/callbacks.c:1361 src/callbacks.c:1551
+msgid "Spellcheck (Makasar)"
+msgstr "Rechtschreibung (Makasar)"
+
+#: src/callbacks.c:1362 src/callbacks.c:1552
+msgid "Spellcheck (Malay)"
+msgstr "Rechtschreibung (Malaysisch)"
+
+#: src/callbacks.c:1363 src/callbacks.c:1553
+msgid "Spellcheck (Maltese)"
+msgstr "Rechtschreibung (Maltesisch)"
+
+#: src/callbacks.c:1364 src/callbacks.c:1554
+msgid "Spellcheck (Dutch)"
+msgstr "Rechtschreibung (Niederländisch)"
+
+#: src/callbacks.c:1365 src/callbacks.c:1555
+msgid "Spellcheck (Norwegian)"
+msgstr "Rechtschreibung (Norwegisch)"
+
+#: src/callbacks.c:1366 src/callbacks.c:1556
+msgid "Spellcheck (Polish)"
+msgstr "Rechtschreibung (Polnisch)"
+
+#: src/callbacks.c:1367 src/callbacks.c:1557
+msgid "Spellcheck (Portuguese)"
+msgstr "Rechtschreibung (Portuesisch)"
+
+#. } else if (SPELLIT_MACRO( _("Spellcheck (Portuguese, BR)"), "pt_BR" )
+#: src/callbacks.c:1369 src/callbacks.c:1559
+msgid "Spellcheck (Russian)"
+msgstr "Rechtschreibung (Russisch)"
+
+#: src/callbacks.c:1370 src/callbacks.c:1560
+msgid "Spellcheck (Romanian)"
+msgstr "Rechtschreibung (Romänisch)"
+
+#: src/callbacks.c:1371 src/callbacks.c:1563
+msgid "Spellcheck (Slovak)"
+msgstr "Rechtschreibung (Slovakisch)"
+
+#: src/callbacks.c:1372 src/callbacks.c:1562
+msgid "Spellcheck (Slovenian)"
+msgstr "Rechtschreibung (Slovenisch)"
+
+#: src/callbacks.c:1373 src/callbacks.c:1561
+msgid "Spellcheck (Swedish)"
+msgstr "Rechtschreibung (Schwedisch)"
+
+#: src/callbacks.c:1374 src/callbacks.c:1564
+msgid "Spellcheck (Ukrainian)"
+msgstr "Rechtschreibung (Ukranisch)"
+
+#: src/callbacks.c:1375 src/callbacks.c:1565
+msgid "Spellcheck (Walloon)"
+msgstr "Rechtschreibung (Wallonisch)"
+
+#: src/callbacks.c:1376 src/callbacks.c:1566
+msgid "Spellcheck (Zulu)"
+msgstr "Rechtschreibung (Zulu)"
+
 #. more aspell languages to be test
-#: src/callbacks.c:627 src/callbacks.c:703
+#: src/callbacks.c:1380 src/callbacks.c:1503
 msgid "Thesaurus (German)"
 msgstr "Thesaurus (Deutsch)"
 
-#: src/callbacks.c:628 src/callbacks.c:704
+#: src/callbacks.c:1381 src/callbacks.c:1504
 msgid "Thesaurus (Spanish)"
 msgstr "Thesaurus (Spanisch)"
 
-#: src/callbacks.c:629 src/callbacks.c:707
+#: src/callbacks.c:1382 src/callbacks.c:1507
 msgid "Thesaurus (French)"
 msgstr "Thesaurus (Französisch)"
 
-#: src/callbacks.c:630 src/callbacks.c:705
+#: src/callbacks.c:1383 src/callbacks.c:1505
 msgid "Thesaurus (English)"
 msgstr "Thesaurus (Englisch)"
 
-#: src/callbacks.c:631 src/callbacks.c:708
+#: src/callbacks.c:1384 src/callbacks.c:1508
 msgid "Thesaurus (Portuguese)"
 msgstr "Thesaurus (Portugiesisch)"
 
-#: src/callbacks.c:632 src/callbacks.c:706
+#: src/callbacks.c:1385 src/callbacks.c:1506
 msgid "Thesaurus (Italian)"
 msgstr "Thesaurus (Italienisch)"
 
-#: src/callbacks.c:634 src/callbacks.c:701 src/callbacks.c:1089
+#: src/callbacks.c:1386 src/callbacks.c:1509
+msgid "Thesaurus (Polish)"
+msgstr "Thesaurus (Polnisch)"
+
+#: src/callbacks.c:1388 src/callbacks.c:1500 src/callbacks.c:2193
 msgid "Latin <--> German"
 msgstr "Latein <--> Deutsch"
 
-#: src/callbacks.c:634
+#: src/callbacks.c:1388 src/callbacks.c:1389
 msgid "Latin"
 msgstr "Latein"
 
-#: src/callbacks.c:634 src/callbacks.c:636 src/callbacks.c:637
-#: src/callbacks.c:638 src/callbacks.c:639 src/callbacks.c:640
-#: src/callbacks.c:642 src/callbacks.c:1042
+#: src/callbacks.c:1388 src/callbacks.c:1391 src/callbacks.c:1392
+#: src/callbacks.c:1393 src/callbacks.c:1394 src/callbacks.c:1395
+#: src/callbacks.c:1396 src/callbacks.c:1398 src/callbacks.c:1407
+#: src/callbacks.c:1413 src/callbacks.c:1419 src/callbacks.c:2124
 msgid "German"
 msgstr "Deutsch"
 
-#: src/callbacks.c:636 src/callbacks.c:687 src/callbacks.c:1075
-msgid "German <--> English"
-msgstr "Deutsch <--> Englisch"
+#: src/callbacks.c:1389 src/callbacks.c:1501 src/callbacks.c:2194
+msgid "English <--> Latin"
+msgstr "Englisch <--> Latein"
 
-#: src/callbacks.c:636 src/callbacks.c:642 src/callbacks.c:643
-#: src/callbacks.c:644 src/callbacks.c:645 src/callbacks.c:646
-#: src/callbacks.c:647 src/callbacks.c:648 src/callbacks.c:1044
+#: src/callbacks.c:1389 src/callbacks.c:1391 src/callbacks.c:1398
+#: src/callbacks.c:1399 src/callbacks.c:1400 src/callbacks.c:1401
+#: src/callbacks.c:1402 src/callbacks.c:1403 src/callbacks.c:1404
+#: src/callbacks.c:1405 src/callbacks.c:1408 src/callbacks.c:1414
+#: src/callbacks.c:1420 src/callbacks.c:1425 src/callbacks.c:2126
 msgid "English"
 msgstr "Englisch"
 
-#: src/callbacks.c:637 src/callbacks.c:688 src/callbacks.c:1076
+#: src/callbacks.c:1391 src/callbacks.c:1465 src/callbacks.c:2158
+msgid "German <--> English"
+msgstr "Deutsch <--> Englisch"
+
+#: src/callbacks.c:1392 src/callbacks.c:1466 src/callbacks.c:2159
 msgid "German <--> Spanish"
 msgstr "Deutsch <--> Spanisch"
 
-#: src/callbacks.c:637 src/callbacks.c:643 src/callbacks.c:999
-#: src/callbacks.c:1043
+#: src/callbacks.c:1392 src/callbacks.c:1399 src/callbacks.c:1409
+#: src/callbacks.c:1413 src/callbacks.c:1414 src/callbacks.c:1415
+#: src/callbacks.c:1416 src/callbacks.c:1417 src/callbacks.c:1421
+#: src/callbacks.c:2061 src/callbacks.c:2125
 msgid "Spanish"
 msgstr "Spanisch"
 
-#: src/callbacks.c:638 src/callbacks.c:690 src/callbacks.c:1077
+#: src/callbacks.c:1393 src/callbacks.c:1468 src/callbacks.c:2160
 msgid "German <--> French"
 msgstr "Deutsch <--> Französisch"
 
-#: src/callbacks.c:638 src/callbacks.c:645 src/callbacks.c:998
-#: src/callbacks.c:1045
+#: src/callbacks.c:1393 src/callbacks.c:1401 src/callbacks.c:1407
+#: src/callbacks.c:1408 src/callbacks.c:1409 src/callbacks.c:1410
+#: src/callbacks.c:1411 src/callbacks.c:1415 src/callbacks.c:1422
+#: src/callbacks.c:2127
 msgid "French"
 msgstr "Französisch"
 
-#: src/callbacks.c:639 src/callbacks.c:689 src/callbacks.c:1079
+#: src/callbacks.c:1394 src/callbacks.c:1467 src/callbacks.c:2162
 msgid "German <--> Italian"
 msgstr "Deutsch <--> Italienisch"
 
-#: src/callbacks.c:639 src/callbacks.c:644 src/callbacks.c:1000
-#: src/callbacks.c:1046
+#: src/callbacks.c:1394 src/callbacks.c:1400 src/callbacks.c:1410
+#: src/callbacks.c:1416 src/callbacks.c:1419 src/callbacks.c:1420
+#: src/callbacks.c:1421 src/callbacks.c:1422 src/callbacks.c:1423
+#: src/callbacks.c:2069 src/callbacks.c:2128
 msgid "Italian"
 msgstr "Italienisch"
 
-#: src/callbacks.c:640 src/callbacks.c:691 src/callbacks.c:1078
+#: src/callbacks.c:1395 src/callbacks.c:1469 src/callbacks.c:2161
 msgid "German <--> Portuguese"
 msgstr "Deutsch <--> Portugiesisch"
 
-#: src/callbacks.c:640 src/callbacks.c:646 src/callbacks.c:1005
-#: src/callbacks.c:1047
+#: src/callbacks.c:1395 src/callbacks.c:1402 src/callbacks.c:1411
+#: src/callbacks.c:1417 src/callbacks.c:1423 src/callbacks.c:2077
+#: src/callbacks.c:2129
 msgid "Portuguese"
 msgstr "Portugiesisch"
 
-#: src/callbacks.c:642 src/callbacks.c:693 src/callbacks.c:1081
+#: src/callbacks.c:1396 src/callbacks.c:1470 src/callbacks.c:2163
+msgid "German <--> Dutch"
+msgstr "Deutsch <--> Niederländisch"
+
+#: src/callbacks.c:1396 src/callbacks.c:2075
+msgid "Dutch"
+msgstr "Niederländisch"
+
+#: src/callbacks.c:1398 src/callbacks.c:1472 src/callbacks.c:2165
 msgid "English <--> German"
 msgstr "Englisch <--> Deutsch"
 
-#: src/callbacks.c:643 src/callbacks.c:694 src/callbacks.c:1085
+#: src/callbacks.c:1399 src/callbacks.c:1473 src/callbacks.c:2169
 msgid "English <--> Spanish"
 msgstr "Englisch <--> Spanisch"
 
-#: src/callbacks.c:644 src/callbacks.c:697 src/callbacks.c:1083
+#: src/callbacks.c:1400 src/callbacks.c:1476 src/callbacks.c:2167
 msgid "English <--> Italian"
 msgstr "Englisch <--> Spanisch"
 
-#: src/callbacks.c:645 src/callbacks.c:696 src/callbacks.c:1082
+#: src/callbacks.c:1401 src/callbacks.c:1475 src/callbacks.c:2166
 msgid "English <--> French"
 msgstr "Englisch <--> Französisch"
 
-#: src/callbacks.c:646 src/callbacks.c:695 src/callbacks.c:1084
+#: src/callbacks.c:1402 src/callbacks.c:1474 src/callbacks.c:2168
 msgid "English <--> Portuguese"
 msgstr "Englisch <--> Portugiesisch"
 
-#: src/callbacks.c:647 src/callbacks.c:698 src/callbacks.c:1086
+#: src/callbacks.c:1403 src/callbacks.c:1477 src/callbacks.c:2170
 msgid "English <--> Norwegian"
 msgstr "Englisch <--> Norwegisch"
 
-#: src/callbacks.c:647 src/callbacks.c:648 src/callbacks.c:1003
+#: src/callbacks.c:1403 src/callbacks.c:1425 src/callbacks.c:2076
 msgid "Norwegian"
 msgstr "Norwegisch"
 
-#: src/callbacks.c:648 src/callbacks.c:700 src/callbacks.c:1088
+#: src/callbacks.c:1404 src/callbacks.c:1478 src/callbacks.c:2171
+msgid "English <--> Arabic"
+msgstr "Englisch <--> Arabisch"
+
+#: src/callbacks.c:1404
+msgid "Arabic"
+msgstr "Arabisch"
+
+#: src/callbacks.c:1405 src/callbacks.c:1479 src/callbacks.c:2172
+msgid "English <--> Swedish"
+msgstr "Englisch <--> Schwedisch"
+
+#: src/callbacks.c:1405 src/callbacks.c:2084
+msgid "Swedish"
+msgstr "Schwedisch"
+
+#: src/callbacks.c:1407 src/callbacks.c:1484 src/callbacks.c:2176
+msgid "French <--> German"
+msgstr "Französisch <--> Deutsch"
+
+#: src/callbacks.c:1408 src/callbacks.c:1481 src/callbacks.c:2174
+msgid "French <--> English"
+msgstr "Französisch <--> Englisch"
+
+#: src/callbacks.c:1409 src/callbacks.c:1482 src/callbacks.c:2175
+msgid "French <--> Spanish"
+msgstr "Französisch <--> Spanisch"
+
+#: src/callbacks.c:1410 src/callbacks.c:1483 src/callbacks.c:2178
+msgid "French <--> Italian"
+msgstr "Französisch <--> Italienisch"
+
+#: src/callbacks.c:1411 src/callbacks.c:1485 src/callbacks.c:2177
+msgid "French <--> Portuguese"
+msgstr "Französisch <--> Portugiesisch"
+
+#: src/callbacks.c:1413 src/callbacks.c:1490 src/callbacks.c:2182
+msgid "Spanish <--> German"
+msgstr "Spanisch <--> Deutsch"
+
+#: src/callbacks.c:1414 src/callbacks.c:1487 src/callbacks.c:2180
+msgid "Spanish <--> English"
+msgstr "Spanisch <--> Englisch"
+
+#: src/callbacks.c:1415 src/callbacks.c:1488 src/callbacks.c:2181
+msgid "Spanish <--> French"
+msgstr "Spanisch <--> Französisch"
+
+#: src/callbacks.c:1416 src/callbacks.c:1489 src/callbacks.c:2184
+msgid "Spanish <--> Italian"
+msgstr "Spanisch <--> Italienisch"
+
+#: src/callbacks.c:1417 src/callbacks.c:1491 src/callbacks.c:2183
+msgid "Spanish <--> Portuguese"
+msgstr "Spanisch <--> Portugiesisch"
+
+#: src/callbacks.c:1419 src/callbacks.c:1496 src/callbacks.c:2188
+msgid "Italian <--> German"
+msgstr "Italienisch <--> Deutsch"
+
+#: src/callbacks.c:1420 src/callbacks.c:1493 src/callbacks.c:2186
+msgid "Italian <--> English"
+msgstr "Italienisch <--> Englisch"
+
+#: src/callbacks.c:1421 src/callbacks.c:1494 src/callbacks.c:2187
+msgid "Italian <--> Spanish"
+msgstr "Italienisch <--> Spanisch"
+
+#: src/callbacks.c:1422
+#, fuzzy
+msgid "Italian <--> Italian"
+msgstr "Deutsch <--> Italienisch"
+
+#: src/callbacks.c:1423 src/callbacks.c:1497 src/callbacks.c:2189
+msgid "Italian <--> Portuguese"
+msgstr "Italienisch <--> Portugiesisch"
+
+#: src/callbacks.c:1425 src/callbacks.c:1499 src/callbacks.c:2192
 msgid "Norwegian <--> English"
 msgstr "Norwegisch <--> Englisch"
 
 #. else print error to statusbar
-#: src/callbacks.c:659
+#: src/callbacks.c:1437
 msgid "Your entry is to short!"
 msgstr "Ihre Eingabe (Suchwort) ist zu kurz!"
 
-#: src/callbacks.c:765
-msgid "Spellcheck (Swiss, German)"
-msgstr "Rechtschreibung (Deutsch, Schweiz)"
+#: src/callbacks.c:1495 src/callbacks.c:2190
+msgid "Italian <--> French"
+msgstr "Italienisch <--> Französisch"
 
-#: src/callbacks.c:769
-msgid "Spellcheck (Irish)"
-msgstr "Rechtschreibung (Irisch)"
+#: src/callbacks.c:1898 src/callbacks.c:1904
+msgid "As new search word"
+msgstr "Als neues Suchwort"
 
-#: src/callbacks.c:773
-msgid "Spellcheck (Italian)"
-msgstr "Rechtschreibung (Itatenisch)"
+#. GNOMEUIINFO_ITEM_DATA will not work proper
+#: src/callbacks.c:1903
+msgid "Copy column"
+msgstr "Kopiere Zeileninhalt"
 
-#: src/callbacks.c:774
-msgid "Spellcheck (Danish)"
-msgstr "Rechtschreibung (Dänisch)"
-
-#: src/callbacks.c:775
-msgid "Spellcheck (Dutch)"
-msgstr "Rechtschreibung (Niederländisch)"
-
-#: src/callbacks.c:776
-msgid "Spellcheck (Norwegian)"
-msgstr "Rechtschreibung (Norwegisch)"
-
-#: src/callbacks.c:777 src/callbacks.c:784
-msgid "Spellcheck (Portuguese)"
-msgstr "Rechtschreibung (Portuesisch)"
-
-#. pt versus pt_BR, check this
-#: src/callbacks.c:778
-msgid "Spellcheck (Swedish)"
-msgstr "Rechtschreibung (Schwedisch)"
-
-#. follow parts are untested
-#: src/callbacks.c:780
-msgid "Spellcheck (Bulgarian)"
-msgstr "Rechtschreibung (Bulgarisch)"
-
-#: src/callbacks.c:781
-msgid "Spellcheck (Greek)"
-msgstr "Rechtschreibung (Griechisch)"
-
-#: src/callbacks.c:782
-msgid "Spellcheck (Croatian)"
-msgstr "Rechtschreibung (Kroatisch)"
-
-#: src/callbacks.c:783
-msgid "Spellcheck (Icelandic)"
-msgstr "Rechtschreibung (Isländisch)"
-
-#: src/callbacks.c:785
-msgid "Spellcheck (Russian)"
-msgstr "Rechtschreibung (Russisch)"
-
-#: src/callbacks.c:992
+#: src/callbacks.c:2047
 msgid "German (German)"
 msgstr "Deutsch"
 
-#. } else if (PREF_SPELL_MACRO( ASPELL_DECH, "de_CH", _("German (Swiss)") )
-#: src/callbacks.c:994
-msgid "English (British)"
-msgstr "Englisch (Britisch)"
+#: src/callbacks.c:2048
+msgid "German (Swiss)"
+msgstr "Deutsch (Schweiz)"
 
-#: src/callbacks.c:995
-msgid "English (Canadian)"
-msgstr "Englisch (Kanadisch)"
+#: src/callbacks.c:2049
+msgid "Afrikaans"
+msgstr "Afrikanisch"
 
-#: src/callbacks.c:996
-msgid "English (American)"
-msgstr "Englisch (Amerikanisch)"
+#: src/callbacks.c:2050
+msgid "Bulgarian"
+msgstr "Bulgarisch"
 
-#: src/callbacks.c:997
-msgid "Irish"
-msgstr "Irisch"
+#: src/callbacks.c:2051
+msgid "Breton"
+msgstr "Bretonisch"
 
-#: src/callbacks.c:1001
+#: src/callbacks.c:2052
+msgid "Catalan"
+msgstr "Catalanisch"
+
+#: src/callbacks.c:2053
+msgid "Czech"
+msgstr "Tschechisch"
+
+#: src/callbacks.c:2054
+msgid "Welsh"
+msgstr "Walisisch"
+
+#: src/callbacks.c:2055
 msgid "Danish"
 msgstr "Dänisch"
 
-#: src/callbacks.c:1002
-msgid "Dutch"
-msgstr "Niederländisch"
+#: src/callbacks.c:2056
+msgid "Esperanto"
+msgstr "Esperanto"
 
-#: src/callbacks.c:1004
-msgid "Swedish"
-msgstr "Schwedisch"
+#: src/callbacks.c:2057
+msgid "Greek"
+msgstr "Griechisch"
 
-#: src/callbacks.c:1019 src/callbacks.c:1058 src/callbacks.c:1100
+#: src/callbacks.c:2058
+msgid "English (British)"
+msgstr "Englisch (Britisch)"
+
+#: src/callbacks.c:2059
+msgid "English (Canadian)"
+msgstr "Englisch (Kanadisch)"
+
+#: src/callbacks.c:2060
+msgid "English (American)"
+msgstr "Englisch (Amerikanisch)"
+
+#: src/callbacks.c:2062
+msgid "French, France"
+msgstr "Französisch, Frankreich"
+
+#: src/callbacks.c:2063
+msgid "French, Swiss"
+msgstr "Französisch, Schweiz"
+
+#: src/callbacks.c:2064
+msgid "Faroese"
+msgstr "Faroeisch"
+
+#: src/callbacks.c:2065
+msgid "Irish, Gaelic"
+msgstr "Irisch, Gälisch"
+
+#: src/callbacks.c:2066
+msgid "Gallegan"
+msgstr "Galligien"
+
+#: src/callbacks.c:2067
+msgid "Croatian"
+msgstr "kroatisch"
+
+#: src/callbacks.c:2068
+msgid "Indonesian"
+msgstr "Indonesisch"
+
+#: src/callbacks.c:2070
+msgid "Icelandic"
+msgstr "Islandisch"
+
+#: src/callbacks.c:2071
+msgid "Maori"
+msgstr "Maorisch"
+
+#: src/callbacks.c:2072
+msgid "Makasar"
+msgstr ""
+
+#: src/callbacks.c:2073
+msgid "Malay"
+msgstr "Malaysisch"
+
+#: src/callbacks.c:2074
+msgid "Maltese"
+msgstr "Maltesisch"
+
+#: src/callbacks.c:2078 src/callbacks.c:2130
+msgid "Polish"
+msgstr "Polnisch"
+
+#. } else if (PREF_SPELL_MACRO( ASPELL_GA, "pt_BR", _("Portuguese") )
+#: src/callbacks.c:2080
+msgid "Russian"
+msgstr "Russisch"
+
+#: src/callbacks.c:2081
+msgid "Romanian"
+msgstr "Rumänisch"
+
+#: src/callbacks.c:2082
+msgid "Slovenian"
+msgstr "Slovenisch"
+
+#: src/callbacks.c:2083
+msgid "Slovak"
+msgstr "Slovakisch"
+
+#: src/callbacks.c:2085
+msgid "Ukrainian"
+msgstr "Ukrainisch"
+
+#: src/callbacks.c:2086
+msgid "Walloon"
+msgstr "Wallonisch"
+
+#: src/callbacks.c:2087
+msgid "Zulu"
+msgstr "Zulu"
+
+#: src/callbacks.c:2101 src/callbacks.c:2141 src/callbacks.c:2205
 msgid "active"
 msgstr "aktiv"
 
-#: src/callbacks.c:1020 src/callbacks.c:1059 src/callbacks.c:1101
+#: src/callbacks.c:2102 src/callbacks.c:2142 src/callbacks.c:2206
 msgid "Language"
 msgstr "Sprache"
 
@@ -492,7 +862,7 @@ msgid "Couldn't find pixmap file: %s"
 msgstr "Konnte Bild '%s' nicht finden"
 
 #. no match found
-#: src/thesaurus.c:71 src/myaspell.c:181
+#: src/thesaurus.c:103 src/myaspell.c:253
 #, c-format
 msgid ""
 "Word not found or typo incorrect.\n"
@@ -501,114 +871,276 @@ msgstr ""
 "Wort nicht gefunden oder schreibweise fehlerhaft\n"
 "  '<b>%s</b>'"
 
-#: src/thesaurus.c:107
+#: src/thesaurus.c:139
 #, c-format
 msgid "<b>Suggestion %i:</b>"
 msgstr "<b>Vorschlag %i:</b>"
 
-#: src/myaspell.c:52
+#: src/myaspell.c:93
 msgid "Spelling ok, no suggestions\n"
 msgstr "Rechtschreibung korrekt, keine Vorschläge\n"
 
-#: src/myaspell.c:53
+#: src/myaspell.c:94
 msgid "Suggestions :"
 msgstr "Vorschläge:"
 
-#. gtk_list_store_clear(store);
 #. fill top-level description
-#: src/myaspell.c:59
+#: src/myaspell.c:98
 msgid "German spelling result"
 msgstr "Ergebnis der deutschen Rechtschreibprüfung"
 
-#: src/myaspell.c:60
-msgid "English (CA) spelling result"
-msgstr "Ergebnis der englischen (kanadisch) Rechtschreibprüfung"
+#: src/myaspell.c:99
+msgid "German (CH) spelling result"
+msgstr "Ergebnis der deutschen Rechtschreibprüfung"
 
-#: src/myaspell.c:61
-msgid "English (US) spelling result"
-msgstr "Ergebnis der englischen (amerikanisch) Rechtschreibprüfung"
+#: src/myaspell.c:100
+msgid "Afrikans (AF) spelling result"
+msgstr "Ergebnis der afrikanischen Rechtschreibprüfung"
 
-#: src/myaspell.c:62
+#: src/myaspell.c:101
+msgid "Bulgarian (BG) spelling result"
+msgstr "Ergebnis der bulgarischen Rechtschreibprüfung"
+
+#: src/myaspell.c:102
+msgid "Breton (BR) spelling result"
+msgstr "Ergebnis der bretonischen Rechtschreibprüfung"
+
+#: src/myaspell.c:103
+msgid "Catalan (CA) spelling result"
+msgstr "Ergebnis der katalanischen Rechtschreibprüfung"
+
+#: src/myaspell.c:104
+msgid "Czech (CS) spelling result"
+msgstr "Ergebnis der tschechischen Rechtschreibprüfung"
+
+#: src/myaspell.c:105
+msgid "Welsh (CY) spelling result"
+msgstr "Ergebnis der welschen Rechtschreibprüfung"
+
+#: src/myaspell.c:106
+msgid "Danish (DA) spelling result"
+msgstr "Ergebnis der dänischen Rechtschreibprüfung"
+
+#: src/myaspell.c:107
+msgid "Esperanto (EO) spelling result"
+msgstr "Ergebnis der esperanto Rechtschreibprüfung"
+
+#: src/myaspell.c:108
+msgid "Greek (EL) spelling result"
+msgstr "Ergebnis der griechischen Rechtschreibprüfung"
+
+#: src/myaspell.c:109
 msgid "Spanish (ES) spelling result"
 msgstr "Ergebnis der spanischen Rechtschreibprüfung"
 
-#: src/myaspell.c:63
-msgid "Frensh (FR) spelling result"
+#: src/myaspell.c:110
+msgid "Faroese (FO) spelling result"
+msgstr "Ergebnis der farosischen Rechtschreibprüfung"
+
+#: src/myaspell.c:111
+msgid "Irish, Gaelic (GA) spelling result"
+msgstr "Ergebnis der gälischen Rechtschreibprüfung"
+
+#: src/myaspell.c:112
+msgid "Gallegan (GL) spelling result"
+msgstr "Ergebnis der Galligien Rechtschreibprüfung"
+
+#: src/myaspell.c:113
+msgid "Croatian (HR) spelling result"
+msgstr "Ergebnis der kroatischen Rechtschreibprüfung"
+
+#: src/myaspell.c:114
+msgid "French (FR) spelling result"
 msgstr "Ergebnis der französischen Rechtschreibprüfung"
 
-#: src/myaspell.c:64
+#: src/myaspell.c:115
+msgid "French (CH) spelling result"
+msgstr "Ergebnis der französischen Rechtschreibprüfung"
+
+#: src/myaspell.c:116
+msgid "Indonesian (ID) spelling result"
+msgstr "Ergebnis der indonesischen Rechtschreibprüfung"
+
+#: src/myaspell.c:117
+msgid "Italian (IT) spelling result"
+msgstr "Ergebnis der italienischen Rechtschreibprüfung"
+
+#: src/myaspell.c:118
+msgid "Icelandic (IS) spelling result"
+msgstr "Ergebnis der isländischen Rechtschreibprüfung"
+
+#: src/myaspell.c:119
+msgid "Maori (MI) spelling result"
+msgstr "Ergebnis der maorie Rechtschreibprüfung"
+
+#: src/myaspell.c:120
+msgid "Makasar (MK) spelling result"
+msgstr "Ergebnis der Makasar Rechtschreibprüfung"
+
+#: src/myaspell.c:121
+msgid "Malay (MS) spelling result"
+msgstr "Ergebnis der malayischen Rechtschreibprüfung"
+
+#: src/myaspell.c:122
+msgid "Maltese (MT) spelling result"
+msgstr "Ergebnis der maltesischen Rechtschreibprüfung"
+
+#: src/myaspell.c:123
+msgid "Dutch (NL) spelling result"
+msgstr "Ergebnis der niederländischen Rechtschreibprüfung"
+
+#: src/myaspell.c:124
+msgid "Norwegian (NO) spelling result"
+msgstr "Ergebnis der norwegischen Rechtschreibprüfung"
+
+#. } else if( SPELL_FILL( "pt_BR", _("Portuguese (BR) spelling result") );
+#: src/myaspell.c:126
+msgid "Portuguese (PT) spelling result"
+msgstr "Ergebnis der portugiesischen Rechtschreibprüfung"
+
+#: src/myaspell.c:127
+msgid "Russian (RU) spelling result"
+msgstr "Ergebnis der russischen Rechtschreibprüfung"
+
+#: src/myaspell.c:128
+msgid "Romanian (RO) spelling result"
+msgstr "Ergebnis der rumänischen Rechtschreibprüfung"
+
+#: src/myaspell.c:129
+msgid "Slovak (SK) spelling result"
+msgstr "Ergebnis der slovakischen Rechtschreibprüfung"
+
+#: src/myaspell.c:130
+msgid "Slovenian (SL) spelling result"
+msgstr "Ergebnis der slovenischen Rechtschreibprüfung"
+
+#: src/myaspell.c:131
+msgid "Swedish (SV) spelling result"
+msgstr "Ergebnis der schwedischen Rechtschreibprüfung"
+
+#: src/myaspell.c:132
+msgid "Ukrainian (UK) spelling result"
+msgstr "Ergebnis der ukrainischen Rechtschreibprüfung"
+
+#: src/myaspell.c:133
+msgid "English (CA) spelling result"
+msgstr "Ergebnis der englischen (kanadisch) Rechtschreibprüfung"
+
+#: src/myaspell.c:134
+msgid "English (US) spelling result"
+msgstr "Ergebnis der englischen (amerikanisch) Rechtschreibprüfung"
+
+#: src/myaspell.c:135
+msgid "Walloon (WA) spelling result"
+msgstr "Ergebnis der walisischen Rechtschreibprüfung"
+
+#: src/myaspell.c:136
+msgid "Zulu (ZU) spelling result"
+msgstr "Ergebnis der Zulu Rechtschreibprüfung"
+
+#: src/myaspell.c:137
 msgid "English spelling result"
 msgstr "Ergebnis der englischen Rechtschreibprüfung"
 
-#: src/myaspell.c:65
+#: src/myaspell.c:138
 msgid "English (UK) spelling result"
 msgstr "Ergebnis der englischen (britisch) Rechtschreibprüfung"
 
-#: src/myaspell.c:74 src/myaspell.c:93 src/myaspell.c:129 src/myaspell.c:282
+#: src/myaspell.c:147 src/myaspell.c:165 src/myaspell.c:201 src/myaspell.c:355
 msgid "Error :"
 msgstr "Fehler:"
 
-#: src/myaspell.c:78
+#: src/myaspell.c:151
 msgid "Please don't use german special chars in english spellcheck.\n"
 msgstr "Bitte verwenden Sie Sonderzeichen nur für die Deutsche Sprache.\n"
 
-#: src/myaspell.c:96
+#: src/myaspell.c:168
 msgid "Unknown language selected, please check it.\n"
 msgstr "Unbekannte Sprache ausgewählt, bitte prüfen Sie die Installation.\n"
 
-#: src/myaspell.c:98
+#: src/myaspell.c:170
 msgid "Error message"
 msgstr "Fehlermeldung"
 
-#: src/myaspell.c:119
+#: src/myaspell.c:191
 msgid "use aspell c-api\n"
 msgstr "verwende aspell C-API\n"
 
-#: src/myaspell.c:120
+#: src/myaspell.c:192
 #, c-format
 msgid "search for '%s'\n"
 msgstr "suche für '%s'\n"
 
-#: src/myaspell.c:127
+#: src/myaspell.c:199
 #, c-format
 msgid "Error: Dictinory %s not found\n"
 msgstr "Fehler: Wörterbuch '%s' nicht gefunden.\n"
 
-#: src/myaspell.c:132
+#: src/myaspell.c:204
 msgid "Dict not found"
 msgstr "Wörterbuch nicht gefunden"
 
-#: src/myaspell.c:161
+#: src/myaspell.c:233
 #, c-format
 msgid "Error: %s\n"
 msgstr "Fehler: '%s'\n"
 
-#: src/myaspell.c:198
+#: src/myaspell.c:267
 msgid "<b>Suggestions:</b>"
 msgstr "<b>Vorschläge:</b>"
 
-#: src/myaspell.c:208
+#: src/myaspell.c:281
 msgid "Spelling ok, no suggestions"
 msgstr "Rechtschreibung korrekt, keine Vorschläge"
 
-#: src/myaspell.c:224
+#: src/myaspell.c:297
 msgid "use ispell pipe-mode\n"
 msgstr "verwende ispell PIPE-Modus\n"
 
-#: src/myaspell.c:262
+#: src/myaspell.c:335
 msgid "command: "
 msgstr "Befehl: "
 
-#: src/myaspell.c:281
+#: src/myaspell.c:354
 msgid "Typo or unknown word, no suggestions \n"
 msgstr "Wort unbekannt oder Schreibweise fehlerhaft, keine Vorschläge\n"
 
-#: src/myaspell.c:287
+#: src/myaspell.c:360
 msgid "root"
 msgstr "Wortstamm"
 
-#~ msgid "German (Swiss)"
-#~ msgstr "Deutsch (Schweiz)"
+#~ msgid "Search"
+#~ msgstr "Suchen"
+
+#~ msgid "Copy right column to clipboard"
+#~ msgstr "Kopiere rechten Spalteninhalt in die Zwischenablage."
+
+#~ msgid "switch to small window size"
+#~ msgstr "Schaltet zur kleineren Fensterdarstellung"
+
+#~ msgid "switch to normal window size"
+#~ msgstr "Schaltet zur normalen Fensterdarstellung"
+
+#~ msgid "gnome-ding Homepage: http://www.grawert.net/software/"
+#~ msgstr "GNOME-Ding Web-Seite: http://www.abe-si.de/gnome-ding.html"
+
+#~ msgid "Show the Result for copy and paste."
+#~ msgstr "Suchresultate für 'Copy&Paste' anzeigen."
+
+#~ msgid "Settings only use for translation (by grep)"
+#~ msgstr "Einstellungen zum Übersetzen (per grep)"
+
+#~ msgid "Select the languages that should be available."
+#~ msgstr "Auswahl der Verfügbaren Sprachen."
+
+#~ msgid "Define some settings for Gnome-Ding, like color, font ..."
+#~ msgstr "Zukünftig: Einige Einstellungen wie Schriftart, Farbe ...."
+
+#~ msgid "Irish"
+#~ msgstr "Irisch"
+
+#~ msgid "Spellcheck (Swiss, German)"
+#~ msgstr "Rechtschreibung (Deutsch, Schweiz)"
 
 #~ msgid "Read config.."
 #~ msgstr "Lese Konfiguration..."
