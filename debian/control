@@ -6,8 +6,11 @@ Build-Depends: debhelper (>> 2.0.0), glib2 (>= 2.0), gtk2 (>> 2.0), gnome-deskto
 Standards-Version: 3.2.1
 
 Package: gnome-ding
-Architecture: any
+Architecture: i386
 Depends: ${shlibs:Depends}
 Recommends: ${shlibs:Recommends}
-Description: gnome-ding is a dictionary
- Gnome ding is a tool for spellchecking, translation and thesaurus.
+Description: GNOME ding translation- and spellchecking for GNOME
+ GNOME ding is a translator and spellchecker for Gtk2, inspired by ding.
+ For spellchecking, it will use installed aspell-dictionories and
+ for translations it will use ding-like dictinories, thas will be
+ shiped with this package.

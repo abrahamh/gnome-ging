@@ -1,0 +1,2 @@
+?package(gnome-ding):needs=text|aspell section=libs\
+  title="gnome-ding" command="/usr/bin/gnome-ding"

@@ -1,5 +1,5 @@
 #! /bin/sh
-# postrm script for gnome-ding
+# postinst script for gnome-ding
 #
 
 
