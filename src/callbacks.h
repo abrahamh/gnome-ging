@@ -1,5 +1,8 @@
 #include <gnome.h>
 
+#ifndef _CALLBACK_H_
+#define _CALLBACK_H_
+
 void on_wordlist_init();
 
 void  on_wordlist_delete();
@@ -83,4 +86,16 @@ on_grep_case_toggled                   (GtkToggleButton *togglebutton,
 
 void
 on_aspell_suggest_value_changed        (GtkRange        *range,
+                                        gpointer         user_data);
+										
+
+void
+run_translation (GtkWidget *caller, gchar *lang_from, gchar *lang_to, gchar *dict);
+
+
+
+#endif // _CALLBACK_H_
+
+void
+on_button_reset_clicked                (GtkButton       *button,
                                         gpointer         user_data);

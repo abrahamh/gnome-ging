@@ -130,12 +130,10 @@ create_gnome_ding (void)
   GtkWidget *eventbox1;
   AtkObject *atko;
   GtkWidget *image7;
-  GtkWidget *output;
-  GtkWidget *viewport1;
-  GtkWidget *scrolledwindow1;
-  GtkWidget *viewport2;
+  GtkWidget *vbox7;
   GtkWidget *scrolledwindow2;
   GtkWidget *list;
+  GtkWidget *result_entry;
   GtkWidget *statusbar;
   GtkAccelGroup *accel_group;
   GtkTooltips *tooltips;
@@ -205,7 +203,7 @@ create_gnome_ding (void)
   button1 = gtk_button_new ();
   gtk_widget_set_name (button1, "button1");
   gtk_widget_show (button1);
-  gtk_box_pack_start (GTK_BOX (hbox1), button1, FALSE, FALSE, 4);
+  gtk_box_pack_start (GTK_BOX (hbox1), button1, FALSE, FALSE, 2);
   gtk_widget_set_sensitive (button1, FALSE);
   gtk_tooltips_set_tip (tooltips, button1, _("go back (search history)"), NULL);
 
@@ -233,7 +231,7 @@ create_gnome_ding (void)
   button_vor = gtk_button_new ();
   gtk_widget_set_name (button_vor, "button_vor");
   gtk_widget_show (button_vor);
-  gtk_box_pack_start (GTK_BOX (hbox1), button_vor, FALSE, FALSE, 4);
+  gtk_box_pack_start (GTK_BOX (hbox1), button_vor, FALSE, FALSE, 2);
   gtk_widget_set_sensitive (button_vor, FALSE);
   gtk_tooltips_set_tip (tooltips, button_vor, _("go forward (search history)"), NULL);
 
@@ -244,15 +242,14 @@ create_gnome_ding (void)
 
   label_searchword = gtk_label_new_with_mnemonic (_("_Word:"));
   gtk_widget_set_name (label_searchword, "label_searchword");
-  gtk_widget_show (label_searchword);
-  gtk_box_pack_start (GTK_BOX (hbox1), label_searchword, FALSE, FALSE, 4);
+  gtk_box_pack_start (GTK_BOX (hbox1), label_searchword, FALSE, FALSE, 2);
   gtk_label_set_justify (GTK_LABEL (label_searchword), GTK_JUSTIFY_LEFT);
   gtk_misc_set_padding (GTK_MISC (label_searchword), 5, 0);
 
   suchinput = gtk_entry_new ();
   gtk_widget_set_name (suchinput, "suchinput");
   gtk_widget_show (suchinput);
-  gtk_box_pack_start (GTK_BOX (hbox1), suchinput, TRUE, TRUE, 4);
+  gtk_box_pack_start (GTK_BOX (hbox1), suchinput, FALSE, TRUE, 2);
   gtk_tooltips_set_tip (tooltips, suchinput, _("specify the search string"), NULL);
   gtk_entry_set_activates_default (GTK_ENTRY (suchinput), TRUE);
 
@@ -261,19 +258,19 @@ create_gnome_ding (void)
                      "GladeParentKey", selection);
   gtk_widget_set_name (selection, "selection");
   gtk_widget_show (selection);
-  gtk_box_pack_start (GTK_BOX (hbox1), selection, TRUE, TRUE, 4);
+  gtk_box_pack_start (GTK_BOX (hbox1), selection, TRUE, TRUE, 2);
 
   selection_combo = GTK_COMBO (selection)->entry;
   gtk_widget_set_name (selection_combo, "selection_combo");
   gtk_widget_show (selection_combo);
-  gtk_tooltips_set_tip (tooltips, selection_combo, _("select the dictinory"), NULL);
+  gtk_tooltips_set_tip (tooltips, selection_combo, _("select the dictionary"), NULL);
   gtk_editable_set_editable (GTK_EDITABLE (selection_combo), FALSE);
   gtk_entry_set_text (GTK_ENTRY (selection_combo), _(" "));
 
   submitbutton = gtk_button_new ();
   gtk_widget_set_name (submitbutton, "submitbutton");
   gtk_widget_show (submitbutton);
-  gtk_box_pack_start (GTK_BOX (hbox1), submitbutton, FALSE, FALSE, 4);
+  gtk_box_pack_start (GTK_BOX (hbox1), submitbutton, FALSE, FALSE, 2);
   gtk_tooltips_set_tip (tooltips, submitbutton, _("start search for given word"), NULL);
   gtk_widget_add_accelerator (submitbutton, "clicked", accel_group,
                               GDK_Return, 0,
@@ -314,42 +311,29 @@ create_gnome_ding (void)
   gtk_misc_set_alignment (GTK_MISC (image7), 0, 0);
   gtk_misc_set_padding (GTK_MISC (image7), 5, 0);
 
-  output = gtk_scrolled_window_new (NULL, NULL);
-  gtk_widget_set_name (output, "output");
-  gtk_widget_show (output);
-  gtk_box_pack_start (GTK_BOX (vbox1), output, TRUE, TRUE, 0);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (output), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-
-  viewport1 = gtk_viewport_new (NULL, NULL);
-  gtk_widget_set_name (viewport1, "viewport1");
-  gtk_widget_show (viewport1);
-  gtk_container_add (GTK_CONTAINER (output), viewport1);
-  gtk_container_set_border_width (GTK_CONTAINER (viewport1), 2);
-  gtk_viewport_set_shadow_type (GTK_VIEWPORT (viewport1), GTK_SHADOW_NONE);
-
-  scrolledwindow1 = gtk_scrolled_window_new (NULL, NULL);
-  gtk_widget_set_name (scrolledwindow1, "scrolledwindow1");
-  gtk_widget_show (scrolledwindow1);
-  gtk_container_add (GTK_CONTAINER (viewport1), scrolledwindow1);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow1), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolledwindow1), GTK_SHADOW_IN);
-
-  viewport2 = gtk_viewport_new (NULL, NULL);
-  gtk_widget_set_name (viewport2, "viewport2");
-  gtk_widget_show (viewport2);
-  gtk_container_add (GTK_CONTAINER (scrolledwindow1), viewport2);
-  gtk_viewport_set_shadow_type (GTK_VIEWPORT (viewport2), GTK_SHADOW_NONE);
+  vbox7 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_set_name (vbox7, "vbox7");
+  gtk_widget_show (vbox7);
+  gtk_box_pack_start (GTK_BOX (vbox1), vbox7, TRUE, TRUE, 0);
 
   scrolledwindow2 = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_name (scrolledwindow2, "scrolledwindow2");
   gtk_widget_show (scrolledwindow2);
-  gtk_container_add (GTK_CONTAINER (viewport2), scrolledwindow2);
+  gtk_box_pack_start (GTK_BOX (vbox7), scrolledwindow2, TRUE, TRUE, 2);
+  gtk_widget_set_size_request (scrolledwindow2, 250, 150);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow2), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolledwindow2), GTK_SHADOW_IN);
 
   list = gtk_tree_view_new ();
   gtk_widget_set_name (list, "list");
   gtk_widget_show (list);
   gtk_container_add (GTK_CONTAINER (scrolledwindow2), list);
+
+  result_entry = gtk_entry_new ();
+  gtk_widget_set_name (result_entry, "result_entry");
+  gtk_box_pack_start (GTK_BOX (vbox7), result_entry, FALSE, FALSE, 2);
+  gtk_tooltips_set_tip (tooltips, result_entry, _("Show the Result for copy and paste."), NULL);
+  gtk_editable_set_editable (GTK_EDITABLE (result_entry), FALSE);
 
   statusbar = gtk_statusbar_new ();
   gtk_widget_set_name (statusbar, "statusbar");
@@ -416,12 +400,10 @@ create_gnome_ding (void)
   GLADE_HOOKUP_OBJECT (gnome_ding, label1, "label1");
   GLADE_HOOKUP_OBJECT (gnome_ding, eventbox1, "eventbox1");
   GLADE_HOOKUP_OBJECT (gnome_ding, image7, "image7");
-  GLADE_HOOKUP_OBJECT (gnome_ding, output, "output");
-  GLADE_HOOKUP_OBJECT (gnome_ding, viewport1, "viewport1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, scrolledwindow1, "scrolledwindow1");
-  GLADE_HOOKUP_OBJECT (gnome_ding, viewport2, "viewport2");
+  GLADE_HOOKUP_OBJECT (gnome_ding, vbox7, "vbox7");
   GLADE_HOOKUP_OBJECT (gnome_ding, scrolledwindow2, "scrolledwindow2");
   GLADE_HOOKUP_OBJECT (gnome_ding, list, "list");
+  GLADE_HOOKUP_OBJECT (gnome_ding, result_entry, "result_entry");
   GLADE_HOOKUP_OBJECT (gnome_ding, statusbar, "statusbar");
   GLADE_HOOKUP_OBJECT_NO_REF (gnome_ding, tooltips, "tooltips");
 
@@ -495,6 +477,40 @@ create_preferences1 (void)
   GtkWidget *grep_case;
   GtkWidget *label8;
   GtkWidget *grep;
+  GtkWidget *vbox5;
+  GtkWidget *hbox10;
+  GtkWidget *image28;
+  GtkWidget *label14;
+  GtkWidget *hbox11;
+  GtkWidget *label15;
+  GtkWidget *vbox6;
+  GtkWidget *table2;
+  GtkWidget *label18;
+  GtkWidget *label17;
+  GtkWidget *label16;
+  GtkWidget *scrolledwindow_aspell;
+  GtkWidget *treeview_aspell;
+  GtkWidget *scrolledwindow_thes;
+  GtkWidget *treeview_thes;
+  GtkWidget *scrolledwindow_dict;
+  GtkWidget *treeview_dict;
+  GtkWidget *label13;
+  GtkWidget *vbox8;
+  GtkWidget *hbox12;
+  GtkWidget *image29;
+  GtkWidget *label20;
+  GtkWidget *vbox9;
+  GtkWidget *table3;
+  GtkWidget *label22;
+  GtkWidget *label23;
+  GtkWidget *label24;
+  GtkWidget *colorpicker1;
+  GtkWidget *colorpicker2;
+  GtkWidget *fontpicker1;
+  GtkWidget *hbox13;
+  GtkWidget *button_reset;
+  GtkWidget *label21;
+  GtkWidget *label19;
   GtkWidget *dialog_action_area1;
   GtkWidget *okbutton1;
 
@@ -520,23 +536,26 @@ create_preferences1 (void)
   hbox8 = gtk_hbox_new (FALSE, 0);
   gtk_widget_set_name (hbox8, "hbox8");
   gtk_widget_show (hbox8);
-  gtk_box_pack_start (GTK_BOX (vbox3), hbox8, FALSE, FALSE, 4);
+  gtk_box_pack_start (GTK_BOX (vbox3), hbox8, FALSE, FALSE, 8);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox8), 2);
 
   image21 = create_pixmap (preferences1, "gnome-ding/gnome-ding.png");
   gtk_widget_set_name (image21, "image21");
   gtk_widget_show (image21);
   gtk_box_pack_start (GTK_BOX (hbox8), image21, FALSE, FALSE, 8);
 
-  label5 = gtk_label_new (_("Sellect some settings for use \nwith spellchecking (by aspell)."));
+  label5 = gtk_label_new (_("Select some settings for use \nwith spellchecking (by aspell)."));
   gtk_widget_set_name (label5, "label5");
   gtk_widget_show (label5);
   gtk_box_pack_start (GTK_BOX (hbox8), label5, TRUE, TRUE, 0);
   gtk_label_set_justify (GTK_LABEL (label5), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_alignment (GTK_MISC (label5), 0, 0.5);
 
   hbox5 = gtk_hbox_new (FALSE, 0);
   gtk_widget_set_name (hbox5, "hbox5");
   gtk_widget_show (hbox5);
   gtk_box_pack_start (GTK_BOX (vbox3), hbox5, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox5), 2);
 
   label6 = gtk_label_new (_(" "));
   gtk_widget_set_name (label6, "label6");
@@ -607,7 +626,7 @@ create_preferences1 (void)
   gtk_label_set_justify (GTK_LABEL (label9), GTK_JUSTIFY_RIGHT);
   gtk_misc_set_alignment (GTK_MISC (label9), 0.98, 0.5);
 
-  aspell = gtk_label_new_with_mnemonic (_("_spellchecker"));
+  aspell = gtk_label_new_with_mnemonic (_("_Spellchecker"));
   gtk_widget_set_name (aspell, "aspell");
   gtk_widget_show (aspell);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook1), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook1), 0), aspell);
@@ -622,7 +641,8 @@ create_preferences1 (void)
   hbox9 = gtk_hbox_new (FALSE, 0);
   gtk_widget_set_name (hbox9, "hbox9");
   gtk_widget_show (hbox9);
-  gtk_box_pack_start (GTK_BOX (vbox2), hbox9, FALSE, FALSE, 4);
+  gtk_box_pack_start (GTK_BOX (vbox2), hbox9, FALSE, FALSE, 8);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox9), 2);
 
   image22 = create_pixmap (preferences1, "gnome-ding/gnome-ding.png");
   gtk_widget_set_name (image22, "image22");
@@ -634,6 +654,8 @@ create_preferences1 (void)
   gtk_widget_show (label4);
   gtk_box_pack_start (GTK_BOX (hbox9), label4, FALSE, FALSE, 0);
   gtk_label_set_justify (GTK_LABEL (label4), GTK_JUSTIFY_LEFT);
+  gtk_label_set_line_wrap (GTK_LABEL (label4), TRUE);
+  gtk_misc_set_alignment (GTK_MISC (label4), 0, 0.5);
 
   hbox6 = gtk_hbox_new (FALSE, 0);
   gtk_widget_set_name (hbox6, "hbox6");
@@ -667,11 +689,257 @@ create_preferences1 (void)
   gtk_box_pack_start (GTK_BOX (vbox4), label8, TRUE, TRUE, 4);
   gtk_label_set_justify (GTK_LABEL (label8), GTK_JUSTIFY_LEFT);
 
-  grep = gtk_label_new_with_mnemonic (_("_translation"));
+  grep = gtk_label_new_with_mnemonic (_("_Translation"));
   gtk_widget_set_name (grep, "grep");
   gtk_widget_show (grep);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook1), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook1), 1), grep);
   gtk_label_set_justify (GTK_LABEL (grep), GTK_JUSTIFY_LEFT);
+
+  vbox5 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_set_name (vbox5, "vbox5");
+  gtk_widget_show (vbox5);
+  gtk_container_add (GTK_CONTAINER (notebook1), vbox5);
+
+  hbox10 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_set_name (hbox10, "hbox10");
+  gtk_widget_show (hbox10);
+  gtk_box_pack_start (GTK_BOX (vbox5), hbox10, FALSE, TRUE, 8);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox10), 2);
+
+  image28 = create_pixmap (preferences1, "gnome-ding/gnome-ding.png");
+  gtk_widget_set_name (image28, "image28");
+  gtk_widget_show (image28);
+  gtk_box_pack_start (GTK_BOX (hbox10), image28, FALSE, FALSE, 8);
+
+  label14 = gtk_label_new (_("Select the languages that should be available."));
+  gtk_widget_set_name (label14, "label14");
+  gtk_widget_show (label14);
+  gtk_box_pack_start (GTK_BOX (hbox10), label14, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label14), GTK_JUSTIFY_LEFT);
+  gtk_label_set_line_wrap (GTK_LABEL (label14), TRUE);
+  gtk_misc_set_alignment (GTK_MISC (label14), 0, 0.5);
+
+  hbox11 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_set_name (hbox11, "hbox11");
+  gtk_widget_show (hbox11);
+  gtk_box_pack_start (GTK_BOX (vbox5), hbox11, TRUE, TRUE, 0);
+
+  label15 = gtk_label_new (_(" "));
+  gtk_widget_set_name (label15, "label15");
+  gtk_widget_show (label15);
+  gtk_box_pack_start (GTK_BOX (hbox11), label15, FALSE, FALSE, 4);
+  gtk_label_set_justify (GTK_LABEL (label15), GTK_JUSTIFY_LEFT);
+
+  vbox6 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_set_name (vbox6, "vbox6");
+  gtk_widget_show (vbox6);
+  gtk_box_pack_start (GTK_BOX (hbox11), vbox6, TRUE, TRUE, 0);
+
+  table2 = gtk_table_new (2, 3, FALSE);
+  gtk_widget_set_name (table2, "table2");
+  gtk_widget_show (table2);
+  gtk_box_pack_start (GTK_BOX (vbox6), table2, TRUE, TRUE, 2);
+  gtk_container_set_border_width (GTK_CONTAINER (table2), 3);
+  gtk_table_set_row_spacings (GTK_TABLE (table2), 2);
+  gtk_table_set_col_spacings (GTK_TABLE (table2), 4);
+
+  label18 = gtk_label_new (_("Dictionary:"));
+  gtk_widget_set_name (label18, "label18");
+  gtk_widget_show (label18);
+  gtk_table_attach (GTK_TABLE (table2), label18, 2, 3, 0, 1,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 2, 2);
+  gtk_label_set_justify (GTK_LABEL (label18), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_alignment (GTK_MISC (label18), 0, 0.5);
+
+  label17 = gtk_label_new (_("Thesaurus:"));
+  gtk_widget_set_name (label17, "label17");
+  gtk_widget_show (label17);
+  gtk_table_attach (GTK_TABLE (table2), label17, 1, 2, 0, 1,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 2, 2);
+  gtk_label_set_justify (GTK_LABEL (label17), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_alignment (GTK_MISC (label17), 0, 0.5);
+
+  label16 = gtk_label_new (_("Spellchecker:"));
+  gtk_widget_set_name (label16, "label16");
+  gtk_widget_show (label16);
+  gtk_table_attach (GTK_TABLE (table2), label16, 0, 1, 0, 1,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 2, 2);
+  gtk_label_set_justify (GTK_LABEL (label16), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_alignment (GTK_MISC (label16), 0, 0.5);
+
+  scrolledwindow_aspell = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_set_name (scrolledwindow_aspell, "scrolledwindow_aspell");
+  gtk_widget_show (scrolledwindow_aspell);
+  gtk_table_attach (GTK_TABLE (table2), scrolledwindow_aspell, 0, 1, 1, 2,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 0, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (scrolledwindow_aspell), 2);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow_aspell), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolledwindow_aspell), GTK_SHADOW_IN);
+
+  treeview_aspell = gtk_tree_view_new ();
+  gtk_widget_set_name (treeview_aspell, "treeview_aspell");
+  gtk_widget_show (treeview_aspell);
+  gtk_container_add (GTK_CONTAINER (scrolledwindow_aspell), treeview_aspell);
+  gtk_widget_set_size_request (treeview_aspell, 200, 200);
+  gtk_tree_view_set_reorderable (GTK_TREE_VIEW (treeview_aspell), TRUE);
+  gtk_tree_view_set_enable_search (GTK_TREE_VIEW (treeview_aspell), FALSE);
+
+  scrolledwindow_thes = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_set_name (scrolledwindow_thes, "scrolledwindow_thes");
+  gtk_widget_show (scrolledwindow_thes);
+  gtk_table_attach (GTK_TABLE (table2), scrolledwindow_thes, 1, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 0, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (scrolledwindow_thes), 2);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow_thes), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolledwindow_thes), GTK_SHADOW_IN);
+
+  treeview_thes = gtk_tree_view_new ();
+  gtk_widget_set_name (treeview_thes, "treeview_thes");
+  gtk_widget_show (treeview_thes);
+  gtk_container_add (GTK_CONTAINER (scrolledwindow_thes), treeview_thes);
+  gtk_widget_set_size_request (treeview_thes, 120, 200);
+
+  scrolledwindow_dict = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_set_name (scrolledwindow_dict, "scrolledwindow_dict");
+  gtk_widget_show (scrolledwindow_dict);
+  gtk_table_attach (GTK_TABLE (table2), scrolledwindow_dict, 2, 3, 1, 2,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 0, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (scrolledwindow_dict), 2);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow_dict), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolledwindow_dict), GTK_SHADOW_IN);
+
+  treeview_dict = gtk_tree_view_new ();
+  gtk_widget_set_name (treeview_dict, "treeview_dict");
+  gtk_widget_show (treeview_dict);
+  gtk_container_add (GTK_CONTAINER (scrolledwindow_dict), treeview_dict);
+  gtk_widget_set_size_request (treeview_dict, 200, 200);
+
+  label13 = gtk_label_new_with_mnemonic (_("_Languages"));
+  gtk_widget_set_name (label13, "label13");
+  gtk_widget_show (label13);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook1), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook1), 2), label13);
+  gtk_label_set_justify (GTK_LABEL (label13), GTK_JUSTIFY_LEFT);
+
+  vbox8 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_set_name (vbox8, "vbox8");
+  gtk_widget_show (vbox8);
+  gtk_container_add (GTK_CONTAINER (notebook1), vbox8);
+
+  hbox12 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_set_name (hbox12, "hbox12");
+  gtk_widget_show (hbox12);
+  gtk_box_pack_start (GTK_BOX (vbox8), hbox12, FALSE, TRUE, 8);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox12), 2);
+
+  image29 = create_pixmap (preferences1, "gnome-ding/gnome-ding.png");
+  gtk_widget_set_name (image29, "image29");
+  gtk_widget_show (image29);
+  gtk_box_pack_start (GTK_BOX (hbox12), image29, FALSE, FALSE, 8);
+
+  label20 = gtk_label_new (_("Define some settings for Gnome-Ding, like color, font ..."));
+  gtk_widget_set_name (label20, "label20");
+  gtk_widget_show (label20);
+  gtk_box_pack_start (GTK_BOX (hbox12), label20, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label20), GTK_JUSTIFY_LEFT);
+  gtk_label_set_line_wrap (GTK_LABEL (label20), TRUE);
+  gtk_misc_set_alignment (GTK_MISC (label20), 0, 0.5);
+
+  vbox9 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_set_name (vbox9, "vbox9");
+  gtk_widget_show (vbox9);
+  gtk_box_pack_start (GTK_BOX (vbox8), vbox9, TRUE, TRUE, 0);
+
+  table3 = gtk_table_new (3, 2, FALSE);
+  gtk_widget_set_name (table3, "table3");
+  gtk_widget_show (table3);
+  gtk_box_pack_start (GTK_BOX (vbox9), table3, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (table3), 2);
+  gtk_table_set_row_spacings (GTK_TABLE (table3), 4);
+  gtk_table_set_col_spacings (GTK_TABLE (table3), 4);
+
+  label22 = gtk_label_new (_("Textcolor:"));
+  gtk_widget_set_name (label22, "label22");
+  gtk_widget_show (label22);
+  gtk_table_attach (GTK_TABLE (table3), label22, 0, 1, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_label_set_justify (GTK_LABEL (label22), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_alignment (GTK_MISC (label22), 0, 0.5);
+  gtk_misc_set_padding (GTK_MISC (label22), 12, 0);
+
+  label23 = gtk_label_new (_("Hightlight Color:"));
+  gtk_widget_set_name (label23, "label23");
+  gtk_widget_show (label23);
+  gtk_table_attach (GTK_TABLE (table3), label23, 0, 1, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_label_set_justify (GTK_LABEL (label23), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_alignment (GTK_MISC (label23), 0, 0.5);
+  gtk_misc_set_padding (GTK_MISC (label23), 12, 0);
+
+  label24 = gtk_label_new (_("Textfont:"));
+  gtk_widget_set_name (label24, "label24");
+  gtk_widget_show (label24);
+  gtk_table_attach (GTK_TABLE (table3), label24, 0, 1, 2, 3,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_label_set_justify (GTK_LABEL (label24), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_alignment (GTK_MISC (label24), 0, 0.5);
+  gtk_misc_set_padding (GTK_MISC (label24), 12, 0);
+
+  colorpicker1 = gnome_color_picker_new ();
+  gtk_widget_set_name (colorpicker1, "colorpicker1");
+  gtk_widget_show (colorpicker1);
+  gtk_table_attach (GTK_TABLE (table3), colorpicker1, 1, 2, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gnome_color_picker_set_title (GNOME_COLOR_PICKER (colorpicker1), _("Choose the text color"));
+
+  colorpicker2 = gnome_color_picker_new ();
+  gtk_widget_set_name (colorpicker2, "colorpicker2");
+  gtk_widget_show (colorpicker2);
+  gtk_table_attach (GTK_TABLE (table3), colorpicker2, 1, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gnome_color_picker_set_title (GNOME_COLOR_PICKER (colorpicker2), _("Choose the color for highlight "));
+
+  fontpicker1 = gnome_font_picker_new ();
+  gtk_widget_set_name (fontpicker1, "fontpicker1");
+  gtk_widget_show (fontpicker1);
+  gtk_table_attach (GTK_TABLE (table3), fontpicker1, 1, 2, 2, 3,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_SHRINK | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gnome_font_picker_set_title (GNOME_FONT_PICKER (fontpicker1), _("Choose the font color"));
+  gnome_font_picker_set_mode (GNOME_FONT_PICKER (fontpicker1),
+                              GNOME_FONT_PICKER_MODE_FONT_INFO);
+
+  hbox13 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_set_name (hbox13, "hbox13");
+  gtk_widget_show (hbox13);
+  gtk_box_pack_start (GTK_BOX (vbox9), hbox13, FALSE, FALSE, 2);
+
+  button_reset = gtk_button_new_with_mnemonic (_("Reset"));
+  gtk_widget_set_name (button_reset, "button_reset");
+  gtk_widget_show (button_reset);
+  gtk_box_pack_start (GTK_BOX (hbox13), button_reset, FALSE, FALSE, 2);
+
+  label21 = gtk_label_new (_("Reset internel date model to store user defined settings."));
+  gtk_widget_set_name (label21, "label21");
+  gtk_widget_show (label21);
+  gtk_box_pack_start (GTK_BOX (hbox13), label21, FALSE, FALSE, 4);
+  gtk_label_set_justify (GTK_LABEL (label21), GTK_JUSTIFY_LEFT);
+
+  label19 = gtk_label_new_with_mnemonic (_("_General"));
+  gtk_widget_set_name (label19, "label19");
+  gtk_widget_show (label19);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook1), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook1), 3), label19);
+  gtk_label_set_justify (GTK_LABEL (label19), GTK_JUSTIFY_LEFT);
 
   dialog_action_area1 = GTK_DIALOG (preferences1)->action_area;
   gtk_widget_set_name (dialog_action_area1, "dialog_action_area1");
@@ -698,6 +966,9 @@ create_preferences1 (void)
                     NULL);
   g_signal_connect ((gpointer) grep_case, "toggled",
                     G_CALLBACK (on_grep_case_toggled),
+                    NULL);
+  g_signal_connect ((gpointer) button_reset, "clicked",
+                    G_CALLBACK (on_button_reset_clicked),
                     NULL);
   g_signal_connect ((gpointer) okbutton1, "clicked",
                     G_CALLBACK (on_okbutton1_clicked),
@@ -733,6 +1004,40 @@ create_preferences1 (void)
   GLADE_HOOKUP_OBJECT (preferences1, grep_case, "grep_case");
   GLADE_HOOKUP_OBJECT (preferences1, label8, "label8");
   GLADE_HOOKUP_OBJECT (preferences1, grep, "grep");
+  GLADE_HOOKUP_OBJECT (preferences1, vbox5, "vbox5");
+  GLADE_HOOKUP_OBJECT (preferences1, hbox10, "hbox10");
+  GLADE_HOOKUP_OBJECT (preferences1, image28, "image28");
+  GLADE_HOOKUP_OBJECT (preferences1, label14, "label14");
+  GLADE_HOOKUP_OBJECT (preferences1, hbox11, "hbox11");
+  GLADE_HOOKUP_OBJECT (preferences1, label15, "label15");
+  GLADE_HOOKUP_OBJECT (preferences1, vbox6, "vbox6");
+  GLADE_HOOKUP_OBJECT (preferences1, table2, "table2");
+  GLADE_HOOKUP_OBJECT (preferences1, label18, "label18");
+  GLADE_HOOKUP_OBJECT (preferences1, label17, "label17");
+  GLADE_HOOKUP_OBJECT (preferences1, label16, "label16");
+  GLADE_HOOKUP_OBJECT (preferences1, scrolledwindow_aspell, "scrolledwindow_aspell");
+  GLADE_HOOKUP_OBJECT (preferences1, treeview_aspell, "treeview_aspell");
+  GLADE_HOOKUP_OBJECT (preferences1, scrolledwindow_thes, "scrolledwindow_thes");
+  GLADE_HOOKUP_OBJECT (preferences1, treeview_thes, "treeview_thes");
+  GLADE_HOOKUP_OBJECT (preferences1, scrolledwindow_dict, "scrolledwindow_dict");
+  GLADE_HOOKUP_OBJECT (preferences1, treeview_dict, "treeview_dict");
+  GLADE_HOOKUP_OBJECT (preferences1, label13, "label13");
+  GLADE_HOOKUP_OBJECT (preferences1, vbox8, "vbox8");
+  GLADE_HOOKUP_OBJECT (preferences1, hbox12, "hbox12");
+  GLADE_HOOKUP_OBJECT (preferences1, image29, "image29");
+  GLADE_HOOKUP_OBJECT (preferences1, label20, "label20");
+  GLADE_HOOKUP_OBJECT (preferences1, vbox9, "vbox9");
+  GLADE_HOOKUP_OBJECT (preferences1, table3, "table3");
+  GLADE_HOOKUP_OBJECT (preferences1, label22, "label22");
+  GLADE_HOOKUP_OBJECT (preferences1, label23, "label23");
+  GLADE_HOOKUP_OBJECT (preferences1, label24, "label24");
+  GLADE_HOOKUP_OBJECT (preferences1, colorpicker1, "colorpicker1");
+  GLADE_HOOKUP_OBJECT (preferences1, colorpicker2, "colorpicker2");
+  GLADE_HOOKUP_OBJECT (preferences1, fontpicker1, "fontpicker1");
+  GLADE_HOOKUP_OBJECT (preferences1, hbox13, "hbox13");
+  GLADE_HOOKUP_OBJECT (preferences1, button_reset, "button_reset");
+  GLADE_HOOKUP_OBJECT (preferences1, label21, "label21");
+  GLADE_HOOKUP_OBJECT (preferences1, label19, "label19");
   GLADE_HOOKUP_OBJECT_NO_REF (preferences1, dialog_action_area1, "dialog_action_area1");
   GLADE_HOOKUP_OBJECT (preferences1, okbutton1, "okbutton1");
 

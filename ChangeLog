@@ -1,3 +1,21 @@
+Jun 29 2004 - H.Abraham
+ - bugfix in win/mini-winmode
+ - prepare translation for fr, br, it, es, need help
+
+Jun 28 2004 - H.Abraham
+ - extended macros for thes/dict  {de,en,fr,br,it}
+ - new button in pref-dialog (reset)
+ - new dict en-fr
+ - new dict en-es
+
+Jun 23 2004 - H.Abraham
+ - more macro-functions to support all aspell-languages 
+ - other internel data-model support new macros
+ - new preferences dialog to select languages 
+ - new thesaurus es
+ - new format for gconf-settings
+ - new thes es
+
 Sep 05 2003 - H.Abraham
  - stable version 2.0
  - new gnome-like content entry

@@ -10,69 +10,813 @@
 #include <gnome.h>
 #include <gconf/gconf-client.h>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 #include "interface.h"
 #include "support.h"
 #include "main.h"
 
-gint win_x_size = 0;
-gint win_y_size = 0;
-gint sug_mode = 3;
-gboolean hidden = FALSE;
-gboolean debug = TRUE;
-gchar *trans_de_en = NULL;
-gchar *trans_lat_de = NULL;
-gchar *thes_de = NULL;
+#define VALUESET(x) \
+	if(value != NULL) { \
+		if (stat(value, &buf) == 0) { \
+			g_string_printf( x, "%s", value ); \
+		 } else {  \
+			 g_string_printf( x , "(null)" ); \
+		 } \
+	} else { \
+		g_string_printf( x , "(null)" ); \
+	}
 
-gboolean search_exact_words = TRUE;
-gboolean serach_case_sense = TRUE;
-
-gint get_x_size() { return win_x_size; }
-gint get_y_size() { return win_y_size; }
-gint get_sug_mode() { return sug_mode; }
-gboolean  get_debug() { return debug; }
-gboolean  get_hidden() { return hidden; }
-gboolean  get_search_exact_words() { return search_exact_words; }
-gboolean  get_search_case_sense()  { return serach_case_sense; }
-
-gchar *get_trans_de_en() { return trans_de_en; }
-gchar *get_trans_lat_de() { return trans_lat_de; }
-gchar *get_thes_de() { return thes_de; }
-
-void set_x_size( gint val ) {
-	if ( val < 20 ) val = 500;
-	win_x_size = val;
-}
-
-void set_y_size( gint val ) {
-	if ( val < 20 ) val = 500;
-	win_y_size = val;
-}
-
-void
-set_search_exact_words(gboolean value)
-{
-	/* set word-exactly-search for egrep */
-	search_exact_words = value;	
-}
-void
-set_search_case_sense(gboolean value)
-{
-	/* set case-sensitive for egrep */
-	serach_case_sense = value;	
-}
-
-void
-set_sug_mode(gint value)
-{
-	/* set suggestion-mode for aspell */
-	if (value < 1 ) value = 3;
-	if (value > 4 ) value = 3;
-	sug_mode = value;
-}
+	// usage: CASE_MACRO1( ASPELL_AF, my_model.aspell_af )
+#define CASE_MACRO1(x, y) \
+	case x: \
+		return y; \
+		break;
+	
+void model_alloc();
+void model_free();
+void model_default();
+void model_read(GConfClient *gconf);
+void model_write(GConfClient *gconf);
+	
+static struct my_ding_data my_model;
 
 
+gint get_model_int(MYTYPE i) {
+	switch (i) {
+		case MAIN_SIZE_X: 
+			return my_model.win_size_x;
+			break;
+		case MAIN_SIZE_Y: 
+			return my_model.win_size_y;
+			break;
+		case MAIN_SUGEST_MODE: 
+			return my_model.suggestion_mode;
+			break;
+		default:
+			g_message("get_model_int(%i) - unknown type\n", i);
+			break;
+	}
+	return -1;
+} // get_model_int
 
 
+void set_model_int(MYTYPE i, gint value) {
+	switch (i) {
+		case MAIN_SIZE_X: 
+			if ( value < 20 ) value = 500;
+			my_model.win_size_x = value;
+			break;
+		case MAIN_SIZE_Y: 
+			if ( value < 20 ) value = 500;
+			my_model.win_size_y = value;
+			break;
+		case MAIN_SUGEST_MODE: 
+			if (value < 1) value = 1;
+			if (value > 4) value = 4;
+			my_model.suggestion_mode = value;
+			break;
+		default:
+			g_message("set_model_int(%i) - unknown type\n", i);
+			break;
+	}
+} // set_model_int
+
+gboolean get_model_bool(MYTYPE i) {
+	switch(i) {
+		case MAIN_HIDDEN:
+			return my_model.main_hidden;
+			break;
+		case MAIN_EXACT:
+			return my_model.search_exact_words;
+			break;
+		case MAIN_CASE:
+			return my_model.serach_case_sense;
+			break;
+		case MAIN_DEBUG:
+			return my_model.main_debug;
+			break;
+		case MAIN_RESET:
+			return my_model.main_reset;
+			break;
+		
+		// aspell languages
+		CASE_MACRO1( ASPELL_AF, my_model.aspell_af)
+		CASE_MACRO1( ASPELL_BG, my_model.aspell_bg)
+ 		CASE_MACRO1( ASPELL_BR, my_model.aspell_br)
+		CASE_MACRO1( ASPELL_CA, my_model.aspell_ca)
+		CASE_MACRO1( ASPELL_DECH, my_model.aspell_ch )
+		CASE_MACRO1( ASPELL_CS, my_model.aspell_cs )
+		CASE_MACRO1( ASPELL_CY, my_model.aspell_cy)
+		CASE_MACRO1( ASPELL_DA, my_model.aspell_da)
+		CASE_MACRO1( ASPELL_DE, my_model.aspell_de)
+		CASE_MACRO1( ASPELL_EL, my_model.aspell_el)
+		CASE_MACRO1( ASPELL_EO, my_model.aspell_eo)
+		CASE_MACRO1( ASPELL_ES, my_model.aspell_es)
+		CASE_MACRO1( ASPELL_FO, my_model.aspell_fo)
+		CASE_MACRO1( ASPELL_FR, my_model.aspell_fr)
+		CASE_MACRO1( ASPELL_GA, my_model.aspell_ga)
+		CASE_MACRO1( ASPELL_GB, my_model.aspell_gb)
+		CASE_MACRO1( ASPELL_GL, my_model.aspell_gl)
+		CASE_MACRO1( ASPELL_HR, my_model.aspell_hr)
+		CASE_MACRO1( ASPELL_IS, my_model.aspell_is)
+		CASE_MACRO1( ASPELL_IT, my_model.aspell_it)
+		CASE_MACRO1( ASPELL_NL, my_model.aspell_nl)
+		CASE_MACRO1( ASPELL_NO, my_model.aspell_no)
+		CASE_MACRO1( ASPELL_PL, my_model.aspell_pl)
+		CASE_MACRO1( ASPELL_PT, my_model.aspell_pt)
+		CASE_MACRO1( ASPELL_RO, my_model.aspell_ro)
+		CASE_MACRO1( ASPELL_RU, my_model.aspell_ru)
+		CASE_MACRO1( ASPELL_SK, my_model.aspell_sk)
+		CASE_MACRO1( ASPELL_SL, my_model.aspell_sl)
+		CASE_MACRO1( ASPELL_SV, my_model.aspell_sv)
+		CASE_MACRO1( ASPELL_UC, my_model.aspell_uc)
+		CASE_MACRO1( ASPELL_UK, my_model.aspell_uk)
+		CASE_MACRO1( ASPELL_US, my_model.aspell_us)
+		CASE_MACRO1( ASPELL_WA, my_model.aspell_wa)
+		CASE_MACRO1( ASPELL_ZU, my_model.aspell_zu)
+		
+		// thesaurus
+		CASE_MACRO1( THES_DE, my_model.thes_de)
+		CASE_MACRO1( THES_IT, my_model.thes_it)
+		CASE_MACRO1( THES_ES, my_model.thes_es)
+		CASE_MACRO1( THES_FR, my_model.thes_fr)
+		CASE_MACRO1( THES_EN, my_model.thes_en)
+		CASE_MACRO1( THES_PT, my_model.thes_pt)
+
+		// dictinory		
+		CASE_MACRO1( DICT_LAT_DE, my_model.dict_lat_de)
+		
+		CASE_MACRO1( DICT_DE_EN,  my_model.dict_de_en)
+		CASE_MACRO1( DICT_DE_ES,  my_model.dict_de_es)
+		CASE_MACRO1( DICT_DE_FR,  my_model.dict_de_fr)
+		CASE_MACRO1( DICT_DE_IT,  my_model.dict_de_it)
+		CASE_MACRO1( DICT_DE_PT,  my_model.dict_de_pt)
+		
+		CASE_MACRO1( DICT_EN_DE,  my_model.dict_en_de)
+		CASE_MACRO1( DICT_EN_FR,  my_model.dict_en_fr)
+		CASE_MACRO1( DICT_EN_ES,  my_model.dict_en_es)
+		CASE_MACRO1( DICT_EN_PT,  my_model.dict_en_pt)
+		CASE_MACRO1( DICT_EN_IT,  my_model.dict_en_it)
+		CASE_MACRO1( DICT_EN_NO,  my_model.dict_en_no)
+		
+		CASE_MACRO1( DICT_NO_EN,  my_model.dict_no_en)
+		
+		default:
+			g_message("get_model_bool(%i) - unknown type\n", i );
+			break;
+	}
+	return FALSE;
+} // get_model_bool
+
+void set_model_bool(MYTYPE i, gboolean value) {
+	switch(i) {
+		case MAIN_HIDDEN:
+			my_model.main_hidden = value;
+			break;
+		case MAIN_EXACT:
+			my_model.search_exact_words = value;
+			break;
+		case MAIN_CASE:
+			my_model.serach_case_sense = value;
+			break;
+		case MAIN_DEBUG:
+			my_model.main_debug = value;
+			break;
+		
+		// aspell languages
+		case ASPELL_AF:
+			my_model.aspell_af = value;
+			break;
+		case ASPELL_BG:
+			my_model.aspell_bg = value;
+			break;
+		case ASPELL_BR:
+			my_model.aspell_br = value;
+			break;
+		case ASPELL_CA:
+			my_model.aspell_ca = value;
+			break;
+		case ASPELL_DECH:
+			my_model.aspell_ch = value;
+			break;
+		case ASPELL_CS:
+			my_model.aspell_cs = value;
+			break;
+		case ASPELL_CY:
+			my_model.aspell_cy = value;
+			break;
+		case ASPELL_DA:
+			my_model.aspell_da = value;
+			break;
+		case ASPELL_DE:
+			my_model.aspell_de = value;
+		case ASPELL_EL:
+			my_model.aspell_el = value;
+			break;
+		case ASPELL_EO:
+			my_model.aspell_eo = value;
+			break;
+		case ASPELL_ES:
+			my_model.aspell_es = value;
+			break;
+		case ASPELL_FO:
+			my_model.aspell_fo = value;
+			break;
+		case ASPELL_FR:
+			my_model.aspell_fr = value;
+			break;
+		case ASPELL_GA:
+			my_model.aspell_ga = value;
+			break;
+		case ASPELL_GB:
+			my_model.aspell_gb = value;
+			break;
+		case ASPELL_GL:
+			my_model.aspell_gl = value;
+			break;
+		case ASPELL_IT:
+			my_model.aspell_it = value;
+			break;
+		case ASPELL_NL:
+			my_model.aspell_nl = value;
+			break;
+		case ASPELL_NO:
+			my_model.aspell_no = value;
+			break;
+		case ASPELL_PL:
+			my_model.aspell_pl = value;
+			break;
+		case ASPELL_PT:
+			my_model.aspell_pt = value;
+			break;
+		case ASPELL_RO:
+			my_model.aspell_ro = value;
+			break;
+		case ASPELL_RU:
+			my_model.aspell_ru = value;
+			break;
+		case ASPELL_SK:
+			my_model.aspell_sk = value;
+			break;
+		case ASPELL_SL:
+			my_model.aspell_sl = value;
+			break;
+		case ASPELL_SV:
+			my_model.aspell_sv = value;
+			break;
+		case ASPELL_UC:
+			my_model.aspell_uc = value;
+			break;
+		case ASPELL_UK:
+			my_model.aspell_uk = value;
+			break;
+		case ASPELL_US:
+			my_model.aspell_us = value;
+			break;
+		case ASPELL_WA:
+			my_model.aspell_wa = value;
+			break;
+		case ASPELL_ZU:
+			my_model.aspell_zu = value;
+			break;
+		
+		// thesaurus
+		case THES_DE:
+			my_model.thes_de = value;
+			break;
+		case THES_IT:
+			my_model.thes_it = value;
+			break;
+		case THES_ES:
+			my_model.thes_es = value;
+			break;
+		case THES_FR:
+			my_model.thes_fr = value;
+			break;
+		case THES_EN:
+			my_model.thes_en = value;
+			break;
+		case THES_PT:
+			my_model.thes_pt = value;
+			break;
+
+		// dictinory		
+		case DICT_DE_EN:
+			my_model.dict_de_en = value;
+			break;
+		case DICT_DE_ES:
+			my_model.dict_de_es = value;
+			break;
+		case DICT_DE_FR:
+			my_model.dict_de_fr = value;
+			break;
+		case DICT_DE_IT:
+			my_model.dict_de_it = value;
+			break;
+		case DICT_DE_PT:
+			my_model.dict_de_pt = value;
+			break;
+		
+		case DICT_EN_DE:
+			my_model.dict_en_de = value;
+			break;
+		case DICT_EN_ES:
+			my_model.dict_en_es = value;
+			break;
+		case DICT_EN_FR:
+			my_model.dict_en_fr = value;
+			break;
+		case DICT_EN_PT:
+			my_model.dict_en_pt = value;
+			break;
+		case DICT_EN_IT:
+			my_model.dict_en_it = value;
+			break;
+		case DICT_EN_NO:
+			my_model.dict_en_no = value;
+			break;
+		
+		case DICT_NO_EN:
+			my_model.dict_no_en = value;
+			break;
+		
+		case DICT_LAT_DE:
+			my_model.dict_lat_de = value;
+			break;
+
+		default:
+			g_message("set-model-bool with unknown type\n");
+			break;
+	}
+} // set_model_bool
+
+
+gchar *get_model_char(MYTYPE i) {
+	switch (i) {
+		case THES_DE:
+			return my_model.sz_thes_de->str;
+			break;
+		case THES_IT:
+			return my_model.sz_thes_it->str;
+			break;
+		case THES_FR:
+			return my_model.sz_thes_fr->str;
+			break;
+		case THES_EN:
+			return my_model.sz_thes_en->str;
+			break;
+		case THES_ES:
+			return my_model.sz_thes_es->str;
+			break;
+		case THES_PT:
+			return my_model.sz_thes_pt->str;
+			break;
+	
+		case DICT_DE_EN:
+			return my_model.sz_dict_de_en->str;
+			break;
+		case DICT_DE_ES:
+			return my_model.sz_dict_de_es->str;
+			break;
+		case DICT_DE_FR:
+			return my_model.sz_dict_de_fr->str;
+			break;
+		case DICT_DE_IT:
+			return my_model.sz_dict_de_it->str;
+			break;
+		case DICT_DE_PT:
+			return my_model.sz_dict_de_pt->str;
+			break;
+		
+		case DICT_EN_DE:
+			return my_model.sz_dict_en_de->str;
+			break;
+		case DICT_EN_FR:
+			return my_model.sz_dict_en_fr->str;
+			break;
+		case DICT_EN_ES:
+			return my_model.sz_dict_en_es->str;
+			break;
+		case DICT_EN_PT:
+			return my_model.sz_dict_en_pt->str;
+			break;
+		case DICT_EN_IT:
+			return my_model.sz_dict_en_it->str;
+			break;
+		case DICT_EN_NO:
+			return my_model.sz_dict_en_no->str;
+			break;
+		
+		case DICT_NO_EN:
+			return my_model.sz_dict_no_en->str;
+			break;
+		
+		case DICT_LAT_DE:
+			return my_model.sz_dict_lat_de->str;
+			break;
+		default:
+			// g_message("get-model-char with unknown type\n");
+			return NULL;
+			break;
+	}
+	return NULL;
+} // get_model_char
+
+
+
+
+void set_model_char(MYTYPE i, gchar *value) {
+	struct stat buf;
+		
+	switch (i) {
+		
+		case THES_IT:
+			VALUESET(my_model.sz_thes_it);
+			break;
+		case THES_DE:
+			VALUESET(my_model.sz_thes_de);
+			break;
+		case THES_FR:
+			VALUESET(my_model.sz_thes_fr);
+			break;
+		case THES_EN:
+			VALUESET(my_model.sz_thes_en);
+			break;
+		case THES_ES:
+			VALUESET(my_model.sz_thes_es);
+			break;
+		case THES_PT:
+			VALUESET(my_model.sz_thes_pt);
+			break;
+		
+		case DICT_LAT_DE:
+			VALUESET(my_model.sz_dict_lat_de);
+			break;
+		
+		case DICT_DE_EN:
+			VALUESET(my_model.sz_dict_de_en);
+			break;
+		case DICT_DE_ES:
+			VALUESET(my_model.sz_dict_de_es);
+			break;
+		case DICT_DE_FR:
+			VALUESET(my_model.sz_dict_de_fr);
+			break;
+		case DICT_DE_IT:
+			VALUESET(my_model.sz_dict_de_it);
+			break;
+		case DICT_DE_PT:
+			VALUESET(my_model.sz_dict_de_pt);
+			break;
+		
+		case DICT_EN_DE:
+			VALUESET(my_model.sz_dict_en_de);
+			break;
+		case DICT_EN_PT:
+			VALUESET(my_model.sz_dict_en_pt);
+			break;
+		case DICT_EN_IT:
+			VALUESET(my_model.sz_dict_en_it);
+			break;
+		case DICT_EN_FR:
+			VALUESET(my_model.sz_dict_en_fr);
+			break;
+		case DICT_EN_ES:
+			VALUESET(my_model.sz_dict_en_es);
+			break;
+		case DICT_EN_NO:
+			VALUESET(my_model.sz_dict_en_no);
+			break;
+		
+		case DICT_NO_EN:
+			VALUESET(my_model.sz_dict_no_en);
+			break;
+		
+		default:
+			g_message("set-model-char with unknown type\n");
+			return;
+			break;
+	}
+	return;
+} // set_model_char
+
+gboolean  get_debug() { return my_model.main_debug; }
+GtkWidget *get_mainwin() { return my_model.win_main;}
+
+void model_alloc() {
+	// init all GString's
+	my_model.sz_thes_de = g_string_new(""); 
+	my_model.sz_thes_en = g_string_new("");
+	my_model.sz_thes_es = g_string_new("");
+	my_model.sz_thes_it = g_string_new("");
+	my_model.sz_thes_fr = g_string_new("");
+	my_model.sz_thes_pt = g_string_new("");
+	
+	my_model.sz_dict_de_en  = g_string_new("");
+	my_model.sz_dict_de_es = g_string_new("");
+	my_model.sz_dict_de_fr = g_string_new("");
+	my_model.sz_dict_de_it = g_string_new("");
+	my_model.sz_dict_de_pt = g_string_new("");
+	
+	my_model.sz_dict_en_de = g_string_new("");
+	my_model.sz_dict_en_es = g_string_new("");
+	my_model.sz_dict_en_fr = g_string_new("");
+	my_model.sz_dict_en_pt = g_string_new("");
+	my_model.sz_dict_en_it = g_string_new("");
+	my_model.sz_dict_en_no = g_string_new("");
+	
+	my_model.sz_dict_no_en = g_string_new("");
+	
+	my_model.sz_dict_lat_de = g_string_new("");
+} // model_alloc();
+
+void model_free() {
+	// free all GString's
+	g_string_free(my_model.sz_thes_de , TRUE);
+	g_string_free(my_model.sz_thes_es , TRUE);
+	g_string_free(my_model.sz_thes_en , TRUE);
+	g_string_free(my_model.sz_thes_fr , TRUE);
+	g_string_free(my_model.sz_thes_it , TRUE);
+	g_string_free(my_model.sz_thes_pt , TRUE);
+	
+	g_string_free(my_model.sz_dict_de_en , TRUE);
+	g_string_free(my_model.sz_dict_de_es , TRUE);
+	g_string_free(my_model.sz_dict_de_fr , TRUE);
+	g_string_free(my_model.sz_dict_de_it , TRUE);
+	g_string_free(my_model.sz_dict_de_pt , TRUE);
+	
+	g_string_free(my_model.sz_dict_en_de , TRUE);
+	g_string_free(my_model.sz_dict_en_fr , TRUE);
+	g_string_free(my_model.sz_dict_en_es , TRUE);
+	g_string_free(my_model.sz_dict_en_pt , TRUE);
+	g_string_free(my_model.sz_dict_en_it , TRUE);
+	g_string_free(my_model.sz_dict_en_no , TRUE);
+	
+	g_string_free(my_model.sz_dict_no_en , TRUE);
+	g_string_free(my_model.sz_dict_lat_de , TRUE);
+} // model_free
+
+
+void model_read(GConfClient *gconf) {
+	
+	if( gconf_client_get_bool (gconf, "/apps/gnome-ding/main_reset", NULL) == TRUE) {
+		set_model_bool(MAIN_RESET, TRUE);
+		set_model_int(MAIN_SIZE_X,  gconf_client_get_int (gconf, "/apps/gnome-ding/main_size_x", NULL) );
+		set_model_int(MAIN_SIZE_Y,  gconf_client_get_int (gconf, "/apps/gnome-ding/main_size_y", NULL) );
+		set_model_int(MAIN_SUGEST_MODE, gconf_client_get_int (gconf, "/apps/gnome-ding/main_sug_mode", NULL) );
+
+		set_model_bool(MAIN_HIDDEN, gconf_client_get_bool(gconf, "/apps/gnome-ding/main_hidden", NULL) );
+		set_model_bool(MAIN_DEBUG,  gconf_client_get_bool(gconf, "/apps/gnome-ding/debug", NULL));
+	
+		set_model_bool(MAIN_EXACT,  gconf_client_get_bool(gconf, "/apps/gnome-ding/main_exact_words", NULL));
+		set_model_bool(MAIN_CASE,   gconf_client_get_bool(gconf, "/apps/gnome-ding/main_case_sense", NULL));
+	
+		set_model_bool(THES_ES, gconf_client_get_bool(gconf, "/apps/gnome-ding/thes/thes_es", NULL));	
+		set_model_bool(THES_DE, gconf_client_get_bool(gconf, "/apps/gnome-ding/thes/thes_de", NULL))	;
+		set_model_bool(THES_EN, gconf_client_get_bool(gconf, "/apps/gnome-ding/thes/thes_en", NULL));	
+		set_model_bool(THES_IT, gconf_client_get_bool(gconf, "/apps/gnome-ding/thes/thes_it", NULL));	
+		set_model_bool(THES_FR, gconf_client_get_bool(gconf, "/apps/gnome-ding/thes/thes_fr", NULL));	
+		set_model_bool(THES_PT, gconf_client_get_bool(gconf, "/apps/gnome-ding/thes/thes_pt", NULL));	
+	
+		set_model_bool(ASPELL_GB, gconf_client_get_bool(gconf, "/apps/gnome-ding/aspell/aspell_gb", NULL) );	
+		set_model_bool(ASPELL_US, gconf_client_get_bool(gconf, "/apps/gnome-ding/aspell/aspell_us", NULL) );	
+		set_model_bool(ASPELL_UC, gconf_client_get_bool(gconf, "/apps/gnome-ding/aspell/aspell_uc", NULL) );	
+		set_model_bool(ASPELL_DE, gconf_client_get_bool(gconf, "/apps/gnome-ding/aspell/aspell_de", NULL) );	
+		set_model_bool(ASPELL_DECH, gconf_client_get_bool(gconf, "/apps/gnome-ding/aspell/aspell_ch", NULL) );	
+		set_model_bool(ASPELL_ES, gconf_client_get_bool(gconf, "/apps/gnome-ding/aspell/aspell_es", NULL) );	
+		set_model_bool(ASPELL_FR, gconf_client_get_bool(gconf, "/apps/gnome-ding/aspell/aspell_fr", NULL) );	
+		set_model_bool(ASPELL_IT, gconf_client_get_bool(gconf, "/apps/gnome-ding/aspell/aspell_it", NULL) );	
+
+		set_model_bool(DICT_LAT_DE, gconf_client_get_bool(gconf, "/apps/gnome-ding/dict/dict_lat_de", NULL) );	
+		
+		set_model_bool(DICT_DE_EN, gconf_client_get_bool(gconf, "/apps/gnome-ding/dict/dict_de_en", NULL) );	
+		set_model_bool(DICT_DE_ES, gconf_client_get_bool(gconf, "/apps/gnome-ding/dict/dict_de_es", NULL) );	
+		set_model_bool(DICT_DE_FR ,gconf_client_get_bool(gconf, "/apps/gnome-ding/dict/dict_de_fr", NULL) );	
+		set_model_bool(DICT_DE_IT ,gconf_client_get_bool(gconf, "/apps/gnome-ding/dict/dict_de_it", NULL) );	
+		set_model_bool(DICT_DE_PT ,gconf_client_get_bool(gconf, "/apps/gnome-ding/dict/dict_de_pt", NULL) );	
+
+		set_model_bool(DICT_EN_DE ,gconf_client_get_bool(gconf, "/apps/gnome-ding/dict/dict_en_de", NULL) );	
+		set_model_bool(DICT_EN_IT ,gconf_client_get_bool(gconf, "/apps/gnome-ding/dict/dict_en_it", NULL) );	
+		set_model_bool(DICT_EN_FR ,gconf_client_get_bool(gconf, "/apps/gnome-ding/dict/dict_en_fr", NULL) );	
+		set_model_bool(DICT_EN_PT ,gconf_client_get_bool(gconf, "/apps/gnome-ding/dict/dict_en_pt", NULL) );	
+		set_model_bool(DICT_EN_ES ,gconf_client_get_bool(gconf, "/apps/gnome-ding/dict/dict_en_es", NULL) );	
+		set_model_bool(DICT_EN_NO ,gconf_client_get_bool(gconf, "/apps/gnome-ding/dict/dict_en_no", NULL) );	
+
+		set_model_bool(DICT_NO_EN ,gconf_client_get_bool(gconf, "/apps/gnome-ding/dict/dict_no_en", NULL) );	
+		set_model_char(DICT_LAT_DE, gconf_client_get_string( gconf, "/apps/gnome-ding/file_dict_lat_de", NULL) );
+
+		set_model_char(DICT_DE_EN, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_de_en", NULL) );
+		set_model_char(DICT_DE_ES, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_de_es", NULL) );
+		set_model_char(DICT_DE_FR, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_de_fr", NULL) );
+		set_model_char(DICT_DE_IT, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_de_it", NULL) );
+		set_model_char(DICT_DE_PT, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_de_pt", NULL) );
+	
+		set_model_char(DICT_EN_DE, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_en_de", NULL) );
+		set_model_char(DICT_EN_IT, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_en_it", NULL) );
+		set_model_char(DICT_EN_ES, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_en_es", NULL) );
+		set_model_char(DICT_EN_PT, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_en_pt", NULL) );
+		set_model_char(DICT_EN_FR, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_en_fr", NULL) );
+		set_model_char(DICT_EN_NO, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_en_no", NULL) );
+	
+		set_model_char(DICT_NO_EN, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_no_en", NULL) );
+	
+		set_model_char(THES_DE, gconf_client_get_string( gconf, "/apps/gnome-ding/thes/file_thes_de", NULL) );
+		set_model_char(THES_ES, gconf_client_get_string( gconf, "/apps/gnome-ding/thes/file_thes_es", NULL)  );
+		set_model_char(THES_EN, gconf_client_get_string( gconf, "/apps/gnome-ding/thes/file_thes_en", NULL)  );
+		set_model_char(THES_IT, gconf_client_get_string( gconf, "/apps/gnome-ding/thes/file_thes_it", NULL)  );
+		set_model_char(THES_FR, gconf_client_get_string( gconf, "/apps/gnome-ding/thes/file_thes_fr", NULL)  );
+		set_model_char(THES_PT, gconf_client_get_string( gconf, "/apps/gnome-ding/thes/file_thes_pt", NULL)  );
+	} else {
+		// set to default value
+		model_default();
+	}
+} // model_read
+
+void model_write(GConfClient *gconf) {
+	gconf_client_set_int (gconf, "/apps/gnome-ding/main_size_x", get_model_int(MAIN_SIZE_X), NULL);
+    gconf_client_set_int (gconf, "/apps/gnome-ding/main_size_y", get_model_int(MAIN_SIZE_Y), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/main_hidden", get_model_bool(MAIN_HIDDEN), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/debug",  get_model_bool(MAIN_DEBUG), NULL);
+	gconf_client_set_int (gconf, "/apps/gnome-ding/main_sug_mode", get_model_int(MAIN_SUGEST_MODE), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/main_exact_words",  get_model_bool(MAIN_EXACT), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/main_case_sense",  get_model_bool(MAIN_CASE), NULL);
+
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_af", get_model_bool(ASPELL_AF), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_bg", get_model_bool(ASPELL_BG), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_br", get_model_bool(ASPELL_BR), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_ca", get_model_bool(ASPELL_CA), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_ch", get_model_bool(ASPELL_DECH), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_cs", get_model_bool(ASPELL_CS), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_cy", get_model_bool(ASPELL_CY), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_da", get_model_bool(ASPELL_DA), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_de", get_model_bool(ASPELL_DE), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_el", get_model_bool(ASPELL_EL), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_eo", get_model_bool(ASPELL_EO), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_es", get_model_bool(ASPELL_ES), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_fo", get_model_bool(ASPELL_FO), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_fr", get_model_bool(ASPELL_FR), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_ga", get_model_bool(ASPELL_GA), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_gb", get_model_bool(ASPELL_GB), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_gl", get_model_bool(ASPELL_GL), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_it", get_model_bool(ASPELL_IT), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_nl", get_model_bool(ASPELL_NL), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_pl", get_model_bool(ASPELL_PL), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_pt", get_model_bool(ASPELL_PT), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_ro", get_model_bool(ASPELL_RO), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_ru", get_model_bool(ASPELL_RU), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_sk", get_model_bool(ASPELL_SK), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_sl", get_model_bool(ASPELL_SL), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_sv", get_model_bool(ASPELL_SV), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_uc", get_model_bool(ASPELL_UC), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_uk", get_model_bool(ASPELL_UK), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_us", get_model_bool(ASPELL_US), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_wa", get_model_bool(ASPELL_WA), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_zu", get_model_bool(ASPELL_ZU), NULL);
+	
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/dict/dict_de_en", get_model_bool(DICT_DE_EN), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/dict/dict_de_es", get_model_bool(DICT_DE_ES), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/dict/dict_de_fr", get_model_bool(DICT_DE_FR), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/dict/dict_de_it", get_model_bool(DICT_DE_IT), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/dict/dict_de_pt", get_model_bool(DICT_DE_PT), NULL);
+	
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/dict/dict_en_de", get_model_bool(DICT_EN_DE), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/dict/dict_en_es", get_model_bool(DICT_EN_ES), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/dict/dict_en_fr", get_model_bool(DICT_EN_FR), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/dict/dict_en_it", get_model_bool(DICT_EN_IT), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/dict/dict_en_pt", get_model_bool(DICT_EN_PT), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/dict/dict_en_no", get_model_bool(DICT_EN_NO), NULL);
+	
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/dict/dict_no_en", get_model_bool(DICT_NO_EN), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/dict/dict_lat_de", get_model_bool(DICT_LAT_DE), NULL);
+	
+	gconf_client_set_string(gconf, "/apps/gnome-ding/dict/file_dict_de_en", get_model_char(DICT_DE_EN), NULL);
+	gconf_client_set_string(gconf, "/apps/gnome-ding/dict/file_dict_de_it", get_model_char(DICT_DE_IT), NULL);
+	gconf_client_set_string(gconf, "/apps/gnome-ding/dict/file_dict_de_es", get_model_char(DICT_DE_ES), NULL);
+	gconf_client_set_string(gconf, "/apps/gnome-ding/dict/file_dict_de_fr", get_model_char(DICT_DE_FR), NULL);
+	gconf_client_set_string(gconf, "/apps/gnome-ding/dict/file_dict_de_pt", get_model_char(DICT_DE_PT), NULL);
+	
+	gconf_client_set_string(gconf, "/apps/gnome-ding/dict/file_dict_en_de", get_model_char(DICT_EN_DE), NULL);
+	gconf_client_set_string(gconf, "/apps/gnome-ding/dict/file_dict_en_it", get_model_char(DICT_EN_IT), NULL);
+	gconf_client_set_string(gconf, "/apps/gnome-ding/dict/file_dict_en_es", get_model_char(DICT_EN_ES), NULL);
+	gconf_client_set_string(gconf, "/apps/gnome-ding/dict/file_dict_en_fr", get_model_char(DICT_EN_FR), NULL);
+	gconf_client_set_string(gconf, "/apps/gnome-ding/dict/file_dict_en_pt", get_model_char(DICT_EN_PT), NULL);
+	gconf_client_set_string(gconf, "/apps/gnome-ding/dict/file_dict_en_no", get_model_char(DICT_EN_NO), NULL);
+	
+	gconf_client_set_string(gconf, "/apps/gnome-ding/dict/file_dict_no_en", get_model_char(DICT_NO_EN), NULL);
+	gconf_client_set_string(gconf, "/apps/gnome-ding/dict/file_dict_lat_de", get_model_char(DICT_LAT_DE), NULL);
+	
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/thes/thes_en",  get_model_bool(THES_EN), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/thes/thes_es",  get_model_bool(THES_ES), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/thes/thes_it",  get_model_bool(THES_IT), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/thes/thes_de",  get_model_bool(THES_DE), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/thes/thes_fr",  get_model_bool(THES_FR), NULL);
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/thes/thes_pt",  get_model_bool(THES_PT), NULL);
+		
+	gconf_client_set_string(gconf, "/apps/gnome-ding/thes/file_thes_de", get_model_char(THES_DE), NULL);
+	gconf_client_set_string(gconf, "/apps/gnome-ding/thes/file_thes_en", get_model_char(THES_EN), NULL);
+	gconf_client_set_string(gconf, "/apps/gnome-ding/thes/file_thes_it", get_model_char(THES_IT), NULL);
+	gconf_client_set_string(gconf, "/apps/gnome-ding/thes/file_thes_fr", get_model_char(THES_FR), NULL);
+	gconf_client_set_string(gconf, "/apps/gnome-ding/thes/file_thes_es", get_model_char(THES_ES), NULL);
+	gconf_client_set_string(gconf, "/apps/gnome-ding/thes/file_thes_pt", get_model_char(THES_PT), NULL);
+
+	gconf_client_set_bool(gconf, "/apps/gnome-ding/main_reset",  get_model_bool(MAIN_RESET), NULL);
+} // model_write
+
+
+void model_default() {
+	// set std value for model
+	my_model.win_size_x = 300;
+	my_model.win_size_y = 200;
+	
+	// my_model.win_main = NULL;
+	my_model.suggestion_mode = 3;
+	my_model.main_hidden = FALSE;
+	my_model.search_exact_words = FALSE;
+	my_model.serach_case_sense = FALSE;
+	my_model.main_debug = FALSE;
+	my_model.main_reset = TRUE;
+	
+	my_model.thes_de = FALSE;
+	g_string_printf(my_model.sz_thes_de, "/usr/share/dict/thesaurus-de.ding");
+	my_model.thes_en = FALSE;
+	g_string_printf(my_model.sz_thes_en, "/usr/share/dict/thesaurus-en.ding");
+	my_model.thes_es = FALSE;
+	g_string_printf(my_model.sz_thes_es, "/usr/share/dict/thesaurus-es.ding");
+	my_model.thes_fr = FALSE;
+	g_string_printf(my_model.sz_thes_fr, "/usr/share/dict/thesaurus-fr.ding");
+	my_model.thes_it = FALSE;
+	g_string_printf(my_model.sz_thes_it, "/usr/share/dict/thesaurus-it.ding");
+	my_model.thes_pt = FALSE;
+	g_string_printf(my_model.sz_thes_pt, "/usr/share/dict/thesaurus-pt.ding");
+	
+	my_model.dict_de_en = FALSE;
+	g_string_printf(my_model.sz_dict_de_en, "/usr/share/dict/de-en.ding");
+	my_model.dict_lat_de = FALSE;
+	g_string_printf(my_model.sz_dict_lat_de, "/usr/share/dict/lat-de.ding");
+	my_model.dict_de_es = FALSE;
+	g_string_printf(my_model.sz_dict_de_es, "/usr/share/dict/de-es.ding");
+	my_model.dict_de_fr = FALSE;
+	g_string_printf(my_model.sz_dict_de_fr, "/usr/share/dict/de-fr.ding");
+	my_model.dict_de_it = FALSE;
+	g_string_printf(my_model.sz_dict_de_it, "/usr/share/dict/de-it.ding");
+	my_model.dict_de_pt = FALSE;
+	g_string_printf(my_model.sz_dict_de_pt, "/usr/share/dict/de-pt.ding");
+	
+	my_model.dict_en_de = FALSE;
+	g_string_printf(my_model.sz_dict_en_de, "/usr/share/dict/en-de.ding");
+	my_model.dict_en_fr = FALSE;
+	g_string_printf(my_model.sz_dict_en_fr, "/usr/share/dict/en-fr.ding");
+	my_model.dict_en_es = FALSE;
+	g_string_printf(my_model.sz_dict_en_es, "/usr/share/dict/en-es.ding");
+	my_model.dict_en_it = FALSE;
+	g_string_printf(my_model.sz_dict_en_it, "/usr/share/dict/en-it.ding");
+	my_model.dict_en_pt = FALSE;
+	g_string_printf(my_model.sz_dict_en_pt, "/usr/share/dict/en-pt.ding");
+	my_model.dict_en_no = FALSE;
+	g_string_printf(my_model.sz_dict_en_no, "/usr/share/dict/en-no.ding");
+
+	my_model.dict_no_en = FALSE;
+	g_string_printf(my_model.sz_dict_no_en, "/usr/share/dict/no-en.ding");
+	
+	my_model.aspell_af = FALSE;
+	my_model.aspell_bg = FALSE;
+	my_model.aspell_br = FALSE;
+	my_model.aspell_ca = FALSE;
+	my_model.aspell_ch = FALSE;
+	my_model.aspell_cs = FALSE;
+	my_model.aspell_cy = FALSE;
+	my_model.aspell_da = FALSE;
+	my_model.aspell_de = TRUE;
+	my_model.aspell_el = FALSE;
+	my_model.aspell_eo = FALSE;
+	my_model.aspell_es = FALSE;
+	my_model.aspell_fo = FALSE;
+	my_model.aspell_fr = FALSE;
+	my_model.aspell_ga = FALSE;
+	my_model.aspell_gb = TRUE;
+	my_model.aspell_gl = FALSE;
+	my_model.aspell_hr = FALSE;
+	my_model.aspell_is = FALSE;
+	my_model.aspell_it = FALSE;
+	my_model.aspell_nl = FALSE;
+	my_model.aspell_no = FALSE;
+	my_model.aspell_pl = FALSE;
+	my_model.aspell_pt = FALSE;
+	my_model.aspell_ro = FALSE;
+	my_model.aspell_ru = FALSE;
+	my_model.aspell_sk = FALSE;
+	my_model.aspell_sl = FALSE;
+	my_model.aspell_sv = FALSE;
+	my_model.aspell_uc = FALSE;
+	my_model.aspell_uk = FALSE;
+	my_model.aspell_us = FALSE;
+	my_model.aspell_wa = FALSE;
+	my_model.aspell_zu = FALSE;
+
+} // model_default
 
 int
 main (int argc, char *argv[])
@@ -95,43 +839,18 @@ main (int argc, char *argv[])
 	gconf = gconf_client_get_default ();
     gconf_client_add_dir(gconf, "/apps/gnome-ding", GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
 
-	win_x_size = gconf_client_get_int (gconf, "/apps/gnome-ding/size_x", NULL);
-	if( win_x_size < 20 ) win_x_size = 500;
-	win_y_size = gconf_client_get_int (gconf, "/apps/gnome-ding/size_y", NULL);
-	if( win_y_size < 20 ) win_y_size = 300;
-	hidden = gconf_client_get_bool(gconf, "/apps/gnome-ding/hidden", NULL);
-	debug = gconf_client_get_bool(gconf, "/apps/gnome-ding/debug", NULL);
-	
-	search_exact_words = gconf_client_get_bool(gconf, "/apps/gnome-ding/exact_words", NULL);
-	serach_case_sense  = gconf_client_get_bool(gconf, "/apps/gnome-ding/case_sense", NULL);
-	
-	sug_mode = gconf_client_get_int (gconf, "/apps/gnome-ding/sug_mode", NULL);
-	if ( sug_mode < 1 ) sug_mode = 3;
-	if ( sug_mode > 4 ) sug_mode = 3;
-	
-	trans_de_en = gconf_client_get_string( gconf, "/apps/gnome-ding/trans_de_en", NULL);
-	if( trans_de_en == NULL ) {
-		trans_de_en = g_strdup("/usr/share/dict/ger-eng.ding");	
-	}
-	trans_lat_de = gconf_client_get_string( gconf, "/apps/gnome-ding/trans_lat_de", NULL);
-	if( trans_lat_de == NULL ) {
-		trans_lat_de = g_strdup("/usr/share/dict/lat-deu.ding");	
-	}
-	thes_de = gconf_client_get_string( gconf, "/apps/gnome-ding/thes_de", NULL);
-	if( thes_de == NULL ) {
-		thes_de = g_strdup("/usr/share/dict/thesaurus-de.ding");	
-	}
-	
-	/* fixme: check, if we can open/exist trans_de_en-file */
-	
-	
-	
-	if ( debug == TRUE ) {
-		g_print("%s x=%i x=%i\n", _("Read config.."), win_x_size, win_y_size );
-	}
+	model_alloc();
+	model_default();
+	model_read(gconf);
+
  	gnome_ding = create_gnome_ding ();
+	my_model.win_main = gnome_ding;
 	on_wordlist_init();
-	gtk_window_set_default_size( GTK_WINDOW(gnome_ding), win_x_size , win_y_size );
+	
+	gtk_window_set_default_size( GTK_WINDOW(gnome_ding), 
+		get_model_int(MAIN_SIZE_X),
+		get_model_int(MAIN_SIZE_Y) );
+	
 	gtk_widget_show (gnome_ding);
    
  	fill_combo( gnome_ding );
@@ -143,29 +862,11 @@ main (int argc, char *argv[])
 	}
 	on_wordlist_delete();
 	
+	model_write(gconf);
+	model_free();
 	
-	
-	gconf_client_set_int (gconf, "/apps/gnome-ding/size_x", win_x_size, NULL);
-    gconf_client_set_int (gconf, "/apps/gnome-ding/size_y", win_y_size, NULL);
-	gconf_client_set_bool(gconf, "/apps/gnome-ding/hidden", hidden, NULL);
-	gconf_client_set_bool(gconf, "/apps/gnome-ding/debug",  debug, NULL);
-	
-	gconf_client_set_bool(gconf, "/apps/gnome-ding/exact_words",  search_exact_words, NULL);
-	gconf_client_set_bool(gconf, "/apps/gnome-ding/case_sense",  serach_case_sense, NULL);
-	
-	gconf_client_set_int (gconf, "/apps/gnome-ding/sug_mode", sug_mode, NULL);
-	
-	gconf_client_set_string(gconf, "/apps/gnome-ding/trans_de_en", trans_de_en, NULL);
-	gconf_client_set_string(gconf, "/apps/gnome-ding/trans_lat_de", trans_lat_de, NULL);
-	gconf_client_set_string(gconf, "/apps/gnome-ding/thes_de", thes_de, NULL);
-	// todo: last dict
-	// todo: remember last setup
-	// todo: config dict-path
 	
 	gconf_client_remove_dir (gconf, "/apps/gnome-ding", NULL);
     g_object_unref (gconf);
-	g_free( trans_de_en );
-	g_free( trans_lat_de );
   	return 0;
 }
-

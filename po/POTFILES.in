@@ -4,3 +4,5 @@ src/main.c
 src/interface.c
 src/callbacks.c
 src/support.c
+src/thesaurus.c
+src/myaspell.c

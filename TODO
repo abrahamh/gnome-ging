@@ -1,11 +1,9 @@
 - add syntax-highlight for result-window (include better upper-case)
-- add thesaurus (de, en)
+- add thesaurus (en, fr, it, br)
 - update documentations 
-- update languages de/es (I need help for it)
-- check-in more aspell-languages
+- update languages es/fr/it (I need help for it)
 
 -------------------------------------
-
 
 the thesaurus come from "http://thesaurus.kdenews.org". This
 Thesaurus is not very nice. It will not support reletions between
@@ -21,9 +19,9 @@ http://de.wikipedia.org/wiki/W%F6rterb%FCcher
 
 HINT: for people who will help to translate:
 
-- example: in dirrectory 'po' you will find a file 'gnome-ding.pot'
-  copy this file to 'po/es.po' for spain-translation or to
-  'po/it.po' for italy and so on.
+- example: in directory 'po' you will find a file 'gnome-ding.pot'
+  copy this file to 'po/es.po' for spainsh-translation or to
+  'po/it.po' for italian and so on.
 - then load this file 'po/es.po' with a tool like 'kbabel' or 'emacs'
   or 'gtranslator' and change the strings.
 - then save the file and send this file to the author or distributed
@@ -31,3 +29,25 @@ HINT: for people who will help to translate:
 
 - in the same way you should work with the online-documentation,
   make a new subdirectory in './doc/' and translate the '.xml' files
+
+-------------------------------------
+
+
+HINT: for people who will help to support dict's:
+
+- you can edit the existing dict's, found at /usr/share/dict/*.ding
+  please be very careful to protect errors.
+  Send a mail to the author, so that the changes can be included
+  in the next release.
+
+- if you have found a new language, that will not be supported
+  be gnome-ding, then send a email to the author with a link,
+  who can be receive a new thesaurus or dict.
+  Then the author can include it, or you lock inside the code.
+  in main.c you will find macros to save the filename for the
+  dict and his state to display it in the selection box.
+  in callbacks.c you will found macros to fill this settings into
+  the selection-combo-box and macros to select it for actions an
+  macros to fill this information into the preferences dialog.
+  Typical it is only only programming line for each action and
+  languages - so I hope it is simple enought.

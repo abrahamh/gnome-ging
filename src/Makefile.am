@@ -11,7 +11,9 @@ gnome_ding_SOURCES = \
 	main.c main.h \
 	support.c support.h \
 	interface.c interface.h \
-	callbacks.c callbacks.h
+	callbacks.c callbacks.h \
+	thesaurus.c thesaurus.h \
+	myaspell.c myaspell.h
 
 gnome_ding_LDADD = @PACKAGE_LIBS@ $(INTLLIBS)
 

@@ -95,7 +95,7 @@ install_sh = @install_sh@
 
 # if you translate the help files for gnorpm, place them in a directory
 # matching your language code, and add the directory to this list.
-SUBDIRS = C de
+SUBDIRS = C de es fr
 EXTRA_DIST = omf.make xmldocs.make
 subdir = doc
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs

@@ -8,16 +8,77 @@
 #ifdef USE_ASPELL
 #  include <aspell.h>
 #endif
-
-
-
 #include <pthread.h>
-
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include "callbacks.h"
 #include "interface.h"
 #include "support.h"
 #include "main.h"
+#include "thesaurus.h"
+#include "aspell.h"
 
+// usage:  THESAURUS_MACRO( THES_DE, _("Thesaurus German") )
+#define THESAURUS_MACRO(x, y) \
+	strcmp ((char*)suchart, (char*)y ) == 0 ) { \
+			run_thesaurus(widget, get_model_char(x), y);
+
+// usage: SPELLIT_MACRO( _("Spellchecker German"), "de_DE" )
+#define SPELLIT_MACRO(x,y) \
+	strcmp ((char*)suchart, (char*)x ) == 0 ) { \
+			run_spellchecker(widget, y);
+		
+// usage: TRANSLATION_MACRO( _("Latin <--> German") , _("Latin"), _("German") , USE_DICT_LAT_DE ) 
+#define TRANSLATION_MACRO(x,y,z, a ) \
+	strcmp ((char*)suchart, (char*)x ) == 0 ) { \
+		run_translation(widget, y, z, get_model_char(a) );
+
+		// usage: COMBO_MACRO( ASPELL_DE, "de_DE", _("Spellcheck (German)") 		
+#define COMBO_MACRO(x,y,z) \
+		( get_model_bool(x) == TRUE) && (strcmp(entryd->name, (char*)y) == 0) ) { \
+			combo_entry = g_list_append (combo_entry, (gpointer)z);
+// usage: COMBO_MACRO2( DICT_DE_EN, _("German <--> English") )
+#define COMBO_MACRO2(x, y) \
+	if( get_model_bool( x ) ) { \
+	combo_entry = g_list_append (combo_entry, (gpointer)y ); \
+	}
+			
+// usage: PREF_SPELL_MACRO( ASPELL_GB, "en_GB", _("English (GB)") )
+#define PREF_SPELL_MACRO(x,y,z) \
+ /* if */ (strcmp(entryd->name, (char*)y) == 0) ) { \
+		gtk_list_store_append (store_aspell, &iter_aspell); \
+		gtk_list_store_set (store_aspell, &iter_aspell, \
+			  COLUMN_ASPELL_FIXED, get_model_bool(x), \
+			  COLUMN_ASPELL_DESCRIPTION, z, \
+			  COLUMN_ASPELL_NUM, x, \
+			  -1);
+
+// usage: PREF_THES_MACRO( THES_DE, _("German") )	 
+#define PREF_THES_MACRO(x,y) \
+	 /* if ( */ stat( get_model_char(x), &my_stat) == 0 ) { \
+	 	gtk_list_store_append (store_thes, &iter_thes);  \
+        gtk_list_store_set (store_thes, &iter_thes,  \
+                          COLUMN_THES_FIXED, get_model_bool(x),  \
+                          COLUMN_THES_DESCRIPTION, y,  \
+                          COLUMN_THES_NUM, x, \
+                          -1);
+
+// usage: PREF_DICT_MACRO( DICT_DE_EN, _("German <--> English") )	 
+#define PREF_DICT_MACRO(x,y) \
+	 /* if ( */ stat( get_model_char(x), &my_stat) == 0 ) { \
+	 	gtk_list_store_append (store_dict, &iter_dict);  \
+        gtk_list_store_set (store_dict, &iter_dict,  \
+                          COLUMN_DICT_FIXED, get_model_bool(x),  \
+                          COLUMN_DICT_DESCRIPTION, y,  \
+                          COLUMN_DICT_NUM, x, \
+                          -1);		 
+
+static void on_spell_toggle(GtkCellRendererToggle *cell, gchar *path_str, gpointer data);
+static void on_thes_toggle(GtkCellRendererToggle *cell, gchar *path_str, gpointer data);
+static void on_dict_toggle(GtkCellRendererToggle *cell, gchar *path_str, gpointer data);
+
+	 
 GList *wordlist;
 GtkWidget *pref_dlg = NULL;
 
@@ -129,18 +190,18 @@ unhide (GtkWidget      *widget)
 	GtkWidget *status;
 	GtkWidget *win;
 	
-	list = lookup_widget(GTK_WIDGET(widget), "output");
+	list = lookup_widget(GTK_WIDGET(widget), "vbox7");
     menu = lookup_widget(GTK_WIDGET(widget), "menubar1");
     status = lookup_widget(GTK_WIDGET(widget), "statusbar");
     win = lookup_widget(GTK_WIDGET(widget), "gnome_ding");
                                                                                                        
 	/* restore the win */
-	gtk_widget_show(list);
-	gtk_widget_show(menu);
-	gtk_widget_show(status);
-	gtk_window_resize(GTK_WINDOW(win), get_x_size(), get_y_size() );
-	gtk_window_set_resizable(GTK_WINDOW(win), 1);
-}
+	if( list != NULL) gtk_widget_show(list);
+	if (menu != NULL) gtk_widget_show(menu);
+	if (status != NULL) gtk_widget_show(status);
+	if (win != NULL) gtk_window_resize(GTK_WINDOW(win), get_model_int(MAIN_SIZE_X), get_model_int(MAIN_SIZE_Y) );
+	if (win != NULL) gtk_window_set_resizable(GTK_WINDOW(win), 1);
+} // unhide
 
 
 
@@ -174,15 +235,12 @@ showtable (GtkWidget *widget, GtkListStore *store,
 	column = gtk_tree_view_column_new_with_attributes ( hdr, renderer, "markup", 0, NULL);
 	gtk_tree_view_column_set_sort_column_id(column, 0);
 	gtk_tree_view_insert_column (GTK_TREE_VIEW (treeview), column, 0);		
-	// g_object_set (G_OBJECT (renderer), "foreground", "darkblue", NULL); // fixme: themes		
 	g_object_set (G_OBJECT (column), "min-width", basewidth, "resizable", TRUE, NULL);
 		
 	if ( col_num > 1 ) {
 		column = gtk_tree_view_column_new_with_attributes ( hdr2, renderer, "markup", 1, NULL);
 		gtk_tree_view_column_set_sort_column_id(column, 1);
 		gtk_tree_view_insert_column (GTK_TREE_VIEW (treeview), column, 1);
-		
-		// g_object_set (G_OBJECT (renderer), "foreground", "darkblue", NULL); // fixme: themes		
 		g_object_set (G_OBJECT (column), "min-width", basewidth, "resizable", TRUE, NULL);
 	}
 	
@@ -225,420 +283,6 @@ cleanup_status  (GtkWidget      *parent)
 }
 
 
-/**
- * run thesaurus search 
- *  
- * @parameter: caller - callback WidgetPointer
- * @parameter 'thes' - filename of the thesaurus
-**/
-void 
-thesaurus(GtkWidget *caller, gchar *thes)
-{
-	if (caller == NULL ) return;
-	if (thes == NULL) return;	
-		
-	GtkWidget       *entry = NULL;
-	GtkWidget       *win = NULL;
-	gchar *such = NULL;
-	char line[200];
-	gchar *reste;
-	gchar *msg = NULL;
-	GString *cmd = g_string_new("");
-	GString *grep_out = g_string_new("");
-	FILE *ptr;
-	gint flag = 0;
-	entry = lookup_widget(GTK_WIDGET(caller), "suchinput");
-	win   = lookup_widget(GTK_WIDGET(caller), "gnome_ding");
-	
-	GtkListStore    *store = NULL;
-	GtkTreeIter 	iter;
-	
-	store = gtk_list_store_new (1, G_TYPE_STRING);
-	
-	such  = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry) ));
-	
-	
-	g_string_printf(cmd, "egrep -h -i -w '%s' '%s' | grep -v '^#'", 
-	    /* (get_search_case_sense()  == FALSE) ? "-i" : " ", */
-		/* (get_search_exact_words() == TRUE) ? "-w" : " ", */
-		such, thes );
-	
-	if ( get_debug() == TRUE) {
-        g_print("command: '%s'\n", cmd->str);
-	}
-                                                                                                       
-	ptr = popen(cmd->str,"r");
-	if (ptr != NULL ) {
-		while (  fgets( line, sizeof(line), ptr)  ) {
-    		g_string_append_printf(grep_out, "%s", line );
-		}
-		pclose(ptr);
-	
-		if ( get_debug() == TRUE ) {
-			g_print("grep-result:\n%s\n", grep_out->str);
-		}
-		if ( strlen(grep_out->str) < 4 ) {
-			/* no match found */
-			g_string_printf(grep_out, _("Word not found or typo incorrect.\n <b>%s</b>"),  such );
-			
-			gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-    		gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0,  grep_out->str, -1);
-			
-			gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-    		gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0, " ", -1);
-			
-		} else {
-			while ( strlen(grep_out->str) > 5 ) {
-				gchar **result_line;
-				gchar *reste = NULL;
-				result_line = g_strsplit ( grep_out->str, "\n", 2);
-				flag++;
-				GString *out0 = g_string_sized_new( strlen(result_line[0] ) ) ;
-       			gint i=0;
-					
-				gint st_len = strlen(result_line[0]);
-				gint such_len = strlen(such);
-				
-				
-				for(i=0; i < st_len; i++ ) {
-                		if ( result_line[0][i] == '[' ) {
-                        	out0 = g_string_append(out0, "[<i>");
-                		} else if (result_line[0][i] == ']') {
-							out0 = g_string_append(out0, "</i>]");
-						} else if (result_line[0][i] == '{') {
-							out0 = g_string_append(out0, "<i>");
-						} else if (result_line[0][i] == '}') {
-							out0 = g_string_append(out0, ".</i>");
-						} else if (result_line[0][i] == ';') {
-							out0 = g_string_append(out0, "\r");
-						} else  {
-							out0 = g_string_append_c(out0, result_line[0][i] );
-						}
-					}
-					msg = g_strdup_printf( _("<b>Suggestion %i:</b>"), flag);
-				
-					gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-					gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0,  msg, -1);
-			
-					gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-					gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0, out0->str, -1);
-					
-					reste = g_string_free(out0, TRUE);
-					grep_out = g_string_erase(grep_out, 0, strlen(result_line[0])+1 );
-                    g_strfreev (result_line);
-			}
-		}
-	}
-	
-	/* output */
-	showtable(GTK_WIDGET(caller), store, 1, 200, _("Thesaurus (de)"), NULL);
-    msg = g_strdup_printf( _("%i matches found to '%s'"), flag, such);
-    print_to_status(GTK_WIDGET(caller), msg);
-	
-	reste = g_string_free(grep_out, TRUE);
-	reste = g_string_free(cmd, TRUE);
-	g_free(such);
-	g_free(msg);
-}
-
-
-
-/**
- * @run spellchecker
- *
- * @parameter: caller - callback WidgetPointer
- * @parameter: lang   - chose language { ngerman, british, ... }
- *
- * @return: fill g_tree_list over callback-pointer with serach-results
-**/
-void
-spellit(GtkWidget *caller, gchar *lang)
-{
-	if (caller == NULL ) return;
-	if (lang == NULL) return;	
-	
-	GtkWidget       *entry = NULL;
-	GtkWidget       *win = NULL;
-	GtkListStore    *store = NULL;
-	gchar *language = NULL;
-	gchar *ok = NULL;
-	gchar *sugg = NULL;
-	gchar *such = NULL;
-	gchar *match = NULL;
-	gchar *output = NULL;
-	
-	entry = lookup_widget(GTK_WIDGET(caller), "suchinput");
-	win   = lookup_widget(GTK_WIDGET(caller), "gnome_ding");
-
-	such  = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry) ));
-	match = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry) ));
-	
-	ok   = g_strdup( _("Spelling ok, no suggestions\n") ); 
-	sugg  = g_strdup( _("Suggestions :") );
-	store = gtk_list_store_new (1, G_TYPE_STRING);
-	GtkTreeIter iter;
-	// gtk_list_store_clear(store);
-	
-	
-	if( strcmp (lang, "de_DE") == 0 ) {
-		language = g_strdup( _("German spelling result") );
-	} else if( strcmp (lang, "en_CA") == 0 ) {
-		language = g_strdup( _("English (CA) spelling result") );
-	} else if( strcmp (lang, "en_US") == 0 ) {
-		language = g_strdup( _("English (US) spelling result") );
-	} else if( strcmp (lang, "es") == 0 ) {
-		language = g_strdup( _("Espain (ES) spelling result") );
-	} else if( strcmp (lang, "fr") == 0 ) {
-		language = g_strdup( _("Frensh (FR) spelling result") );
-	} else if( strcmp (lang, "en") == 0 ) {
-		language = g_strdup( _("English spelling result") );
-	} else if (  strcmp (lang, "en_UK") == 0 ) {
-	  language = g_strdup( _("English (UK) spelling result") );
-		/* fixme: check not for wrong char, check for correct char */
-		/* correct char, [0-9][a-z][A-Z] */
-		if( (strchr(match, 'ä')) || (strchr(match, 'Ä')) ||
-			(strchr(match, 'ü')) || (strchr(match, 'Ü')) ||
-			(strchr(match, 'ö')) || (strchr(match, 'Ö')) ||
-			(strchr(match, 'ß')) )   {
-
-			gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-			gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0,  _("Error :"), -1);
-			
-			gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-			gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0, 
-					_("Please don't use german special chars in english spellcheck.\n"), -1);
-				
-				
-			showtable(GTK_WIDGET(caller), store, 1, 200, language, NULL);
-				
-			g_free(language);
-			g_free(ok);				
-			g_free(sugg);
-			g_free(such);
-			g_free(match);
-        	return;
-		}
-	} else {
-		/* unknow language selected */
-		gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-		gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0,  _("Error :"), -1);
-			
-		gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-		gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0, _("Unknown language selected, please check it.\n"), -1);
-		
-		showtable(GTK_WIDGET(caller), store, 1, 200, _("Error message"), NULL);
-		g_free(language);
-		g_free(ok);				
-		g_free(sugg);
-		g_free(such);
-		g_free(match);
-		return;
-	}
-                                                                                                       
-#ifdef USE_ASPELL
-	/* the problem with the follow code is, that the api is in develoment
-	   so the struct-names can be changed in future versions of aspell */
-	AspellConfig *spell_config;
-	AspellSpeller *spell_manager = 0;
-	AspellCanHaveError *pos_err;
-	int spell_correct;
-	int ret;
-    const AspellWordList *word_list;
-    AspellStringEnumeration *suggestions;
-	
-	if ( get_debug() == TRUE ) {
-		g_print( _("use aspell c-api\n"));
-		g_print( _("search for '%s'\n"), match);
-	}
-	
-	spell_config = new_aspell_config();
-	aspell_config_remove(spell_config, "lang");
-	ret = aspell_config_replace(spell_config, "lang", lang);
-	if ( ret != 1 ) {
-		if ( get_debug() == TRUE ) g_print( _("Error: Dictinory %s not found\n"), lang );
-		gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-		gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0,  _("Error :"), -1);
-			
-		gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-		gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0, _("Dict not found"), -1);
-		
-		showtable(GTK_WIDGET(caller), store, 1, 500, language, NULL);
-		g_free(language);
-		g_free(ok);				
-		g_free(sugg);
-		g_free(output);
-		g_free(such);
-		g_free(match);
-		return;
-	}
-
-	aspell_config_remove(spell_config, "sug-mode"); 
-	if ( get_sug_mode() == 1 ) {
-		aspell_config_replace(spell_config, "sug-mode", "ultra"); 
-	} else if ( get_sug_mode() == 2 ) {
-		aspell_config_replace(spell_config, "sug-mode", "fast"); 
-	} else if ( get_sug_mode() == 4 ) {
-		aspell_config_replace(spell_config, "bad-speller", "normal"); 
-	} else {
-		aspell_config_replace(spell_config, "sug-mode", "normal"); 
-	}
-	
-	
-	/* encoding: utf-8, iso8859-1, koi8-r, viscii, cp1252 */
-	aspell_config_replace(spell_config, "encoding", "utf-8"); 
-	
-	pos_err = new_aspell_speller(spell_config);
-	if( aspell_error_number(pos_err) != 0 ) {
-		g_print( _("Error: %s\n") , aspell_error_message(pos_err) );
-    	delete_aspell_can_have_error(pos_err);
-		delete_aspell_config(spell_config);
-		g_free(language);
-		g_free(ok);				
-		g_free(sugg);
-		g_free(output);
-		g_free(such);
-		g_free(match);
-		return;
-	} else {
-		spell_manager = to_aspell_speller(pos_err);
-	}
-
-	spell_correct = aspell_speller_check(spell_manager, such, strlen( match ) );
-	if ( spell_correct == 0) {
-		const char *word;
-		GString *sug_list = g_string_new("");
-		gchar *reste = NULL;
-		
-		g_string_printf(sug_list, _("Word not found or typo incorrect.\n <b>%s</b>"), 
-			gtk_entry_get_text(GTK_ENTRY(entry) ) );
-		gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-		gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0,  sug_list->str, -1);
-			
-		gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-		gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0, " ", -1);
-		
-		g_string_printf(sug_list, "");
-		
-		word_list = aspell_speller_suggest(spell_manager, match, strlen(match) );
-		suggestions = aspell_word_list_elements( word_list );
- 		while (( word = aspell_string_enumeration_next(suggestions)) != NULL) {
-			g_string_append_printf(sug_list, " %s\r", word );
-		}
-		
-		gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-		gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0,  _("<b>Suggestions:</b>"), -1);
-			
-		gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-		gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0, sug_list->str, -1);
-		
-		showtable(GTK_WIDGET(caller), store, 1, 500, language, NULL);
-	
-		reste = g_string_free(sug_list, TRUE);
-	} else { 
-		gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-		gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0,  _("Spelling ok, no suggestions"), -1);
-			
-		gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-		gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0, such, -1);
-		
-		showtable(GTK_WIDGET(caller), store, 1, 500, language, NULL);
-	} 
-	delete_aspell_can_have_error(pos_err);
-	delete_aspell_config(spell_config);
-#else
-	GString *cmd = g_string_new("");
-	gchar *reste = NULL;
-	char buf[BUFSIZ];
-	char *tmp , *dup, *head;
-	
-	if ( get_debug() == TRUE ) {
-		g_print( _("use ispell pipe-mode\n"));
-	}
-	
-	if (strcmp(lang, _("de_DE")) == 0) {
-		g_string_printf(cmd, "echo '%s' | aspell -B -S -a -Tutf8 -d %s", 
-		such, 
-		"ngerman" );
-	} else if (strcmp(lang, _("en_UK")) == 0) {
-		g_string_printf(cmd, "echo '%s' | aspell -B -S -a -d %s", 
-		such, 
-		"british" );
-	} else if (strcmp(lang, _("en_US")) == 0) {
-		g_string_printf(cmd, "echo '%s' | aspell -B -S -a -d %s", 
-		such, 
-		"american" );
-	} else if (strcmp(lang, _("en_CA")) == 0) {
-		g_string_printf(cmd, "echo '%s' | aspell -B -S -a -d %s", 
-		such, 
-		"canadian" );
-	} else if (strcmp(lang, _("fr")) == 0) {
-		g_string_printf(cmd, "echo '%s' | aspell -B -S -a --ignore-accents -Tutf8 -d %s", 
-		such, 
-		"french" );
-	} else  {
-		g_string_printf(cmd, "echo '%s' | aspell -B -S -a -d %s", 
-		such, 
-		"english" );
-	}
-		
-	if( get_debug() == TRUE ) {
-		g_print("%s %s\n", _("command: "), 	cmd->str);	
-	}
-	
-	/* get the results from ispell and print it */
-	FILE *ptr;
-	ptr = popen(cmd->str, "r");
-	while (fgets(buf, BUFSIZ, ptr) != NULL)  {
-		switch(buf[0]) {
-			case '*':
-				output = ok;
-				head = sugg;
-				break;
-			case '&':
-				dup = strstr(buf, ":");
-				dup = strstr(dup, " ");
-				output = g_locale_from_utf8(g_strdup(dup), -1, NULL, NULL, NULL);
-				head = sugg;
-				break;
-			case '#':
-				output = g_strdup( _("Typo or unknown word, no suggestions \n"));
-				head = g_strdup( _("Error :"));
-				break;
-			case '+':
-				dup = strstr(buf, " ");
-				output = g_locale_from_utf8(g_strdup(dup), -1, NULL, NULL, NULL);
-				head = g_strdup( _("root")); // wortstamm, fixme
-				break;
-			default :
-				break;
-		 }
-         flag++;
-	}
-	pclose(ptr);
-	reste = g_string_free(cmd, TRUE);
-
-	/* output */
-	gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-	gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0,  head, -1);
-			
-	gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-	gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0, output, -1);
-	
-	
-	showtable(GTK_WIDGET(caller), store, 1, 500, language, NULL);
-
-#endif /* use_aspell */
-                                                                                                       
-	/* cleanup status */
-	cleanup_status(caller);
-	g_free(language);
-	g_free(ok);				
-	g_free(sugg);
-	g_free(output);
-	g_free(such);
-	g_free(match);
-}
-
 
 /**
  * use a ding dictinory to translate String(lang_from) ---> String(to)
@@ -648,8 +292,14 @@ spellit(GtkWidget *caller, gchar *lang)
  * @dict - the filename of the uncompressed dict
 **/
 void
-translation (GtkWidget *caller, gchar *lang_from, gchar *lang_to, gchar *dict)
+run_translation (GtkWidget *caller, gchar *lang_from, gchar *lang_to, gchar *dict)
 {
+	if( get_debug() ) {
+		g_print("call translation '%s' '%s' <--> '%s'\n",
+			dict, lang_from, lang_to);
+		
+	}
+	
 	if (caller == NULL) return;        
 	if (lang_from == NULL) return;
 	if (lang_to == NULL) return;
@@ -673,8 +323,8 @@ translation (GtkWidget *caller, gchar *lang_from, gchar *lang_to, gchar *dict)
     store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);                                                                                               
     
     g_string_printf(cmd, "egrep -h %s %s '%s' '%s' | grep -v '^#'", 
-	    (get_search_case_sense()  == FALSE) ? "-i" : " ",
-		(get_search_exact_words() == TRUE) ? "-w" : " ",
+	    (get_model_bool(MAIN_CASE) == FALSE) ? "-i" : " ",
+		(get_model_bool(MAIN_EXACT) == TRUE) ? "-w" : " ",
 		such, dict );
        
 	if ( get_debug() == TRUE) {
@@ -825,8 +475,8 @@ file_quit_activated                    (GtkMenuItem     *menuitem,
 			GTK_WINDOW( lookup_widget( 
 			GTK_WIDGET(menuitem), "gnome_ding") ) ,
 			&x , &y );
-	set_x_size(x);
-	set_y_size(y);
+	set_model_int(MAIN_SIZE_X, x);
+	set_model_int(MAIN_SIZE_Y, y);
 	gtk_main_quit ();
 }
 
@@ -929,7 +579,7 @@ on_search(GtkWidget *widget)
         (strchr(match, '#')) ||
         (strchr(match, '\"'))||
         (strchr(match, '!')) ||
-        (strchr(match, '§')) ||
+        /* (strchr(match, 'Paragraph')) || */
         (strchr(match, '`')) ||
         (strchr(match, '\'')) ) {
 			// show errormessage 
@@ -966,34 +616,40 @@ on_search(GtkWidget *widget)
 		gtk_main_iteration(); 
 		gdk_threads_leave();
 		
-		/* pthread_t p;
-		pthread_create (&p, NULL, my_wait_thread, (void *)sub_button );
-		*/
+        if (SPELLIT_MACRO(_("Spellcheck (German)"), "de_DE") 
+		} else if (SPELLIT_MACRO( _("Spellcheck (Canadian)"), "en_CA" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (American)"), "en_US" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (French)"), "fr" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (Spanish)"), "es" )
+		} else if (SPELLIT_MACRO( _("Spellcheck (British)"), "en_UK")
+		/* more aspell languages to be test */
 		
+		} else if ( THESAURUS_MACRO(THES_DE, _("Thesaurus (German)")) 
+		} else if ( THESAURUS_MACRO(THES_ES, _("Thesaurus (Spanish)")) 
+		} else if ( THESAURUS_MACRO(THES_FR, _("Thesaurus (French)")) 
+		} else if ( THESAURUS_MACRO(THES_EN, _("Thesaurus (English)")) 
+		} else if ( THESAURUS_MACRO(THES_PT, _("Thesaurus (Portuguese)")) 
+		} else if ( THESAURUS_MACRO(THES_IT, _("Thesaurus (Italian)")) 
 		
-        if (strcmp (suchart, _("Rechtschreibung (German)") ) == 0 ) {
-			spellit(widget, "de_DE");
-		} else if (strcmp (suchart, _("German <--> English")  ) == 0 ) {
-			translation(widget, _("German"), _("English"), get_trans_de_en()  );
-		} else if (strcmp (suchart, _("Thesaurus (de)")  ) == 0 ) {
-			thesaurus(widget, get_thes_de()  );
-		} else if (strcmp (suchart, _("Latin <--> German")  ) == 0 ) {
-			translation(widget, _("Latin"), _("German"), get_trans_lat_de()  );
-		} else if (strcmp (suchart, _("Spellcheck (Canadian)") ) == 0 ) {
-			spellit(widget, "en_CA");
-		} else if ( strcmp (suchart, _("Spellcheck (American)") ) == 0 ) {
-			spellit(widget, "en_US");
-		} else if ( strcmp (suchart, _("\303\251pelant (French)") ) == 0 ) {
-			spellit(widget, "fr");
-		} else if ( strcmp (suchart, _("Spellcheck (Spanish)") ) == 0 ) {
-			spellit(widget, "es");
-		} else {
-			spellit(widget, "en_UK");
+		} else if ( TRANSLATION_MACRO( _("Latin <--> German") , _("Latin"), _("German") , DICT_LAT_DE ) 
+		
+		} else if ( TRANSLATION_MACRO( _("German <--> English"), _("German"), _("English"), DICT_DE_EN )
+		} else if ( TRANSLATION_MACRO( _("German <--> Spanish"), _("German"), _("Spanish"), DICT_DE_ES )
+		} else if ( TRANSLATION_MACRO( _("German <--> French"), _("German"), _("French"), DICT_DE_FR )
+		} else if ( TRANSLATION_MACRO( _("German <--> Italian"), _("German"), _("Italian"), DICT_DE_IT )
+		} else if ( TRANSLATION_MACRO( _("German <--> Portuguese"), _("German"), _("Portuguese"), DICT_DE_PT )
+		
+		} else if ( TRANSLATION_MACRO( _("English <--> German"), _("English"), _("German"), DICT_EN_DE )
+		} else if ( TRANSLATION_MACRO( _("English <--> Spanish"), _("English"), _("Spanish"), DICT_EN_ES )
+		} else if ( TRANSLATION_MACRO( _("English <--> Italian"), _("English"), _("Italian"), DICT_EN_IT )
+		} else if ( TRANSLATION_MACRO( _("English <--> French"), _("English"), _("French"), DICT_EN_FR )
+		} else if ( TRANSLATION_MACRO( _("English <--> Portuguese"), _("English"), _("Portuguese"), DICT_EN_PT )
+		} else if ( TRANSLATION_MACRO( _("English <--> Norwegian"), _("English"), _("Norwegian"), DICT_EN_NO )
+		} else if ( TRANSLATION_MACRO( _("Norwegian <--> English"), _("Norwegian"), _("English"), DICT_NO_EN )
+		} else if ( get_debug() ) {
+			g_print("unknown selection in combo box\n");
 		}
-		/*
-		pthread_cancel (p);
-		pthread_join (p, NULL);
-		*/
+		
 		my_cursor = gdk_cursor_new( GDK_LAST_CURSOR );
 		gdk_window_set_cursor ( (lookup_widget(widget, "gnome_ding"))->window, my_cursor);
 		gtk_widget_set_sensitive (GTK_WIDGET(sub_button), TRUE);
@@ -1028,6 +684,32 @@ fill_combo( GtkWidget *mainwin )
 	GList *combo_entry = NULL;
 	entry  = lookup_widget(GTK_WIDGET(mainwin), "selection");
 
+	COMBO_MACRO2(DICT_DE_EN, _("German <--> English") )
+	COMBO_MACRO2(DICT_DE_ES, _("German <--> Spanish") )
+	COMBO_MACRO2(DICT_DE_IT, _("German <--> Italian") )
+	COMBO_MACRO2(DICT_DE_FR, _("German <--> French") )
+	COMBO_MACRO2(DICT_DE_PT, _("German <--> Portuguese") )
+	
+	COMBO_MACRO2(DICT_EN_DE, _("English <--> German") )
+	COMBO_MACRO2(DICT_EN_ES, _("English <--> Spanish") )
+	COMBO_MACRO2(DICT_EN_PT, _("English <--> Portuguese") )
+	COMBO_MACRO2(DICT_EN_FR, _("English <--> French") )
+	COMBO_MACRO2(DICT_EN_IT, _("English <--> Italian") )
+	COMBO_MACRO2(DICT_EN_NO, _("English <--> Norwegian") )
+	
+	COMBO_MACRO2(DICT_NO_EN, _("Norwegian <--> English") )
+	COMBO_MACRO2(DICT_LAT_DE, _("Latin <--> German") )
+	
+	COMBO_MACRO2(THES_DE, _("Thesaurus (German)") )
+	COMBO_MACRO2(THES_ES, _("Thesaurus (Spanish)") ) 
+	COMBO_MACRO2(THES_EN, _("Thesaurus (English)") )
+	COMBO_MACRO2(THES_IT, _("Thesaurus (Italian)") ) 
+	COMBO_MACRO2(THES_FR, _("Thesaurus (French)") )
+	COMBO_MACRO2(THES_PT, _("Thesaurus (Portuguese)") )
+
+
+	
+	
 #ifdef USE_ASPELL
 	AspellConfig *spell_config;
 	AspellDictInfoList * dlist;
@@ -1038,36 +720,77 @@ fill_combo( GtkWidget *mainwin )
 	dlist = get_aspell_dict_info_list(spell_config);
 	
 	dels = aspell_dict_info_list_elements(dlist);
-    	
-	combo_entry = g_list_append (combo_entry, (gpointer) _("German <--> English") );
-	combo_entry = g_list_append (combo_entry, (gpointer) _("Latin <--> German") );
-	combo_entry = g_list_append (combo_entry, (gpointer) _("Thesaurus (de)") );
+
+		
+	/*
+	possible languages:
+	de, de_CH, de_DE
+	en, en_CA, en_CA-w-accents, en_GB, en_GB-w-accents, en_US, en_US-w-accents
+	es
+	fr, fr_CH, fr_FR
+af     Afrikaans
+bg     Bulgarian
+br     Breton
+ca     Catalan/Valencian
+cs     Czech
+cy     Welsh
+da     Danish
+el     Greek
+eo     Esperanto
+fo     Faroese
+ga     Irish
+gl     Gallegan
+hr     Croatian
+it     Italian
+nl     Dutch
+pl     Polish
+pt     Portuguese
+ro     Romanian
+ru     Russian
+sk     Slovak
+sl     Slovenian
+sv     Swedish
+uk     Ukrainian
+wa     Walloon
+zu     Zulu
+	
+	*/
+	
+	
   	while ( (entryd = aspell_dict_info_enumeration_next(dels)) != 0) {
-    	if ( strcmp(entryd->name, "de_DE") == 0 ) {
-			combo_entry = g_list_append (combo_entry, (gpointer) _("Rechtschreibung (German)"));
-		} else if ( strcmp(entryd->name, "en_GB") == 0 ) {
-			combo_entry = g_list_append (combo_entry, (gpointer) _("Spellcheck (British)") );
-		} else if ( strcmp(entryd->name, "en_CA") == 0 ) {
-			combo_entry = g_list_append (combo_entry, (gpointer) _("Spellcheck (Canadian)") );
-		} else if ( strcmp(entryd->name, "en_US") == 0 ) {
-			combo_entry = g_list_append (combo_entry, (gpointer) _("Spellcheck (American)") );
-		} else if ( strcmp(entryd->name, "fr_FR") == 0 ) {
-			combo_entry = g_list_append (combo_entry, (gpointer) _("\303\251pelant (French)") );
+		if( get_debug() ) {
+			g_print("aspell language available: %s\n",entryd->name); 
+		}
+    	if ( COMBO_MACRO(ASPELL_DE, "de_DE", _("Spellcheck (German)") )
+		} else if (COMBO_MACRO(ASPELL_DECH, "de_CH", _("Spellcheck (Swiss, German)") )
+		} else if (COMBO_MACRO(ASPELL_GB, "en_GB", _("Spellcheck (British)") )
+		} else if (COMBO_MACRO(ASPELL_UC, "en_CA", _("Spellcheck (Canadian)") )
+		} else if (COMBO_MACRO(ASPELL_US, "en_US", _("Spellcheck (American)") )
+		} else if (COMBO_MACRO(ASPELL_GA, "ga", _("Spellcheck (Irish)") )
+		} else if (COMBO_MACRO(ASPELL_FR, "fr_FR", _("Spellcheck (French)") )
+		/* } else if (COMBO_MACRO(ASPELL_FRCH, "fr_CH", _("Spellcheck (Swiss, French)") ) */
+		} else if (COMBO_MACRO(ASPELL_ES, "es", _("Spellcheck (Spanish)") )
+		} else if (COMBO_MACRO(ASPELL_IT, "it", _("Spellcheck (Italian)") )
+		} else if (COMBO_MACRO(ASPELL_DA, "da", _("Spellcheck (Danish)") )
+		} else if (COMBO_MACRO(ASPELL_NL, "nl", _("Spellcheck (Dutch)") )
+		} else if (COMBO_MACRO(ASPELL_NO, "no", _("Spellcheck (Norwegian)") )
+		} else if (COMBO_MACRO(ASPELL_PT, "pt", _("Spellcheck (Portuguese)") ) /*pt versus pt_BR, check this */
+		} else if (COMBO_MACRO(ASPELL_SV, "sv", _("Spellcheck (Swedish)") )
+		/* follow parts are untested */
+		} else if (COMBO_MACRO(ASPELL_BG, "bg", _("Spellcheck (Bulgarian)") )
+		} else if (COMBO_MACRO(ASPELL_EL, "el", _("Spellcheck (Greek)") )
+		} else if (COMBO_MACRO(ASPELL_HR, "hr", _("Spellcheck (Croatian)") )
+		} else if (COMBO_MACRO(ASPELL_IS, "is", _("Spellcheck (Icelandic)") )
+		} else if (COMBO_MACRO(ASPELL_PT, "pt", _("Spellcheck (Portuguese)") )
+		} else if (COMBO_MACRO(ASPELL_RU, "ru", _("Spellcheck (Russian)") )
 		} 
-           
   	}
+	
 	delete_aspell_config(spell_config);
    	delete_aspell_dict_info_enumeration(dels);
 	
-#else
-	combo_entry = g_list_append (combo_entry, (gpointer) _("German <--> English") );
-    combo_entry = g_list_append (combo_entry, (gpointer) _("Rechtschreibung (DE)") );
-	combo_entry = g_list_append (combo_entry, (gpointer) _("Thesaurus (de)") );
-	combo_entry = g_list_append (combo_entry, (gpointer) _("Spellcheck (British)") );
-	/* combo_entry = g_list_append (combo_entry, (gpointer) _("Spellcheck (Canadian)") ); */
-	/* combo_entry = g_list_append (combo_entry, (gpointer) _("Spellcheck (American)") ); */
-	combo_entry = g_list_append (combo_entry, (gpointer) _("\303\251pelant (FR)") );
-#endif	
+#endif // USE_ASPELL
+
 	gtk_combo_set_popdown_strings (GTK_COMBO (entry), combo_entry);
     g_list_free (combo_entry);
 
@@ -1090,21 +813,21 @@ on_eventbox1_button_press_event        (GtkWidget       *widget,
 	GtkWidget *status;
 	GtkWidget *win;
                                                                                          
-    list = lookup_widget(GTK_WIDGET(widget), "output");
+    list = lookup_widget(GTK_WIDGET(widget), "vbox7");
     menu = lookup_widget(GTK_WIDGET(widget), "menubar1");
     status = lookup_widget(GTK_WIDGET(widget), "statusbar");
     win = lookup_widget(GTK_WIDGET(widget), "gnome_ding");
-                                                                                                       
-	if (gtk_window_get_resizable(GTK_WINDOW(win))) {
-		gtk_widget_hide(list);
-		gtk_widget_hide(menu);
-		gtk_widget_hide(status);
-		gtk_window_resize(GTK_WINDOW(win), get_x_size(), 40);
-		gtk_window_set_resizable(GTK_WINDOW(win), 0);
-	} else {
-		unhide(widget);
+	if (win != NULL) {
+		if (gtk_window_get_resizable(GTK_WINDOW(win))) {
+			if( list != NULL) gtk_widget_hide(list);
+			if( menu != NULL) gtk_widget_hide(menu);
+			if (status != NULL) gtk_widget_hide(status);
+			gtk_window_resize(GTK_WINDOW(win), get_model_int(MAIN_SIZE_X), 40);
+			if( win != NULL) gtk_window_set_resizable(GTK_WINDOW(win), 0);
+		} else {
+			unhide(widget);
+		}
 	}
-
   	return FALSE;
 }
 
@@ -1164,27 +887,312 @@ on_preferences1_activate               (GtkMenuItem     *menuitem,
 {
 	if ( pref_dlg == NULL ) {
 		pref_dlg = create_preferences1();
-		GtkWidget *case_sense;
-		GtkWidget *exact_word;
+		GtkWidget *case_sense = NULL;
+		GtkWidget *exact_word = NULL;
 		
-		GtkWidget *aspell_sug;
-		GtkWidget *aspell_char;
+		GtkWidget *aspell_sug = NULL;
+		GtkWidget *aspell_char = NULL;
+		
+		GtkWidget *tree_spell = NULL;
+		GtkWidget *tree_thes = NULL;
+		GtkWidget *tree_dict = NULL;
+		GtkListStore *store_aspell;
+		GtkListStore *store_thes;
+		GtkListStore *store_dict;
+  		GtkTreeIter iter_aspell;
+		GtkTreeIter iter_thes;
+		GtkTreeIter iter_dict;
+ 		GtkCellRenderer *textrenderer = NULL;
+		GtkCellRenderer *textrenderer2 = NULL;
+		GtkCellRenderer *textrenderer3 = NULL;
+		GtkCellRenderer *togglerenderer = NULL;
+		GtkCellRenderer *togglerenderer2 = NULL;
+		GtkCellRenderer *togglerenderer3 = NULL;
+		GtkTreeViewColumn *sp_ASPELL_TOG, *sp_ASPELL_LANG, *sp_ASPELL_INT;
+		GtkTreeViewColumn *sp_THES_TOG, *sp_THES_LANG, *sp_THES_INT;
+		GtkTreeViewColumn *sp_DICT_TOG, *sp_DICT_LANG, *sp_DICT_INT;
+		gint i = 0;
+		struct stat my_stat;
+		
+		enum {
+  			COLUMN_ASPELL_FIXED,
+  			COLUMN_ASPELL_DESCRIPTION,
+			COLUMN_ASPELL_NUM,
+  			NUM_ASPELL_COLUMNS
+		};
+		enum {
+  			COLUMN_THES_FIXED,
+  			COLUMN_THES_DESCRIPTION,
+			COLUMN_THES_NUM,
+  			NUM_THES_COLUMNS
+		};
+		enum {
+  			COLUMN_DICT_FIXED,
+  			COLUMN_DICT_DESCRIPTION,
+			COLUMN_DICT_NUM,
+  			NUM_DICT_COLUMNS
+		};
+		typedef struct {
+  			const gboolean  fixed;
+  			const gchar    *description;
+			const guint     number;
+		} ASPELL_TREE; 
+		typedef struct {
+  			const gboolean  fixed;
+  			const gchar    *description;
+			const guint     number;
+		} THES_TREE; 
+		typedef struct {
+  			const gboolean  fixed;
+  			const gchar    *description;
+			const guint     number;
+		} DICT_TREE; 
 		
 		case_sense = lookup_widget(pref_dlg, "grep_case");
 		exact_word = lookup_widget(pref_dlg, "grep_word");
 		aspell_sug  = lookup_widget(pref_dlg, "aspell_suggest");
 		aspell_char = lookup_widget(pref_dlg, "aspell_charset");
 		
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (case_sense), get_search_case_sense() );
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (exact_word), get_search_exact_words() );
+		tree_spell = lookup_widget( pref_dlg, "treeview_aspell");
+		tree_thes = lookup_widget( pref_dlg, "treeview_thes");
+		tree_dict = lookup_widget( pref_dlg, "treeview_dict");
+		
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (case_sense), get_model_bool(MAIN_CASE) );
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (exact_word), get_model_bool(MAIN_EXACT) );
+	
+		gtk_adjustment_set_value(gtk_range_get_adjustment( GTK_RANGE(aspell_sug )),
+			(gdouble)(get_model_int(MAIN_SUGEST_MODE) - 1 ) );
 		
 		
-		gtk_adjustment_set_value(
-			gtk_range_get_adjustment( GTK_RANGE(aspell_sug )),
-			(gdouble)(get_sug_mode() - 1 ) );
+#if !USE_ASPELL		
+	// disable view 
+	g_object_set( GTK_LABEL(lookup_widget(tree_spell, "label16")) , "visible", FALSE, NULL);
+	g_object_set( lookup_widget(tree_spell, "scrolledwindow_aspell") , "visible", FALSE, NULL);
+#else
+	// fill aspell treeview
+		store_aspell = gtk_list_store_new (NUM_ASPELL_COLUMNS,
+			      G_TYPE_BOOLEAN,
+			      G_TYPE_STRING,
+				  G_TYPE_UINT);
+		gtk_list_store_clear( store_aspell );
 		
+		AspellConfig *spell_config;
+		AspellDictInfoList * dlist;
+  		AspellDictInfoEnumeration * dels;
+  		const AspellDictInfo * entryd;
+	
+		spell_config = new_aspell_config();
+		dlist = get_aspell_dict_info_list(spell_config);
+	
+		dels = aspell_dict_info_list_elements(dlist);
+		
+		while ( (entryd = aspell_dict_info_enumeration_next(dels)) != 0) {
+			g_print("check for %s\n", entryd->name);
+		
+			if( PREF_SPELL_MACRO( ASPELL_DE, "de_DE", _("German (German)") ) 
+			/* } else if (PREF_SPELL_MACRO( ASPELL_DECH, "de_CH", _("German (Swiss)") )  */
+			} else if (PREF_SPELL_MACRO( ASPELL_GB, "en_GB", _("English (British)") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_CA, "en_CA", _("English (Canadian)") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_US, "en_US", _("English (American)") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_GA, "ga", _("Irish") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_FR, "fr_FR", _("French") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_ES, "es", _("Spanish") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_IT, "it", _("Italian") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_DA, "da", _("Danish") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_NL, "nl", _("Dutch") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_NO, "no", _("Norwegian") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_SV, "sv", _("Swedish") ) 
+			} else if (PREF_SPELL_MACRO( ASPELL_BR, "br", _("Portuguese") ) 
+			}
+		
+		}
+			
+		g_object_set (GTK_TREE_VIEW(tree_spell), "model", store_aspell, NULL);
+		gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (tree_spell), TRUE);
+      	gtk_tree_view_set_search_column (GTK_TREE_VIEW (tree_spell),
+				       COLUMN_ASPELL_DESCRIPTION);
+					   
+		textrenderer = gtk_cell_renderer_text_new ();
+		togglerenderer = gtk_cell_renderer_toggle_new ();
+		g_signal_connect (togglerenderer, "toggled", G_CALLBACK (on_spell_toggle), store_aspell);
+		
+		sp_ASPELL_TOG  = gtk_tree_view_column_new_with_attributes( _("active") , togglerenderer, "active", COLUMN_ASPELL_FIXED, NULL);
+		sp_ASPELL_LANG = gtk_tree_view_column_new_with_attributes( _("Language") , textrenderer, "text", COLUMN_ASPELL_DESCRIPTION, NULL);
+		sp_ASPELL_INT  = gtk_tree_view_column_new_with_attributes( _(" ") , textrenderer, "text", COLUMN_ASPELL_NUM, NULL);
+		
+		gtk_tree_view_column_set_sort_column_id (sp_ASPELL_TOG, COLUMN_ASPELL_FIXED);
+        gtk_tree_view_append_column(GTK_TREE_VIEW(tree_spell), sp_ASPELL_TOG);
+		
+		gtk_tree_view_column_set_sort_column_id (sp_ASPELL_LANG, COLUMN_ASPELL_DESCRIPTION);
+        gtk_tree_view_append_column( GTK_TREE_VIEW(tree_spell), sp_ASPELL_LANG);
+		
+		delete_aspell_config(spell_config);
+   		delete_aspell_dict_info_enumeration(dels);
+#endif // USE_ASPELL
+
+
+		// now settings for thesaurus
+		store_thes = gtk_list_store_new (NUM_THES_COLUMNS,
+			      G_TYPE_BOOLEAN,
+			      G_TYPE_STRING,
+				  G_TYPE_UINT);
+		gtk_list_store_clear( store_thes );
+		
+		
+		if( PREF_THES_MACRO( THES_DE, _("German") ) 	} 
+		if (PREF_THES_MACRO( THES_ES, _("Spanish") ) 	} 
+		if (PREF_THES_MACRO( THES_EN, _("English") ) 	} 
+		if (PREF_THES_MACRO( THES_FR, _("French") )  	} 
+		if (PREF_THES_MACRO( THES_IT, _("Italian") )  	}
+		if (PREF_THES_MACRO( THES_PT, _("Portuguese") )  	}
+
+		g_object_set (GTK_TREE_VIEW(tree_thes), "model", store_thes, NULL);
+		gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (tree_thes), TRUE);
+      	gtk_tree_view_set_search_column (GTK_TREE_VIEW (tree_thes),
+				       COLUMN_THES_DESCRIPTION);
+					   
+		textrenderer2 = gtk_cell_renderer_text_new ();
+		togglerenderer2 = gtk_cell_renderer_toggle_new ();
+		g_signal_connect (togglerenderer2, "toggled", G_CALLBACK (on_thes_toggle), store_thes);
+		
+		sp_THES_TOG  = gtk_tree_view_column_new_with_attributes( _("active") , togglerenderer2, "active", COLUMN_THES_FIXED, NULL);
+		sp_THES_LANG = gtk_tree_view_column_new_with_attributes( _("Language") , textrenderer2, "text", COLUMN_THES_DESCRIPTION, NULL);
+		sp_THES_INT  = gtk_tree_view_column_new_with_attributes( _(" ") , textrenderer2, "text", COLUMN_THES_NUM, NULL);
+		
+		gtk_tree_view_column_set_sort_column_id (sp_THES_TOG, COLUMN_THES_FIXED);
+        gtk_tree_view_append_column(GTK_TREE_VIEW(tree_thes), sp_THES_TOG);
+		
+		gtk_tree_view_column_set_sort_column_id (sp_THES_LANG, COLUMN_THES_DESCRIPTION);
+        gtk_tree_view_append_column( GTK_TREE_VIEW(tree_thes), sp_THES_LANG);
+
+		// now settings for dict
+		store_dict = gtk_list_store_new (NUM_DICT_COLUMNS,
+			      G_TYPE_BOOLEAN,
+			      G_TYPE_STRING,
+				  G_TYPE_UINT);
+		gtk_list_store_clear( store_dict );
+
+		if( PREF_DICT_MACRO( DICT_DE_EN, _("German <--> English") )  } 
+		if (PREF_DICT_MACRO( DICT_DE_ES, _("German <--> Spanish") ) 	} 
+		if (PREF_DICT_MACRO( DICT_DE_FR, _("German <--> French") ) 	}
+		if (PREF_DICT_MACRO( DICT_DE_PT, _("German <--> Portuguese") ) 	}
+		if (PREF_DICT_MACRO( DICT_DE_IT, _("German <--> Italian") ) 	}
+		
+		if (PREF_DICT_MACRO( DICT_EN_DE, _("English <--> German") ) 	}
+		if (PREF_DICT_MACRO( DICT_EN_FR, _("English <--> French") ) 	}
+		if (PREF_DICT_MACRO( DICT_EN_IT, _("English <--> Italian") ) 	}
+		if (PREF_DICT_MACRO( DICT_EN_PT, _("English <--> Portuguese") ) 	}
+		if (PREF_DICT_MACRO( DICT_EN_ES, _("English <--> Spanish") ) 	}
+		if (PREF_DICT_MACRO( DICT_EN_NO, _("English <--> Norwegian") ) 	}
+				
+		if (PREF_DICT_MACRO( DICT_NO_EN, _("Norwegian <--> English") ) 	}
+		if (PREF_DICT_MACRO( DICT_LAT_DE, _("Latin <--> German") )   } 
+		
+		g_object_set (GTK_TREE_VIEW(tree_dict), "model", store_dict, NULL);
+		gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (tree_dict), TRUE);
+      	gtk_tree_view_set_search_column (GTK_TREE_VIEW (tree_dict),
+				       COLUMN_DICT_DESCRIPTION);
+					   
+		textrenderer3 = gtk_cell_renderer_text_new ();
+		togglerenderer3 = gtk_cell_renderer_toggle_new ();
+		g_signal_connect (togglerenderer3, "toggled", G_CALLBACK (on_dict_toggle), store_dict);
+		
+		sp_DICT_TOG  = gtk_tree_view_column_new_with_attributes( _("active") , togglerenderer3, "active", COLUMN_DICT_FIXED, NULL);
+		sp_DICT_LANG = gtk_tree_view_column_new_with_attributes( _("Language") , textrenderer3, "text", COLUMN_DICT_DESCRIPTION, NULL);
+		sp_DICT_INT  = gtk_tree_view_column_new_with_attributes( _(" ") , textrenderer3, "text", COLUMN_DICT_NUM, NULL);
+		
+		gtk_tree_view_column_set_sort_column_id (sp_DICT_TOG, COLUMN_DICT_FIXED);
+        gtk_tree_view_append_column(GTK_TREE_VIEW(tree_dict), sp_DICT_TOG);
+		
+		gtk_tree_view_column_set_sort_column_id (sp_DICT_LANG, COLUMN_DICT_DESCRIPTION);
+        gtk_tree_view_append_column( GTK_TREE_VIEW(tree_dict), sp_DICT_LANG);
+
 		gtk_widget_show(pref_dlg);
 	}
+}
+
+static void
+on_spell_toggle(GtkCellRendererToggle *cell, gchar *path_str, gpointer data) {
+  GtkTreeModel *model = (GtkTreeModel *)data;
+  GtkTreeIter  iter;
+  GtkTreePath *path = gtk_tree_path_new_from_string (path_str);
+  gboolean fixed;
+  gint i;
+  enum {
+	COLUMN_ASPELL_FIXED,
+	COLUMN_ASPELL_DESCRIPTION,
+	COLUMN_ASPELL_NUM,
+	NUM_ASPELL_COLUMNS
+  };
+		
+  /* get toggled iter */
+  gtk_tree_model_get_iter (model, &iter, path);
+  gtk_tree_model_get (model, &iter, 
+  	COLUMN_ASPELL_FIXED, &fixed, 
+  	COLUMN_ASPELL_NUM, &i,
+  -1);
+
+  fixed ^= 1;
+  set_model_bool(i, fixed);
+
+  gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_ASPELL_FIXED, fixed, -1);
+  gtk_tree_path_free (path);
+}
+
+static void
+on_thes_toggle(GtkCellRendererToggle *cell, gchar *path_str, gpointer data) {
+  GtkTreeModel *model = (GtkTreeModel *)data;
+  GtkTreeIter  iter;
+  GtkTreePath *path = gtk_tree_path_new_from_string (path_str);
+  gboolean fixed;
+  gint i;
+  enum {
+	COLUMN_THES_FIXED,
+	COLUMN_THES_DESCRIPTION,
+	COLUMN_THES_NUM,
+	NUM_THES_COLUMNS
+  };
+		
+  /* get toggled iter */
+  gtk_tree_model_get_iter (model, &iter, path);
+  gtk_tree_model_get (model, &iter, 
+  	COLUMN_THES_FIXED, &fixed, 
+  	COLUMN_THES_NUM, &i,
+  -1);
+
+  fixed ^= 1;
+  set_model_bool(i, fixed);
+
+  gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_THES_FIXED, fixed, -1);
+  gtk_tree_path_free (path);
+}
+
+static void
+on_dict_toggle(GtkCellRendererToggle *cell, gchar *path_str, gpointer data) {
+  GtkTreeModel *model = (GtkTreeModel *)data;
+  GtkTreeIter  iter;
+  GtkTreePath *path = gtk_tree_path_new_from_string (path_str);
+  gboolean fixed;
+  gint i;
+  enum {
+	COLUMN_DICT_FIXED,
+	COLUMN_DICT_DESCRIPTION,
+	COLUMN_DICT_NUM,
+	NUM_DICT_COLUMNS
+  };
+		
+  /* get toggled iter */
+  gtk_tree_model_get_iter (model, &iter, path);
+  gtk_tree_model_get (model, &iter, 
+  	COLUMN_DICT_FIXED, &fixed, 
+  	COLUMN_DICT_NUM, &i,
+  -1);
+
+  fixed ^= 1;
+  set_model_bool(i, fixed);
+
+  gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_DICT_FIXED, fixed, -1);
+  gtk_tree_path_free (path);
 }
 
 
@@ -1209,7 +1217,7 @@ on_mini_mode1_activate                 (GtkMenuItem     *menuitem,
 		gtk_widget_hide(list);
 		gtk_widget_hide(menu);
 		gtk_widget_hide(status);
-		gtk_window_resize(GTK_WINDOW(win), get_x_size(), 40);
+		gtk_window_resize(GTK_WINDOW(win), get_model_int(MAIN_SIZE_X), 40);
 		gtk_window_set_resizable(GTK_WINDOW(win), 0);
 	}
 }
@@ -1221,7 +1229,7 @@ void
 on_window_mode1_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-   unhide(menuitem);
+   unhide(GTK_WIDGET(menuitem) );
 }
 
 /**
@@ -1247,15 +1255,18 @@ on_preferences1_destroy                (GtkObject       *object,
 }
 
 /**
- * only close the prefereces-dialog
+ * close the prefereces-dialog and save back language settings
 **/
 void
 on_okbutton1_clicked                   (GtkButton       *button,
                                         gpointer         user_data)
 {
+	
 	gtk_widget_destroy(pref_dlg);
 	pref_dlg = NULL;
-}
+	
+	fill_combo( get_mainwin() );
+} // on_okbutton1_clicked (preferences dialog)
 
 
 /**
@@ -1265,11 +1276,9 @@ void
 on_grep_word_toggled                   (GtkToggleButton *togglebutton,
                                         gpointer         user_data)
 {
-	gboolean value;
-	GtkWidget *exact_word;
+	GtkWidget *exact_word = NULL;
 	exact_word = lookup_widget(pref_dlg, "grep_word");
-	value = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (exact_word) );
-	set_search_exact_words(value);
+	set_model_bool(MAIN_EXACT, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (exact_word) ) );
 }
 
 /**
@@ -1279,12 +1288,9 @@ void
 on_grep_case_toggled                   (GtkToggleButton *togglebutton,
                                         gpointer         user_data)
 {
-	gboolean value;
-	GtkWidget *case_sense;
-	
+	GtkWidget *case_sense = NULL;
 	case_sense = lookup_widget(pref_dlg, "grep_case");
-	value = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (case_sense) );
-	set_search_case_sense( value);
+	set_model_bool(MAIN_CASE , gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (case_sense) ) );
 }
 
 /**
@@ -1296,12 +1302,210 @@ on_aspell_suggest_value_changed        (GtkRange        *range,
 {
 	GtkAdjustment *adj;
 	adj = gtk_range_get_adjustment( range );
-	set_sug_mode( 1+ (gint)( gtk_adjustment_get_value(adj) ));
+	set_model_int(MAIN_SUGEST_MODE,  1 + (gint)( gtk_adjustment_get_value(adj) ));
 }
 
 
 /**
  * count entries in dictionary 
-  less ger-eng.ding | grep -v '^#' | sed 's/:.*$//' | sed 's/|/\n/p' | wc -l
+  less de-en.ding | grep -v '^#' | sed 's/:.*$//' | sed 's/|/\n/p' | wc -l
 **/
 
+
+/* delete this later
+void dummy() {
+	
+	char *languages = {
+	// "ab", _("Abkhazian"),
+	// "ae", _("Avestan"), 
+	"af", _("Afrikaans"),
+	// "an", -("Aragonese"),
+	// "ar", _("Arabic"), 
+	// "as", _("Assamese"),
+	// "ay",  _("Aymara"),  - unused
+	// "az",  _("Azerbaijani"),  - unused
+	// "ba",  _("Bashkir"), - unused
+	// "be",  _("Belarusian"), - unused
+	"bg",  _("Bulgarian"),
+	// "bh",  _("Bihari"), - unused
+	// "bn",  _("Bengali"), - unused
+	// "bo",  _("Tibetan"), - unused
+	"br",  _("Breton"),
+	// "bs",  _("Bosnian"), - unused
+	"ca",  _("Catalan/Valencian"),
+	// "ce",  _("Chechen"), - unused
+	"dech",  _("Swiss/German"),
+	// "co",  _("Corsican"),  - unused
+	// "cr",  _("Cree"), - unused
+	"cs",  _("Czech"),
+	"cy",  _("Welsh"),
+	"da",  _("Danish"),
+	"de",  _("German"),
+	// "dv",  _("Divehi"), - unused
+	// "dz",  _("Dzongkha"), - unused
+	"el",  _("Greek"),
+	"en",  _("English"),
+	"eo",  _("Esperanto"),
+	"es",  _("Spanish"),
+	// "et",  _("Estonian"), - unused
+	// "eu",  _("Basque"),  - unused
+	// "fa",  _("Persian"), - unused
+	// "fi",  _("Finnish"), - unused
+	// "fj",  _("Fijian"),  - unused
+	"fo",  _("Faroese"),
+	"fr",  _("France"),
+	// "fy",  _("Frisian"), - unused
+	"ga",  _("Irish"),
+	"gb",  _("English"), //  great brit.
+	// "gd",  _("Scottish Gaelic"),  - unused
+	"gl",  _("Gallegan"),
+	// "gn",  _("Guarani"), - unused
+	// "gu",  _("Gujarati"), - unused
+	// "gv",  _("Manx"), - unused
+	// "ha",  _("Hausa"),  - unused
+	// "he",  _("Hebrew"), - unused
+	// "hi",  _("Hindi"), - unused
+	"hr",  _("Croatian"),
+	// "hu",  _("Hungarian"), - unused
+	// "hy",  _("Armenian"), - unused
+	// "ia",  _("Interlingua"), - unused
+	// "id",  _("Indonesian"), - unused
+	// "io",  _("Ido"), - unused
+	"is",  _("Icelandic"),
+	"it",  _("Italian"),
+	// "iu",  _("Inuktitut"), - unused
+	// "ja",  -("Japanese"), - unused
+	// "ka",  _("Georgian"), - unused
+	// "kk",  _("Kazakh"), - unused
+	// "kl",  _("Kalaallisut/Greenlandic"), - unused
+	// "km",  _("Khmer"), - unused
+	// "kn",  _("Kannada"), - unused
+	// "ko",  _("Korean"),  - unused
+	// "kr",  _("Kanuri"),  - unused
+	// "ks",  _("Kashmiri"), - unused
+	// "ku",  _("Kurdish"),  - unused
+	// "kv",  _("Komi"),  - unused
+	// "kw",  _("Cornish"),  - unused
+	// "ky",  _("Kirghiz"), - unused
+	// "la",  _("Latin"), - unused
+	// "lo",  _("Lao"), - unused
+	// "lt",  _("Lithuanian"), - unused
+	// "lv",  _("Latvian"), - unused
+	// "mi",  _("Maori"), - unused
+	// "mk",  _("Makasar"), - unused
+	// "ml",  _("Malayalam"), - unused
+	// "mn",  _("Mongolian"), - unused
+	// "mo",  _("Moldavian"), - unused
+	// "mr",  _("Marathi"), - unused
+	// "ms",  _("Malay"), - unused
+	// "mt",  _("Maltese"), - unused
+	// "my",  _("Burmese"), - unused
+	// "nb",  _("Norwegian Bokmal"), - unused
+	// "ne",  _("Nepali"), - unused
+	"nl",  _("Dutch"),
+	// "nn",  _("Norwegian Nynorsk"), - unused
+	"no",  _("Norwegian"),
+	// "nv",  _("Navajo"), - unused
+	// "oc",  _("Occitan/Provencal"), - unused
+	// "oj",  _("Ojibwa"), - unused
+	// "or",  _("Oriya"), - unused
+	// "os",  _("Ossetic"), - unused
+	// "pa",  _("Punjabi"), - unused
+	// "pi",  _("Pali"), - unused
+	"pl",  _("Polish"),
+	// "ps",  _("Pushto"),	- unused
+	"pt",  _("Portuguese"),
+	// "qu",  _("Quechua"), - unused
+	// "rm",  _("Raeto-Romance"), - unused
+	// "ro",  _("Romanian"),
+	"ru",  _("Russian"),
+	// "sa",  _("Sanskrit"), - unused
+	// "sd",  _("Sindhi"), - unused
+	// "se",  _("Northern Sami"), - unused
+	"sk",  _("Slovak"),
+	"sl",  _("Slovenian"),
+	// "sn",  _("Shona"),  - unused
+	// "so",  _("Somali"), - unused
+	// "sq",  _("Albanian"), - unused
+	// "sr",  _("Serbian"), - unused
+	// "su",  _("Sundanese"), - unused
+	"sv",  _("Swedish"),
+	// "sw",  _("Swahili"),  - unused
+	// "ta",  _("Tamil"), -unused
+	// "te",  _("Telugu"), - unused
+	// "tg",  _("Tajik"), - unused
+	// "tk",  _("Turkmen"), - unused
+	// "tl",  _("Tagalog"),  - unused
+	// "tr",  _("Turkish"), - unused
+	// "tt",  _("Tatar"), - unused
+	// "ty",  _("Tahitian"), - unused
+	"uc",  _("English/Canadian"),
+	// "ug",  _("Uighur"), - unused
+	"uk",  _("Ukrainian"),
+	// "ur",  _("Urdu"), - unused
+	"us",  _("English/American"),
+	// "uz",  _("Uzbek"), - unused
+	// "vi",  _("Vietnamese"), - unused
+	// "vo",  _("Volapuk"), - unused
+	"wa",  _("Walloon"),
+	// "yi",  _("Yiddish"), - unused
+	// "yo",  _("Yoruba"), - unused
+	"zu",  _("Zulu")
+	// "aa", _("Afar"),
+	// "ak", _("Akan"),
+	// "av", _("Avaric"),
+	// "bi", _("Bislama"),
+	// "bm", _("Bambara"),
+	// "cu", _("Old Slavonic"),
+	// "ee", _("Ewe"),
+	// "ff", _("Fulah"),
+	// "ho", _("Hiri Motu"),
+	// "ht", _("Haitian Creole"),
+	// "hz", _("Herero"),
+	// "ie", _("Interlingue"),
+	// "ig", _("Igbo"),
+	// "ii", _("Sichuan Yi"),
+	// "ik", _("Inupiaq"),
+	// "kg", _("Kongo"),
+	// "ki", _("Kikuyu/Gikuyu"),
+	// "kj", _("Kwanyama"),
+	// "lb", _("Luxembourgish"),
+	// "lg", _("Ganda"),
+	// "li", _("Limburgan"),
+	// "ln", _("Lingala"),
+	// "lu", _("Luba-Katanga"),
+	// "mg", _("Malagasy"),
+	// "mh", _("Marshallese"),
+	// "na", _("Nauru"),
+	// "nd", _("North Ndebele"),
+	// "ng", _("Ndonga"),
+	// "nr", _("South Ndebele"),
+	// "ny", _("Nyanja"),
+	// "rn", _("Rundi"),
+	// "rw", _("Kinyarwanda"),
+	// "sc", _("Sardinian"),
+	// "sg", _("Sango"),
+	// "si", _("Sinhalese"),
+	// "sm", _("Samoan"),
+	// "ss", _("Swati"),
+	// "st", _("Southern Sotho"),
+	// "tn", _("Tswana"),
+	// "to", _("Tonga"),
+	// "ts", _("Tsonga"),
+	// "tw", _("Twi"),
+	// "ve", _("Venda"),
+	// "wo", _("Wolof"),
+	// "xh", _("Xhosa"),
+	// "za", _("Zhuang")
+	}
+	
+}
+*/
+
+void
+on_button_reset_clicked                (GtkButton       *button,
+                                        gpointer         user_data)
+{
+	model_default();
+	gtk_widget_destroy( lookup_widget( GTK_WIDGET(button), "preferences1") ); 
+}
