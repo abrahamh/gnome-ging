@@ -51,6 +51,8 @@ struct my_ding_data {
 	gboolean serach_case_sense;		// thes/dict - search case sensitive
 	gboolean main_debug;	// debug mode (output to stdout)
 	gboolean main_reset;	// reset-flag (false==on) - reset interal data model
+	GString  *main_prefix;  // application prefix like "/usr/local/"
+ 	GString *main_latest_dict;   // string that contain the latest selected dictionary
 	
 	gint column_num;    	// num of column (for contex menu, copy result)
 	GString *column1;		// String to hold left column cell content (contex)
@@ -356,6 +358,7 @@ typedef enum _mytype {
 	MAIN_CASE,
 	MAIN_DEBUG,
 	MAIN_RESET,
+	MAIN_PREFIX,
 	MAIN_FONT,
 	MAIN_FONT_DEFAULT,
 	MAIN_COLOR_DEFAULT,
@@ -364,6 +367,8 @@ typedef enum _mytype {
 	MAIN_COLUMN_NUM,
 	MAIN_COLUMN1,
 	MAIN_COLUMN2,
+	MAIN_LATEST_DICT,
+	
 	// Flags for Aspell
 	ASPELL_AA,  // "aa", _("Afar"),
 	ASPELL_AB,  // "ab", _("Abkhazian"),

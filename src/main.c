@@ -108,6 +108,11 @@
 	case x: \
 			y = value; \
 			break;
+
+// 	DEFAULT_MACRO(my_model.dict_de_en, my_model.sz_dict_de_en, "de-en.ding" )
+#define DEFAULT_MACRO(x,y,z) \
+	x  = FALSE; \
+	g_string_printf(y, "%sshare/dict/%s", get_model_char(MAIN_PREFIX), z);
 	
 void model_alloc();
 void model_free();
@@ -484,6 +489,8 @@ gchar *get_model_char(MYTYPE i) {
 		CASE_MACRO1(MAIN_COLOR2, my_model.text_highlight->str)
 		CASE_MACRO1(MAIN_COLUMN1, my_model.column1->str)
 		CASE_MACRO1(MAIN_COLUMN2, my_model.column2->str)
+		CASE_MACRO1(MAIN_PREFIX, my_model.main_prefix->str)
+		CASE_MACRO1(MAIN_LATEST_DICT, my_model.main_latest_dict->str)
 		
 		CASE_MACRO1(THES_DE, my_model.sz_thes_de->str)
 		CASE_MACRO1(THES_IT, my_model.sz_thes_it->str)
@@ -562,7 +569,7 @@ void set_model_char(MYTYPE i, gchar *value) {
 		
 	switch (i) {
 		case MAIN_FONT: 
-			g_string_printf( my_model.text_font, "%s", value ); 
+			g_string_printf( my_model.text_font, "%s", value );
 			break;
 		case MAIN_COLOR1:
 			g_string_printf( my_model.text_color, "%s", value ); 
@@ -575,6 +582,12 @@ void set_model_char(MYTYPE i, gchar *value) {
 			break;
 		case MAIN_COLUMN2:
 			g_string_printf( my_model.column2, "%s", value ); 
+			break;
+		case MAIN_PREFIX:
+			g_string_printf( my_model.main_prefix, "%s", value ); 
+			break;
+		case MAIN_LATEST_DICT:
+			g_string_printf( my_model.main_latest_dict, "%s", value ); 
 			break;
 		
 		VALUESET(THES_DE, my_model.sz_thes_de);
@@ -679,6 +692,8 @@ void model_alloc() {
 	my_model.text_highlight = g_string_new("");
 	my_model.column1 = g_string_new("");
 	my_model.column2 = g_string_new("");
+	my_model.main_prefix = g_string_new("");
+	my_model.main_latest_dict = g_string_new("");
 	
 	// init all GString's (empty)
 	my_model.sz_thes_de = g_string_new(""); 
@@ -746,6 +761,7 @@ void model_free() {
 	g_string_free(my_model.text_highlight , TRUE);
 	g_string_free(my_model.column1, TRUE);
 	g_string_free(my_model.column2, TRUE);
+	g_string_free(my_model.main_prefix, TRUE);
 	// free all GString's
 	g_string_free(my_model.sz_thes_de , TRUE);
 	g_string_free(my_model.sz_thes_es , TRUE);
@@ -754,6 +770,7 @@ void model_free() {
 	g_string_free(my_model.sz_thes_it , TRUE);
 	g_string_free(my_model.sz_thes_pt , TRUE);
 	g_string_free(my_model.sz_thes_pl , TRUE);
+	g_string_free(my_model.main_latest_dict, TRUE);
 	
 	g_string_free(my_model.sz_dict_de_en , TRUE);
 	g_string_free(my_model.sz_dict_de_es , TRUE);
@@ -821,6 +838,8 @@ void model_read(GConfClient *gconf) {
 		set_model_char(MAIN_FONT,   gconf_client_get_string( gconf, "/apps/gnome-ding/font", NULL) );
 		set_model_char(MAIN_COLOR1, gconf_client_get_string( gconf, "/apps/gnome-ding/color1", NULL) );
 		set_model_char(MAIN_COLOR2, gconf_client_get_string( gconf, "/apps/gnome-ding/color2", NULL) );
+		set_model_char(MAIN_LATEST_DICT, gconf_client_get_string( gconf, "/apps/gnome-ding/main_latest", NULL) );
+		
 		
 		set_model_bool(THES_ES, gconf_client_get_bool(gconf, "/apps/gnome-ding/thes/thes_es", NULL));	
 		set_model_bool(THES_DE, gconf_client_get_bool(gconf, "/apps/gnome-ding/thes/thes_de", NULL))	;
@@ -983,6 +1002,7 @@ void model_write(GConfClient *gconf) {
 	gconf_client_set_string(gconf, "/apps/gnome-ding/font", get_model_char(MAIN_FONT), NULL);	
 	gconf_client_set_string(gconf, "/apps/gnome-ding/color1", get_model_char(MAIN_COLOR1), NULL);
 	gconf_client_set_string(gconf, "/apps/gnome-ding/color2", get_model_char(MAIN_COLOR2), NULL);
+	gconf_client_set_string(gconf, "/apps/gnome-ding/main_latest", get_model_char(MAIN_LATEST_DICT), NULL);
 	
 	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_af", get_model_bool(ASPELL_AF), NULL);
 	gconf_client_set_bool(gconf, "/apps/gnome-ding/aspell/aspell_bg", get_model_bool(ASPELL_BG), NULL);
@@ -1140,7 +1160,6 @@ void model_default() {
 	my_model.main_reset = TRUE;
 	my_model.text_font_default = TRUE;
 	my_model.text_color_default = TRUE;
-	
 	my_model.column_num = 1;
 	
 	// todo: load themes-default settings
@@ -1148,90 +1167,51 @@ void model_default() {
 	g_string_printf(my_model.text_color, "#000000000000"); 
 	g_string_printf(my_model.text_highlight, "#00000000ffff"); 
 	
-	my_model.thes_de = FALSE;
-	g_string_printf(my_model.sz_thes_de, "/usr/share/dict/thesaurus-de.ding");
-	my_model.thes_en = FALSE;
-	g_string_printf(my_model.sz_thes_en, "/usr/share/dict/thesaurus-en.ding");
-	my_model.thes_es = FALSE;
-	g_string_printf(my_model.sz_thes_es, "/usr/share/dict/thesaurus-es.ding");
-	my_model.thes_fr = FALSE;
-	g_string_printf(my_model.sz_thes_fr, "/usr/share/dict/thesaurus-fr.ding");
-	my_model.thes_it = FALSE;
-	g_string_printf(my_model.sz_thes_it, "/usr/share/dict/thesaurus-it.ding");
-	my_model.thes_pt = FALSE;
-	g_string_printf(my_model.sz_thes_pt, "/usr/share/dict/thesaurus-pt.ding");
-	my_model.thes_pl = FALSE;
-	g_string_printf(my_model.sz_thes_pl, "/usr/share/dict/thesaurus-pl.ding");
+	DEFAULT_MACRO(my_model.thes_de, my_model.sz_thes_de, "thesaurus-de.ding" );
+	DEFAULT_MACRO(my_model.thes_en, my_model.sz_thes_en, "thesaurus-en.ding" );
+	DEFAULT_MACRO(my_model.thes_es, my_model.sz_thes_es, "thesaurus-es.ding" );
+	DEFAULT_MACRO(my_model.thes_fr, my_model.sz_thes_fr, "thesaurus-fr.ding" );
+	DEFAULT_MACRO(my_model.thes_it, my_model.sz_thes_it, "thesaurus-it.ding" );
+	DEFAULT_MACRO(my_model.thes_pt, my_model.sz_thes_pt, "thesaurus-pt.ding" );
+	DEFAULT_MACRO(my_model.thes_pl, my_model.sz_thes_pl, "thesaurus-pl.ding" );
+
+	DEFAULT_MACRO(my_model.dict_de_en, my_model.sz_dict_de_en, "de-en.ding" );
+	DEFAULT_MACRO(my_model.dict_de_es, my_model.sz_dict_de_es, "de-es.ding" );
+	DEFAULT_MACRO(my_model.dict_de_fr, my_model.sz_dict_de_fr, "de-fr.ding" );
+	DEFAULT_MACRO(my_model.dict_de_it, my_model.sz_dict_de_it, "de-it.ding" );
+	DEFAULT_MACRO(my_model.dict_de_pt, my_model.sz_dict_de_pt, "de-pt.ding" );
+	DEFAULT_MACRO(my_model.dict_de_nl, my_model.sz_dict_de_nl, "de-nl.ding" );
 	
-	my_model.dict_de_en = FALSE;
-	g_string_printf(my_model.sz_dict_de_en, "/usr/share/dict/de-en.ding");
-	my_model.dict_lat_de = FALSE;
-	g_string_printf(my_model.sz_dict_lat_de, "/usr/share/dict/lat-de.ding");
-	my_model.dict_en_lat = FALSE;
-	g_string_printf(my_model.sz_dict_en_lat, "/usr/share/dict/en-lat.ding");
-	my_model.dict_de_es = FALSE;
-	g_string_printf(my_model.sz_dict_de_es, "/usr/share/dict/de-es.ding");
-	my_model.dict_de_fr = FALSE;
-	g_string_printf(my_model.sz_dict_de_fr, "/usr/share/dict/de-fr.ding");
-	my_model.dict_de_it = FALSE;
-	g_string_printf(my_model.sz_dict_de_it, "/usr/share/dict/de-it.ding");
-	my_model.dict_de_pt = FALSE;
-	g_string_printf(my_model.sz_dict_de_pt, "/usr/share/dict/de-pt.ding");
-	my_model.dict_de_nl = FALSE;
-	g_string_printf(my_model.sz_dict_de_nl, "/usr/share/dict/de-nl.ding");
+	DEFAULT_MACRO(my_model.dict_en_de, my_model.sz_dict_en_de, "en-de.ding" );
+	DEFAULT_MACRO(my_model.dict_en_lat, my_model.sz_dict_en_lat, "en-lat.ding" );
+	DEFAULT_MACRO(my_model.dict_en_fr, my_model.sz_dict_en_fr, "en-fr.ding" );
+	DEFAULT_MACRO(my_model.dict_en_es, my_model.sz_dict_en_es, "en-es.ding" );
+	DEFAULT_MACRO(my_model.dict_en_it, my_model.sz_dict_en_it, "en-it.ding" );
+	DEFAULT_MACRO(my_model.dict_en_pt, my_model.sz_dict_en_pt, "en-pt.ding" );
+	DEFAULT_MACRO(my_model.dict_en_no, my_model.sz_dict_en_no, "en-no.ding" );
+	DEFAULT_MACRO(my_model.dict_en_ar, my_model.sz_dict_en_ar, "en-ar.ding" );
+	DEFAULT_MACRO(my_model.dict_en_sv, my_model.sz_dict_en_sv, "en-sv.ding" );
 	
-	my_model.dict_en_de = FALSE;
-	g_string_printf(my_model.sz_dict_en_de, "/usr/share/dict/en-de.ding");
-	my_model.dict_en_fr = FALSE;
-	g_string_printf(my_model.sz_dict_en_fr, "/usr/share/dict/en-fr.ding");
-	my_model.dict_en_es = FALSE;
-	g_string_printf(my_model.sz_dict_en_es, "/usr/share/dict/en-es.ding");
-	my_model.dict_en_it = FALSE;
-	g_string_printf(my_model.sz_dict_en_it, "/usr/share/dict/en-it.ding");
-	my_model.dict_en_pt = FALSE;
-	g_string_printf(my_model.sz_dict_en_pt, "/usr/share/dict/en-pt.ding");
-	my_model.dict_en_no = FALSE;
-	g_string_printf(my_model.sz_dict_en_no, "/usr/share/dict/en-no.ding");
-	my_model.dict_en_ar = FALSE;
-	g_string_printf(my_model.sz_dict_en_ar, "/usr/share/dict/en-ar.ding");
-	my_model.dict_en_sv = FALSE;
-	g_string_printf(my_model.sz_dict_en_sv, "/usr/share/dict/en-sv.ding");
+	DEFAULT_MACRO(my_model.dict_fr_en, my_model.sz_dict_fr_en, "fr-en.ding" );
+	DEFAULT_MACRO(my_model.dict_fr_es, my_model.sz_dict_fr_es, "fr-es.ding" );
+	DEFAULT_MACRO(my_model.dict_fr_de, my_model.sz_dict_fr_de, "fr-de.ding" );
+	DEFAULT_MACRO(my_model.dict_fr_it, my_model.sz_dict_fr_it, "fr-it.ding" );
+	DEFAULT_MACRO(my_model.dict_fr_pt, my_model.sz_dict_fr_pt, "fr-pt.ding" );
 	
-	my_model.dict_fr_en = FALSE;
-	g_string_printf(my_model.sz_dict_fr_en, "/usr/share/dict/fr-en.ding");
-	my_model.dict_fr_es = FALSE;
-	g_string_printf(my_model.sz_dict_fr_es, "/usr/share/dict/fr-es.ding");
-	my_model.dict_fr_de = FALSE;
-	g_string_printf(my_model.sz_dict_fr_de, "/usr/share/dict/fr-de.ding");
-	my_model.dict_fr_it = FALSE;
-	g_string_printf(my_model.sz_dict_fr_it, "/usr/share/dict/fr-it.ding");
-	my_model.dict_fr_pt = FALSE;
-	g_string_printf(my_model.sz_dict_fr_pt, "/usr/share/dict/fr-pt.ding");
+	DEFAULT_MACRO(my_model.dict_es_en, my_model.sz_dict_es_en, "es-en.ding" );
+	DEFAULT_MACRO(my_model.dict_es_fr, my_model.sz_dict_es_fr, "es-fr.ding" );
+	DEFAULT_MACRO(my_model.dict_es_de, my_model.sz_dict_es_de, "es-de.ding" );
+	DEFAULT_MACRO(my_model.dict_es_it, my_model.sz_dict_es_it, "es-it.ding" );
+	DEFAULT_MACRO(my_model.dict_es_pt, my_model.sz_dict_es_pt, "es-pt.ding" );
 	
-	my_model.dict_es_en = FALSE;
-	g_string_printf(my_model.sz_dict_es_en, "/usr/share/dict/es-en.ding");
-	my_model.dict_es_fr = FALSE;
-	g_string_printf(my_model.sz_dict_es_fr, "/usr/share/dict/es-rf.ding");
-	my_model.dict_es_de = FALSE;
-	g_string_printf(my_model.sz_dict_es_de, "/usr/share/dict/es-de.ding");
-	my_model.dict_es_it = FALSE;
-	g_string_printf(my_model.sz_dict_es_it, "/usr/share/dict/es-it.ding");
-	my_model.dict_es_pt = FALSE;
-	g_string_printf(my_model.sz_dict_es_pt, "/usr/share/dict/es-pt.ding");
+	DEFAULT_MACRO(my_model.dict_it_en, my_model.sz_dict_it_en, "it-en.ding" );
+	DEFAULT_MACRO(my_model.dict_it_es, my_model.sz_dict_it_es, "it-es.ding" );
+	DEFAULT_MACRO(my_model.dict_it_de, my_model.sz_dict_it_de, "it-de.ding" );
+	DEFAULT_MACRO(my_model.dict_it_fr, my_model.sz_dict_it_fr, "it-fr.ding" );
+	DEFAULT_MACRO(my_model.dict_it_pt, my_model.sz_dict_it_pt, "it-pt.ding" );
 	
-	my_model.dict_it_en = FALSE;
-	g_string_printf(my_model.sz_dict_it_en, "/usr/share/dict/it-en.ding");
-	my_model.dict_it_es = FALSE;
-	g_string_printf(my_model.sz_dict_it_es, "/usr/share/dict/it-es.ding");
-	my_model.dict_it_de = FALSE;
-	g_string_printf(my_model.sz_dict_it_de, "/usr/share/dict/it-de.ding");
-	my_model.dict_it_fr = FALSE;
-	g_string_printf(my_model.sz_dict_it_fr, "/usr/share/dict/it-fr.ding");
-	my_model.dict_it_pt = FALSE;
-	g_string_printf(my_model.sz_dict_it_pt, "/usr/share/dict/it-pt.ding");
-	
-	my_model.dict_no_en = FALSE;
-	g_string_printf(my_model.sz_dict_no_en, "/usr/share/dict/no-en.ding");
+	DEFAULT_MACRO(my_model.dict_no_en, my_model.sz_dict_no_en, "no-en.ding" );
+	DEFAULT_MACRO(my_model.dict_lat_de, my_model.sz_dict_lat_de, "lat-de.ding" );
 	
 	my_model.aspell_af = FALSE;
 	my_model.aspell_bg = FALSE;
@@ -1315,8 +1295,10 @@ main (int argc, char *argv[])
 
 	// setup the internal program model
 	model_alloc();
+	set_model_char(MAIN_PREFIX, PACKAGE_PREFIX_DIR);
 	model_default();
 	model_read(gconf);
+	
 
 	// create mainwin
 	my_model.win_main = NULL;

@@ -63,9 +63,11 @@
 
     <authorgroup>
 	<author>
-	  <firstname>Heiko</firstname> <surname>Abraham</surname>
-	  <affiliation><orgname>Freiburg, Germany</orgname>
-	  <address> <email>&mymail;</email> </address>
+	  <firstname>Heiko</firstname> 
+	  <surname>Abraham</surname>
+	  <affiliation>
+	    <orgname>Freiburg, Germany</orgname>
+	    <address> <email>&mymail;</email> </address>
 	  </affiliation>
 	</author> 
     </authorgroup>
@@ -757,9 +759,6 @@ Abk&uuml;rzung zur Beschreibung bestimmter Fachgebiete, bez&uuml;glich der Wortv
 
 
 <!-- ################################################################# -->
-<!--  SECTION:Customization  -->
-
-<!-- ################################################################# -->
 <!--  SECTION: Known Bugs and Limitations -->
 <sect1 id="win-bugs">
 <title>Beschr&auml;nkungen</title>
@@ -798,10 +797,6 @@ gute Ausgabe zu liefern.
     <listitem>
      <para>Heiko Abraham (<email>abrahamh@web.de</email>)</para>
     </listitem>	 
-    <listitem>
-     <para>Oliver Gerwing (Programm gding2, <email>hostmaster@grawert.net</email>) </para> 
-    </listitem>
-   
     </itemizedlist>
   </para>
 

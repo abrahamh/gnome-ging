@@ -1,0 +1,17 @@
+gnome-ding for Debian
+---------------------
+
+This is gnome-ding. Gnome-ding is a tool for spelling, thesaurus
+and translation. Please use the rpm-package if possible, because
+it is the newer one.
+
+
+original source:
+http://www.abe-si.de
+
+rpm packages:
+http://www.abe-si.de
+
+
+
+ -- Heiko Abraham <abrahamh@web.de>, Thu,  12 Aug 2004 20:00:00 +0200

@@ -1,0 +1,13 @@
+Source: gnome-ding
+Section: libs
+Priority: optional
+Maintainer: Heiko Abraham <abrahamh@web.de>
+Build-Depends: debhelper (>> 2.0.0), glib2 (>= 2.0), gtk2 (>> 2.0), gnome-desktop (>= 2.0), aspell (>= 0.5)
+Standards-Version: 3.2.1
+
+Package: gnome-ding
+Architecture: any
+Depends: ${shlibs:Depends}
+Recommends: ${shlibs:Recommends}
+Description: gnome-ding is a dictionary
+ Gnome ding is a tool for spellchecking, translation and thesaurus.

@@ -5,7 +5,7 @@
 	Heiko Abraham
         </creator>
 	<maintainer>
-	  O. Grawert
+	  H.Abraham
         </maintainer>
         <title>
             gnome-ding
@@ -14,7 +14,7 @@
            2003-03-05
         </date>
         <version identifier="2.0" date="2003-03-05" description="Updated for GNOME 2.0, program version 2.0"/>
-        <subject category="GNOME|Applications"/>
+        <subject category="GNOME|Applications|Accessories"/>
         <description>
             Dieses Dokument ist das gnome-ding Handbuch.
         </description>

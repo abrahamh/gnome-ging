@@ -46,11 +46,53 @@
 #include "thesaurus.h"
 #include "aspell.h"
 
+#define TIMESTAMP 0
+
 // global list for Search-history
 GList *wordlist;
 
 // global pointer for preferences dialog
 GtkWidget *pref_dlg = NULL;
+
+
+#ifdef TIMESTAMP
+void sub_time(struct timeval *e, struct timeval *a, struct timeval *b) {
+        e->tv_sec = a->tv_sec - b->tv_sec;
+        e->tv_usec = a->tv_usec - b->tv_usec;
+        if(e->tv_usec < 0) {
+                e->tv_usec += 1000000;
+                e->tv_sec--;
+        } else if(e->tv_usec >= 1000000) {
+                e->tv_usec -= 1000000;
+                e->tv_sec ++;
+        }
+}
+void add_time(struct timeval *e, struct timeval *a, struct timeval *b) {
+        e->tv_sec = a->tv_sec + b->tv_sec;
+        e->tv_usec = a->tv_usec + b->tv_usec;
+        if(e->tv_usec < 0) {
+                e->tv_usec += 1000000;
+                e->tv_sec--;
+        } else if(e->tv_usec >= 1000000) {
+                e->tv_usec -= 1000000;
+                e->tv_sec ++;
+        }
+}
+int sub_abs_time(struct timeval *e, struct timeval *a, struct timeval *b) {
+        sub_time(e, a, b);
+        if(e->tv_sec>=0) return 0;
+        sub_time(e, b, a);
+        return 1;
+}
+/*
+   struct timeval difftime, endtime, starttime;
+   gettimeofday( &starttime, NULL);
+	
+	sub_time( &difftime, &endtime, &starttime);
+	g_print(" diff time %i.%05i \n", difftime.tv_sec, difftime.tv_usec );
+*/
+#endif // TIMESTAMP
+
 
 
 
@@ -647,32 +689,75 @@ void run_translation (GtkWidget *caller, gchar *lang_from, gchar *lang_to, gchar
     /* initialize the vars */
 	GString *cmd = g_string_new("");
 	GString *grep_out = g_string_new("");
-	char line[200];
+	char line[2048];
 	gchar *reste = NULL;
 	FILE *ptr;
 	gchar *msg = NULL;
     gchar *such = NULL;
 	gint flag = 0;
 	
+	gint use_egrep = TRUE;  // new algorithm is to slow
+	
+		
     such  = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry) ) );
     store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);                                                                                               
     
-    g_string_printf(cmd, "egrep -h %s %s '%s' '%s' | grep -v '^#'", 
-	    (get_model_bool(MAIN_CASE) == FALSE) ? "-i" : " ",
-		(get_model_bool(MAIN_EXACT) == TRUE) ? "-w" : " ",
-		such, dict );
-       
-	if ( get_debug() == TRUE) {
-        g_print("command: '%s'\n", cmd->str);
-	}
-                                                                                                       
-	ptr = popen(cmd->str,"r");
-	if (ptr != NULL ) {
-		while (  fgets( line, sizeof(line), ptr)  ) {
-    		g_string_append_printf(grep_out, "%s", line );
-		}
-		pclose(ptr);
 	
+	if ( use_egrep == TRUE ) {
+    	g_string_printf(cmd, "egrep -h %s %s '%s' '%s' | grep -v '^#'", 
+	    	(get_model_bool(MAIN_CASE) == FALSE) ? "-i" : " ",
+			(get_model_bool(MAIN_EXACT) == TRUE) ? "-w" : " ",
+			such, dict );
+		if ( get_debug() == TRUE) {
+     	   g_print("command: '%s'\n", cmd->str);
+		}
+		ptr = popen(cmd->str,"r");
+		if (ptr != NULL ) {
+			while (  fgets( line, sizeof(line), ptr)  ) {
+    			g_string_append_printf(grep_out, "%s", line );
+			}
+			pclose(ptr);
+		}	
+	} else {
+		// use split-algorithm
+		
+		// make it with pointer to gchar, not with gstring
+		GString *helper = g_string_new("");
+		FILE *fd;
+		fd = fopen(/* cmd->str */ dict ,"r");
+		if (fd != NULL ) {
+			while (  fgets( line, sizeof(line), fd)  ) {
+    			g_string_append_printf(helper, "%s", line );
+			}
+			fclose(fd);
+		}
+		gchar *mypointer = NULL;
+		gint i;
+		while (helper->len > 5) {
+			gchar **field_line;
+			gchar **field;
+			field_line = g_strsplit ( helper->str, "\n", 2);
+			field = g_strsplit( field_line[0], " :: ", 2);
+			helper = g_string_erase(helper, 0, g_utf8_strlen(field_line[0], -1)  + 1 ); 			
+			if ( field[0] != NULL ) {
+				// search 
+				// i = g_utf8_strlen( field[0], -1 ); 
+				// mypointer = g_strrstr_len( field[0], i , such );
+				mypointer = g_strrstr( field[0], such );
+				if ( mypointer != NULL ) {
+					g_string_append_printf(grep_out, "%s\n", field_line[0] );
+				}
+			}
+			g_strfreev (field);
+			g_strfreev (field_line);
+		} // while
+		g_string_free(helper, TRUE);
+	}
+       
+	
+	
+                                                                                                       
+	if ( grep_out->len > 2 ) {
 		if ( get_debug() == TRUE ) {
 			g_print("grep-result:\n%s\n", grep_out->str);
 		}
@@ -796,7 +881,6 @@ void run_translation (GtkWidget *caller, gchar *lang_from, gchar *lang_to, gchar
 	g_free(such);
 	reste = g_string_free(grep_out, TRUE);
 	reste = g_string_free(cmd, TRUE);		
- 
 }
 
 
@@ -1272,8 +1356,8 @@ on_search(GtkWidget *widget) {
 	win    = lookup_widget(widget, "ding_mainwin");
 
 	/* get the user input */
-    gchar *suchart = NULL;
-    gchar *match   = NULL;
+    gchar *suchart = NULL;  // the dictionary that are selected 
+    gchar *match   = NULL;  // the word to be search 
                           
 	suchart = g_strdup(gtk_entry_get_text( GTK_ENTRY (GTK_COMBO (select)->entry)));	
 	match   = g_strdup(gtk_entry_get_text( GTK_ENTRY(entry) ));
@@ -1305,6 +1389,9 @@ on_search(GtkWidget *widget) {
                                                                                                        
     /* call function by user selection if valid input is there */
     if (strlen(gtk_entry_get_text(GTK_ENTRY(entry))) > 1) {
+		
+		set_model_char(MAIN_LATEST_DICT, suchart);
+	
 		
     	if (!gtk_window_get_resizable(GTK_WINDOW(win)))      on_window_unhide(win);
 
@@ -1507,7 +1594,7 @@ void on_search_combobox_fill( GtkWidget *mainwin ) {
 	COMBO_MACRO2(THES_FR, _("Thesaurus (French)") )
 	COMBO_MACRO2(THES_PT, _("Thesaurus (Portuguese)") )
 	COMBO_MACRO2(THES_PT, _("Thesaurus (Polish)") )
-
+	
 #ifdef USE_ASPELL
 	AspellConfig *spell_config;
 	AspellDictInfoList * dlist;
@@ -1570,9 +1657,19 @@ void on_search_combobox_fill( GtkWidget *mainwin ) {
    	delete_aspell_dict_info_enumeration(dels);
 	
 #endif // USE_ASPELL
-
 	gtk_combo_set_popdown_strings (GTK_COMBO (entry), combo_entry);
-    g_list_free (combo_entry);
+	
+	// restore predefine
+	// if failed, then (let it) set to the first
+	GList *helper = combo_entry;
+	gchar *latest_dict = get_model_char(MAIN_LATEST_DICT);
+	while ( helper != NULL ) {
+		if ( !strcmp (latest_dict, (gchar*)helper->data) ) {
+			g_object_set( GTK_COMBO(entry)->entry, "text", latest_dict, NULL);	
+		}
+		helper = helper->next;
+	}
+	g_list_free (combo_entry);
 }
 
 /**

@@ -32,8 +32,7 @@
  <articleinfo>
    <title>&app; - user manual</title>
    <copyright>
-     <year>2003</year>
-	 <year>2004</year>
+     <year>2003-2004</year>
      <holder>Heiko Abraham</holder>
    </copyright>
    <releaseinfo>
@@ -48,7 +47,7 @@
    <para>
         &app; is a grafical frontend intended by ding for translation and spelling for GNOME. 
         It will use grep and a ispell/aspell dictionary in the background in the same way like
-        a shiped ding-dictinory for translation.
+        some shipped ding-dictinory for translation.
    </para>
    <para>
    &app; is inspired by gding2, developed by Oliver Grawert, 
@@ -56,17 +55,13 @@
    &app; was writen completly new by H. Abraham, become as extention to gding2 a aspell interface and a 
    ding-dictinory himself.
    </para>	 
-   <para>
-	This document describt at short some intressting questions for &app;.   
-    </para>
     </abstract>
 
     <authorgroup>
 	<author>
-	  <firstname>Heiko</firstname> <surname>Abraham</surname>
-	  <affiliation><orgname>Freiburg, Germany</orgname>
-	  <address> <email>&mymail;</email> </address>
-	  </affiliation>
+	  <firstname>Heiko</firstname> 
+          <surname>Abraham</surname>
+	    <address>Freiburg, Germany <email>&mymail;</email> </address>
 	</author> 
     </authorgroup>
 
@@ -81,7 +76,19 @@
 
 </articleinfo>
 
-<indexterm zone="index"><primary>gnome-ding</primary></indexterm>
+ <indexterm zone="index">
+    <primary>Gnome Ding</primary>
+  </indexterm>
+  <indexterm zone="index">
+    <primary>gnome-ding</primary>
+  </indexterm>
+  <indexterm zone="index">
+    <primary>Translation</primary>
+  </indexterm>
+  <indexterm zone="index">
+     <primary>Spellchecker</primary>
+  </indexterm>
+<!-- <indexterm zone="index"><primary>gnome-ding</primary></indexterm> -->
 
 <!-- ################################################################# -->
 <!--                   GENERAL STUFF                                   -->
@@ -92,19 +99,49 @@
 <para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
    
 <para>
-        &app; is a grafical tool for spell checking and translation for Gnome2.
-        &app; was intended by ding 
-		(<ulink type="help" url="http://www-user.tu-chemnitz.de/~fri/ding/">ding project</ulink>).
-</para>
-<para>
-        &app; will use egrep and a ispell/aspell dictionary as backend.
-		For thesaurus and ttranslation &app; will have own dictionaries (in ding-like format).
+	&app; is a grafical frontend for translation or spellchecking of single words.
+	For spellchecking &app; will use a installed aspell (version 0.5) dictionary. 
+	For translation &app; will use a ding-like dictionary, that is shipped with gnome-ding.
+	</para>
+    <para>
+    &app; was intended by the
+    (<ulink type="help" url="http://www-user.tu-chemnitz.de/~fri/ding/">ding project</ulink>).
 </para>
 
 <para>
+		Since version 2.2 &app; provide the following languages directly:
+		
+		<itemizedlist>
+			<listitem>
+     		<para>Spellchecking by using installed apsell dictionaries - 
+			af, bg, br, ca, de_ch, cs, cy, da, de_DE, el, eo, es, fo, fr_CH,
+			ga, en_GB, gl, id, is, it, mi, mk, ms, mt, nl, pl, pt, ro, ru, sk, 
+			sl, sv, en_CA, uk, en_US, wa, zu.
+			</para>
+    		</listitem>	 
+			
+			<listitem>
+     		<para>Thesaurus - de, es</para>
+    		</listitem>	 
+
+			<listitem>
+     		<para>Dictionary - stored in a ding-like format (from ding-project or freedict.org - 
+			de-en, de-fr, de-it, de-nl,
+			en-ar, en-de, en-es, en-fr, en-no, en-pt,
+			fr-de, no-en
+			</para>
+    		</listitem>	 
+    </itemizedlist>
+	<para>
+	&app; is designed that a use can easy change or extend new dictionaries, please 
+	refere the gconf-entries.
+	</para>
+	<para>
         &app; work with <acronym>Gtk2+</acronym> and <acronym>GNOME2</acronym>. 
-        &app; required as backend aspell (0.50) und grep (2.5.x).
+        &app; required as backend aspell (0.50) und grep (2.5.x). 
+    </para>
 </para>
+
 
 </sect1> <!-- id=introduction -->
 
@@ -134,6 +171,10 @@
           </variablelist>
 	<para>
 	If you start &app; now at first time, then all nesseccary configurations will be make automaticly.
+	</para>	
+	<para>
+	If you wish to reset all your configurations of &app; you can use the button 'reset' inside
+	the preferences dialog. As result &app; will be configured same like the first start.
 	</para>	
 
 </sect2> <!-- gnome-ding-to-start -->
@@ -254,7 +295,11 @@ The &app; main window  contains the following elements:
    German or translation.
    </para>
    <para>
-   For start the lookup, press the 'Search'-Button on the commandbar or choose 'search from the menubar.
+   Hint: The the editabe 'Search' can contain some wildcards like 'dot' as expression for all 
+   possible characters.
+   </para>
+   <para>
+   For start the lookup, press the 'Search'-Button on the commandbar or choose 'search' from the menubar.
    </para>
 </sect2>
 
@@ -279,6 +324,10 @@ The &app; main window  contains the following elements:
     like the sex of the word, or the typical usage or the special branches.
     </para>
 
+    <para>
+	A entry from the result-window you can easy copy into your clipboard by using the 
+	contex-menu.
+	</para>
 </sect2>
 
 <sect2 id="win-main-statusbar">
@@ -314,16 +363,88 @@ In the follow &app; will display in the result-window the results (as a list) fo
 your search request.
 </para>
 
-<para>
-Please remember, &app; is not developed to check or translate sentences. 
-</para>
+<sect2 id="win-usage-search">
+   <title>Search</title>
+   <para>
+   The usage of &app; is very easy. First you will input your interrested word into the
+	search entry. After you have now input your search-string, please select the prefered
+	dictionary to use for the search. Then press the search-button on the commandbar.
+	In the following &app; will display inside the result-window all matched results 
+	(as a list) for your search request.
+   </para>
+   
+   <para>
+   Please remember that &app; works only with single words.   	
+	</para>
 
-<para>
-Please remember, &app; is developed to work offline. You must have installed the
-prefered dictionaries. Typical, all neccessary dictonaries will be installed on
-your linux-box, if you use Gnome2 and have installed &app; correctly.
-</para>
- 
+	<para>
+	Your search entry can also contain wildcards. As example a 'dot' as expression for all
+	possible single characters.
+	</para>
+	
+	<para>
+	Remember what &app; is developed to work offline. You must have installed the
+	prefered dictionaries. 
+	</para>
+</sect2>
+
+<sect2 id="win-usage-results">
+   <title>Results</title>
+   <para>
+	If your search request was successful then inside the result-window will 
+	display all matched results. All matches will display as a list.
+	</para>
+	<para>
+	If you use the spellchecker then the result list will be a list with a 
+	single column. If you translate a seach entry by using a dictionaries, then
+	the result list will have been two columns, each for every languages.
+	</para>
+	
+</sect2>
+
+<sect2 id="win-usage-preferences">
+   <title>Preferences</title>
+   <para>
+   At this place you can configure your application.
+   </para>
+   
+   <para>
+   &app; use for spelling aspell (version 0.50). If a search-entry will be not
+   matched with the aspell dictionary entries, then you will become some 
+   <guilabel>suggestions</guilabel> for correct spelling. The sensetivity of the 
+   suggestions will be defineable in five steps.
+   </para>
+   
+   <para>
+   For thesaurus and translation search you can define, how to be match the 
+   search entry with the dictionary. 
+   </para>
+   <para>
+   Select the <guilabel>case sensitive</guilabel> option to only find occurrences 
+   of the dictionary entries that match the case of the search string that you type. 
+   </para>
+   <para>
+   Select the <guilabel>search only exact word</guilabel> option to only find occurrences of the 
+   dictionary entries that match the entire words of the search string that you type. 
+   </para>
+   
+   <para>
+   The category <guilabel>Languages</guilabel> contain a list of available dictionaries that installed 
+   on your system and usable for &app;. Choose a Language from the list to activate 
+   the availability of this language for &app; inside the commandbar.
+   </para>
+   <para>
+   Hint: The usable dictionaries and here file are stored as gconf-string, so it is easy to 
+   change something without re-compile the application.
+   </para>
+   
+   <para>
+   The category <guilabel>general</guilabel> contain settings to define your favorite colors and 
+   fonts for the result-window.  The option button "reset" will set all user 
+   define settings from &app; to default value like &app; is started first time.   
+   </para>
+
+</sect2>
 </sect1>  <!-- usage -->
 
 
@@ -624,96 +745,27 @@ Abbreviation to describe the special branches of usage this word.
 
 
 <!-- ################################################################# -->
-<!--  SECTION:Customization  -->
-<sect1 id="preferneces">
-<title>Preferences</title>
-  <para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
-
-  <para>To configure <application>&app;</application>, choose <menuchoice> 
-  <guimenu>Dictionary</guimenu> <guimenuitem>Preferences</guimenuitem> </menuchoice>. 
-  The <guilabel>Preferences</guilabel> dialog contains the following categories:</para>
-
-  <itemizedlist>
-    <listitem><para><xref linkend="ding-pref-spell"/></para></listitem>
-	<listitem><para><xref linkend="ding-pref-trans"/></para></listitem>
-	<listitem><para><xref linkend="ding-pref-lang"/></para></listitem>
-	<listitem><para><xref linkend="ding-pref-general"/></para></listitem>
-  </itemizedlist>
-  
-  <sect2 id="ding-pref-spell">
-  <title>Spellchecker</title>
-  
-  <para>Use the <guilabel>Suggestion Mode</guilabel> slider to select the 
-  sharpness and the quality of the spelling.
-  </para>
-  
-  </sect2>
-  
-  <sect2 id="ding-pref-trans">
-  <title>Translation</title>
-  <para>Select the <guilabel>search only exact words</guilabel> option to 
-  only find occurrences of the string that match the entire words of the 
-  text that you type.
-  </para>
-  
-  <para>Select the <guilabel>case sensetive</guilabel> option to only find 
-  occurrences of the string that match the case of the text that you type.
-  </para>
-  
-  </sect2>
-  
-  <sect2 id="ding-pref-lang">
-  <title>Languages</title>
-  
-  <para>
-  &app; will show a list of available languages. The list is depends on 
-  your installation. Select the languages, i.e. 
-  the language for the spelling checker, for the thesaurus or the
-  translation dictionary.
-  </para>
-  <para>As result, the selection box from the commandbar will only contains
-  your prefered languages that defined her.</para>
-  
-  </sect2>
-  
-  <sect2 id="ding-pref-general">
-  <title>General</title>
-  
-  <para>
-  Select you prefered color and font for the &app; result window.
-  </para>
-  
-  </sect2>
-  
-
-</sect1>  <!-- bugs -->
-
-
-
-<!-- ################################################################# -->
 <!--  SECTION: Known Bugs and Limitations -->
 <sect1 id="win-bugs">
 <title>Limitations</title>
   <para><graphic fileref="figures/gnome-ding.png" format="PNG"></graphic></para> 
 
 <para>
-&app; use als backend for spellchecking aspell. &app; will use the C-API to aspell, so &app; can
-use aspell directly. But if you have install a newer version of aspell, perhaps with a other
-A-API interface design, than &app; will not work correct. Also I have no idea, if my implementation
-will also work correct with some special charsets, like KO8 or japanese. This must be tested be
-some people, who understand this language.
+&app; use als backend for spellchecking aspell. &app; will use aspell directly by using 
+the C-API. But if you have install a newer version of aspell, perhaps with a other
+C-API interface design, than &app; will not work correct. If you detect some misstakes 
+like wrong charset implementation (like japanese)  please feel be free to send a email.
 </para>
 
 <para>
-Also &app; use for translation a ding-dictionary. The search will use only egrep for search of matched
+For translation &app; use a ding based dictionary. The search will use only grep for search of matched
 strings. But it will not know something about the semantic of a lookup. So the search-result is not
 the best one. Also the ding-dictionary is converted to the UFT8-Charset. This is a little better for
-special chars an I front of the extension to other languages, but grep will work very slow with
-utf8-coded files.
+special characters,  but grep will work very slow with utf8-coded files.
 </para>
 
 <para>
-If some people have a solve for this problen, in detail also for the usage of good offline dictionaries
+If some people have a solve for this problem, in detail also for the usage of good offline dictionaries
 in multi-languages, please be free and send a email to the author. Also you can use this source-code
 and develop a better program under the terms of the GNU GPL2.
 </para>
@@ -731,10 +783,6 @@ and develop a better program under the terms of the GNU GPL2.
     <listitem>
      <para>Heiko Abraham (<email>abrahamh@web.de</email>)</para>
     </listitem>	 
-    <listitem>
-     <para>Oliver Gerwing (program gding2, version 1.0 and 1.2) </para> 
-    </listitem>
-   
     </itemizedlist>
   </para>
 

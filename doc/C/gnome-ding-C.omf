@@ -5,7 +5,7 @@
 	Heiko Abraham
         </creator>
 	<maintainer>
-	  O. Grawert
+	  H.Abraham
         </maintainer>
         <title>
             gnome-ding
@@ -25,7 +25,7 @@
         <identifier url="gnome-ding.xml"/>
         <language code="C"/>
 	<relation seriesid="4f1da026-c99e-11d6-95f0-ae2166108028"/>
-	<rights type="GNU FDL" license.version="1.1" holder="GNOME-ding Team"/>
+	<rights type="GNU FDL" license.version="1.1" holder="gnome-ding Team"/>
 
     </resource>
 </omf>

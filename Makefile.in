@@ -101,6 +101,7 @@ EXTRA_DIST = \
 	gnome-ding.gladep \
 	gnome-ding.spec.in \
 	gnome-ding.desktop \
+	debian \
 	thesaurus-de.ding \
 	thesaurus-es.ding \
 	lat-de.ding \

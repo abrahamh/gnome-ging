@@ -3,6 +3,7 @@
 INCLUDES = \
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
+	-DPACKAGE_PREFIX_DIR=\""$(prefix)/"\" \
 	@PACKAGE_CFLAGS@
 
 bin_PROGRAMS = gnome-ding

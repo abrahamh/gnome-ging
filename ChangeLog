@@ -1,5 +1,16 @@
+Sep 21 2004 - H.Abraham
+- update en-xml-documentation
+- update some en-de-dict
+
+Aug 16 2004 - H.Abraham
+- remember latest used dictionary
+
+Aug 13 2004 - H.Abraham
+- new macro for dict-lookup in ${application_prefix}
+- update en-de-dict
+
 Aug 03 2004 - H.Abraham
-- new dict sv, es-de
+- new dict  sv, es-de
 - little bugfix - sv
 - prepare for it-* and es-* dicts
 

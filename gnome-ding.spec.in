@@ -4,7 +4,7 @@ Summary:   	GNOME ding translation- and spellchecking for GNOME
 Summary(de):   	GNOME ding ist ein Uebersetzungs- und Rechtschreibpruefprogramm
 Name:      	gnome-ding
 Version:   	%ver
-Release:   	3
+Release:   	4
 Copyright: 	GPL
 Packager:  	Heiko Abraham  <abrahamh@web.de>
 Group:     	Applications/System
