@@ -1,0 +1,601 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2004-07-01 19:05+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/main.c:861
+msgid "write config, exit"
+msgstr ""
+
+#: src/interface.c:32
+msgid "Back"
+msgstr ""
+
+#: src/interface.c:33 src/interface.c:208
+msgid "go back (search history)"
+msgstr ""
+
+#: src/interface.c:39
+msgid "Forward"
+msgstr ""
+
+#: src/interface.c:40 src/interface.c:236
+msgid "go forward (search history)"
+msgstr ""
+
+#: src/interface.c:47
+msgid "Search"
+msgstr ""
+
+#: src/interface.c:48 src/interface.c:274
+msgid "start search for given word"
+msgstr ""
+
+#: src/interface.c:68
+msgid "Mini-Mode"
+msgstr ""
+
+#: src/interface.c:69
+msgid "switch to small window size"
+msgstr ""
+
+#: src/interface.c:75
+msgid "Window-Mode"
+msgstr ""
+
+#: src/interface.c:76
+msgid "swizch to normal window size"
+msgstr ""
+
+#: src/interface.c:94
+msgid "Dictionary"
+msgstr ""
+
+#: src/interface.c:147
+msgid "gnome ding"
+msgstr ""
+
+#: src/interface.c:243
+msgid "_Word:"
+msgstr ""
+
+#: src/interface.c:253
+msgid "specify the search string"
+msgstr ""
+
+#: src/interface.c:266
+msgid "select the dictionary"
+msgstr ""
+
+#: src/interface.c:268 src/interface.c:560 src/interface.c:665
+#: src/interface.c:686 src/interface.c:727 src/callbacks.c:1021
+#: src/callbacks.c:1060 src/callbacks.c:1102
+msgid " "
+msgstr ""
+
+#: src/interface.c:295
+msgid "_Search"
+msgstr ""
+
+#: src/interface.c:305
+msgid "minimode/winmode"
+msgstr ""
+
+#: src/interface.c:335
+msgid "Show the Result for copy and paste."
+msgstr ""
+
+#: src/interface.c:362
+msgid "gnome-ding Homepage: http://www.grawert.net/software/"
+msgstr ""
+
+#: src/interface.c:433
+msgid "(c) 2003 Heiko Abraham"
+msgstr ""
+
+#: src/interface.c:434
+msgid ""
+"A translation- and spellchecking program for single words, inspired by \"ding"
+"\" and \"g2ding\"."
+msgstr ""
+
+#: src/interface.c:519
+msgid "gnome-ding - preferences"
+msgstr ""
+
+#: src/interface.c:547
+msgid ""
+"Select some settings for use \n"
+"with spellchecking (by aspell)."
+msgstr ""
+
+#: src/interface.c:574
+msgid "Charset:"
+msgstr ""
+
+#: src/interface.c:590
+msgid "<small>(low)</small>"
+msgstr ""
+
+#: src/interface.c:604
+msgid "<small>(high)</small>"
+msgstr ""
+
+#: src/interface.c:618
+msgid "UTF8"
+msgstr ""
+
+#: src/interface.c:620
+msgid "Suggestion Mode:"
+msgstr ""
+
+#: src/interface.c:629
+msgid "_Spellchecker"
+msgstr ""
+
+#: src/interface.c:652
+msgid "Settings only use for translation (by grep)"
+msgstr ""
+
+#: src/interface.c:676
+msgid "search only exact words"
+msgstr ""
+
+#: src/interface.c:681
+msgid "case sensitive"
+msgstr ""
+
+#: src/interface.c:692
+msgid "_Translation"
+msgstr ""
+
+#: src/interface.c:714
+msgid "Select the languages that should be available."
+msgstr ""
+
+#: src/interface.c:746
+msgid "Dictionary:"
+msgstr ""
+
+#: src/interface.c:755
+msgid "Thesaurus:"
+msgstr ""
+
+#: src/interface.c:764
+msgid "Spellchecker:"
+msgstr ""
+
+#: src/interface.c:823
+msgid "_Languages"
+msgstr ""
+
+#: src/interface.c:845
+msgid "Define some settings for Gnome-Ding, like color, font ..."
+msgstr ""
+
+#: src/interface.c:866
+msgid "Textcolor:"
+msgstr ""
+
+#: src/interface.c:876
+msgid "Hightlight Color:"
+msgstr ""
+
+#: src/interface.c:886
+msgid "Textfont:"
+msgstr ""
+
+#: src/interface.c:902
+msgid "Choose the text color"
+msgstr ""
+
+#: src/interface.c:910
+msgid "Choose the color for highlight "
+msgstr ""
+
+#: src/interface.c:918
+msgid "Choose the font color"
+msgstr ""
+
+#: src/interface.c:927
+msgid "Reset"
+msgstr ""
+
+#: src/interface.c:932
+msgid "Reset internel date model to store user defined settings."
+msgstr ""
+
+#: src/interface.c:938
+msgid "_General"
+msgstr ""
+
+#: src/callbacks.c:348
+msgid "No match found"
+msgstr ""
+
+#: src/callbacks.c:349
+msgid "No match"
+msgstr ""
+
+#: src/callbacks.c:451 src/thesaurus.c:124
+#, c-format
+msgid "%i matches found to '%s'"
+msgstr ""
+
+#. show errormessage
+#: src/callbacks.c:586
+msgid " Please insert only characters !"
+msgstr ""
+
+#: src/callbacks.c:619 src/callbacks.c:764
+msgid "Spellcheck (German)"
+msgstr ""
+
+#: src/callbacks.c:620 src/callbacks.c:767
+msgid "Spellcheck (Canadian)"
+msgstr ""
+
+#: src/callbacks.c:621 src/callbacks.c:768
+msgid "Spellcheck (American)"
+msgstr ""
+
+#: src/callbacks.c:622 src/callbacks.c:770
+msgid "Spellcheck (French)"
+msgstr ""
+
+#. } else if (COMBO_MACRO(ASPELL_FRCH, "fr_CH", _("Spellcheck (Swiss, French)") )
+#: src/callbacks.c:623 src/callbacks.c:772
+msgid "Spellcheck (Spanish)"
+msgstr ""
+
+#: src/callbacks.c:624 src/callbacks.c:766
+msgid "Spellcheck (British)"
+msgstr ""
+
+#. more aspell languages to be test
+#: src/callbacks.c:627 src/callbacks.c:703
+msgid "Thesaurus (German)"
+msgstr ""
+
+#: src/callbacks.c:628 src/callbacks.c:704
+msgid "Thesaurus (Spanish)"
+msgstr ""
+
+#: src/callbacks.c:629 src/callbacks.c:707
+msgid "Thesaurus (French)"
+msgstr ""
+
+#: src/callbacks.c:630 src/callbacks.c:705
+msgid "Thesaurus (English)"
+msgstr ""
+
+#: src/callbacks.c:631 src/callbacks.c:708
+msgid "Thesaurus (Portuguese)"
+msgstr ""
+
+#: src/callbacks.c:632 src/callbacks.c:706
+msgid "Thesaurus (Italian)"
+msgstr ""
+
+#: src/callbacks.c:634 src/callbacks.c:701 src/callbacks.c:1089
+msgid "Latin <--> German"
+msgstr ""
+
+#: src/callbacks.c:634
+msgid "Latin"
+msgstr ""
+
+#: src/callbacks.c:634 src/callbacks.c:636 src/callbacks.c:637
+#: src/callbacks.c:638 src/callbacks.c:639 src/callbacks.c:640
+#: src/callbacks.c:642 src/callbacks.c:1042
+msgid "German"
+msgstr ""
+
+#: src/callbacks.c:636 src/callbacks.c:687 src/callbacks.c:1075
+msgid "German <--> English"
+msgstr ""
+
+#: src/callbacks.c:636 src/callbacks.c:642 src/callbacks.c:643
+#: src/callbacks.c:644 src/callbacks.c:645 src/callbacks.c:646
+#: src/callbacks.c:647 src/callbacks.c:648 src/callbacks.c:1044
+msgid "English"
+msgstr ""
+
+#: src/callbacks.c:637 src/callbacks.c:688 src/callbacks.c:1076
+msgid "German <--> Spanish"
+msgstr ""
+
+#: src/callbacks.c:637 src/callbacks.c:643 src/callbacks.c:999
+#: src/callbacks.c:1043
+msgid "Spanish"
+msgstr ""
+
+#: src/callbacks.c:638 src/callbacks.c:690 src/callbacks.c:1077
+msgid "German <--> French"
+msgstr ""
+
+#: src/callbacks.c:638 src/callbacks.c:645 src/callbacks.c:998
+#: src/callbacks.c:1045
+msgid "French"
+msgstr ""
+
+#: src/callbacks.c:639 src/callbacks.c:689 src/callbacks.c:1079
+msgid "German <--> Italian"
+msgstr ""
+
+#: src/callbacks.c:639 src/callbacks.c:644 src/callbacks.c:1000
+#: src/callbacks.c:1046
+msgid "Italian"
+msgstr ""
+
+#: src/callbacks.c:640 src/callbacks.c:691 src/callbacks.c:1078
+msgid "German <--> Portuguese"
+msgstr ""
+
+#: src/callbacks.c:640 src/callbacks.c:646 src/callbacks.c:1005
+#: src/callbacks.c:1047
+msgid "Portuguese"
+msgstr ""
+
+#: src/callbacks.c:642 src/callbacks.c:693 src/callbacks.c:1081
+msgid "English <--> German"
+msgstr ""
+
+#: src/callbacks.c:643 src/callbacks.c:694 src/callbacks.c:1085
+msgid "English <--> Spanish"
+msgstr ""
+
+#: src/callbacks.c:644 src/callbacks.c:697 src/callbacks.c:1083
+msgid "English <--> Italian"
+msgstr ""
+
+#: src/callbacks.c:645 src/callbacks.c:696 src/callbacks.c:1082
+msgid "English <--> French"
+msgstr ""
+
+#: src/callbacks.c:646 src/callbacks.c:695 src/callbacks.c:1084
+msgid "English <--> Portuguese"
+msgstr ""
+
+#: src/callbacks.c:647 src/callbacks.c:698 src/callbacks.c:1086
+msgid "English <--> Norwegian"
+msgstr ""
+
+#: src/callbacks.c:647 src/callbacks.c:648 src/callbacks.c:1003
+msgid "Norwegian"
+msgstr ""
+
+#: src/callbacks.c:648 src/callbacks.c:700 src/callbacks.c:1088
+msgid "Norwegian <--> English"
+msgstr ""
+
+#. else print error to statusbar
+#: src/callbacks.c:659
+msgid "Your entry is to short!"
+msgstr ""
+
+#: src/callbacks.c:765
+msgid "Spellcheck (Swiss, German)"
+msgstr ""
+
+#: src/callbacks.c:769
+msgid "Spellcheck (Irish)"
+msgstr ""
+
+#: src/callbacks.c:773
+msgid "Spellcheck (Italian)"
+msgstr ""
+
+#: src/callbacks.c:774
+msgid "Spellcheck (Danish)"
+msgstr ""
+
+#: src/callbacks.c:775
+msgid "Spellcheck (Dutch)"
+msgstr ""
+
+#: src/callbacks.c:776
+msgid "Spellcheck (Norwegian)"
+msgstr ""
+
+#: src/callbacks.c:777 src/callbacks.c:784
+msgid "Spellcheck (Portuguese)"
+msgstr ""
+
+#. pt versus pt_BR, check this
+#: src/callbacks.c:778
+msgid "Spellcheck (Swedish)"
+msgstr ""
+
+#. follow parts are untested
+#: src/callbacks.c:780
+msgid "Spellcheck (Bulgarian)"
+msgstr ""
+
+#: src/callbacks.c:781
+msgid "Spellcheck (Greek)"
+msgstr ""
+
+#: src/callbacks.c:782
+msgid "Spellcheck (Croatian)"
+msgstr ""
+
+#: src/callbacks.c:783
+msgid "Spellcheck (Icelandic)"
+msgstr ""
+
+#: src/callbacks.c:785
+msgid "Spellcheck (Russian)"
+msgstr ""
+
+#: src/callbacks.c:992
+msgid "German (German)"
+msgstr ""
+
+#. } else if (PREF_SPELL_MACRO( ASPELL_DECH, "de_CH", _("German (Swiss)") )
+#: src/callbacks.c:994
+msgid "English (British)"
+msgstr ""
+
+#: src/callbacks.c:995
+msgid "English (Canadian)"
+msgstr ""
+
+#: src/callbacks.c:996
+msgid "English (American)"
+msgstr ""
+
+#: src/callbacks.c:997
+msgid "Irish"
+msgstr ""
+
+#: src/callbacks.c:1001
+msgid "Danish"
+msgstr ""
+
+#: src/callbacks.c:1002
+msgid "Dutch"
+msgstr ""
+
+#: src/callbacks.c:1004
+msgid "Swedish"
+msgstr ""
+
+#: src/callbacks.c:1019 src/callbacks.c:1058 src/callbacks.c:1100
+msgid "active"
+msgstr ""
+
+#: src/callbacks.c:1020 src/callbacks.c:1059 src/callbacks.c:1101
+msgid "Language"
+msgstr ""
+
+#: src/support.c:60 src/support.c:85
+#, c-format
+msgid "Couldn't find pixmap file: %s"
+msgstr ""
+
+#. no match found
+#: src/thesaurus.c:71 src/myaspell.c:181
+#, c-format
+msgid ""
+"Word not found or typo incorrect.\n"
+" <b>%s</b>"
+msgstr ""
+
+#: src/thesaurus.c:107
+#, c-format
+msgid "<b>Suggestion %i:</b>"
+msgstr ""
+
+#: src/myaspell.c:52
+msgid "Spelling ok, no suggestions\n"
+msgstr ""
+
+#: src/myaspell.c:53
+msgid "Suggestions :"
+msgstr ""
+
+#. gtk_list_store_clear(store);
+#. fill top-level description
+#: src/myaspell.c:59
+msgid "German spelling result"
+msgstr ""
+
+#: src/myaspell.c:60
+msgid "English (CA) spelling result"
+msgstr ""
+
+#: src/myaspell.c:61
+msgid "English (US) spelling result"
+msgstr ""
+
+#: src/myaspell.c:62
+msgid "Spanish (ES) spelling result"
+msgstr ""
+
+#: src/myaspell.c:63
+msgid "Frensh (FR) spelling result"
+msgstr ""
+
+#: src/myaspell.c:64
+msgid "English spelling result"
+msgstr ""
+
+#: src/myaspell.c:65
+msgid "English (UK) spelling result"
+msgstr ""
+
+#: src/myaspell.c:74 src/myaspell.c:93 src/myaspell.c:129 src/myaspell.c:282
+msgid "Error :"
+msgstr ""
+
+#: src/myaspell.c:78
+msgid "Please don't use german special chars in english spellcheck.\n"
+msgstr ""
+
+#: src/myaspell.c:96
+msgid "Unknown language selected, please check it.\n"
+msgstr ""
+
+#: src/myaspell.c:98
+msgid "Error message"
+msgstr ""
+
+#: src/myaspell.c:119
+msgid "use aspell c-api\n"
+msgstr ""
+
+#: src/myaspell.c:120
+#, c-format
+msgid "search for '%s'\n"
+msgstr ""
+
+#: src/myaspell.c:127
+#, c-format
+msgid "Error: Dictinory %s not found\n"
+msgstr ""
+
+#: src/myaspell.c:132
+msgid "Dict not found"
+msgstr ""
+
+#: src/myaspell.c:161
+#, c-format
+msgid "Error: %s\n"
+msgstr ""
+
+#: src/myaspell.c:198
+msgid "<b>Suggestions:</b>"
+msgstr ""
+
+#: src/myaspell.c:208
+msgid "Spelling ok, no suggestions"
+msgstr ""
+
+#: src/myaspell.c:224
+msgid "use ispell pipe-mode\n"
+msgstr ""
+
+#: src/myaspell.c:262
+msgid "command: "
+msgstr ""
+
+#: src/myaspell.c:281
+msgid "Typo or unknown word, no suggestions \n"
+msgstr ""
+
+#: src/myaspell.c:287
+msgid "root"
+msgstr ""

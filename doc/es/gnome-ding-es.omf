@@ -1,0 +1,30 @@
+<?xml version="1.0" standalone="no"?>
+<omf>
+    <resource>
+        <creator>
+	Heiko Abraham
+        </creator>
+	<maintainer>
+	  H. Abraham
+        </maintainer>
+        <title>
+            gnome-ding
+        </title>
+        <date>
+           2003-05-16
+        </date>
+        <version identifier="2.0" date="2003-03-05" description="Updated for GNOME 2.0, program version 2.0"/>
+        <subject category="GNOME|Applications"/>
+        <description>
+            This is the manual for gnome-ding.
+        </description>
+        <type>
+            manual
+        </type>
+        <format mime="text/xml" dtd="-//OASIS//DTD DocBook XML V4.1.2//EN"/>
+        <identifier url="gnome-ding.xml"/>
+        <language code="es"/>
+	<relation seriesid="4f1da026-c99e-11d6-95f0-ae2166108028"/>
+	<rights type="GNU FDL" license.version="1.1" holder="gnome-ding Team"/>
+    </resource>
+</omf>
