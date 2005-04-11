@@ -1,24 +1,24 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = src po doc
+SUBDIRS = src po doc debian
 
 EXTRA_DIST = \
 	autogen.sh \
 	gnome-ding.glade \
 	gnome-ding.gladep \
 	gnome-ding.spec.in \
-	gnome-ding.desktop \
-	debian \
-	thesaurus-de.ding \
-	thesaurus-es.ding \
-	lat-de.ding \
-	lat-en.ding \
-	en-lat.ding \
+	gnome-ding.desktop 
+
+
+DING_DICT_DE = \
 	de-en.ding \
 	de-fr.ding \
 	de-it.ding \
 	de-nl.ding \
-	de-pt.ding \
+	de-pt.ding 
+
+DING_DICT_EN = \
+	en-lat.ding \
 	en-es.ding \
 	en-de.ding \
 	en-fr.ding \
@@ -26,12 +26,27 @@ EXTRA_DIST = \
 	en-pt.ding \
 	en-it.ding \
 	en-no.ding \
-	en-ar.ding \
+	en-ar.ding 
+
+DING_DICT_EX = \
+	lat-de.ding \
+	lat-en.ding \
 	es-de.ding \
 	fr-de.ding \
 	it-de.ding \
 	it-en.ding \
 	no-en.ding
+
+
+DING_THES = \
+	thesaurus-de.ding \
+	thesaurus-es.ding 
+
+DING_DOC = \
+	AUTHORS \
+	COPYING \
+	INSTALL \
+	README
 
 install-data-local:
 	@$(NORMAL_INSTALL)
@@ -47,102 +62,22 @@ install-data-local:
 	  $(mkinstalldirs) $(DESTDIR)$(datadir)/pixmaps/; \
 	  $(INSTALL_DATA) $(srcdir)/pixmaps/gnome-ding.png $(DESTDIR)$(datadir)/pixmaps/; \
 	fi; \
-	if [ -f $(srcdir)/de-en.ding ] ; then \
+	for P in ${DING_THES} ; do \
 	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) de-en.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/de-fr.ding ] ; then \
+	  $(INSTALL_DATA)  $${P} $(DESTDIR)/usr/share/dict; \
+	done ;\
+	for P in ${DING_DICT_DE} ${DING_DICT_EN} ${DING_DICT_EX} ; do \
 	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) de-fr.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/de-it.ding ] ; then \
-	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) de-it.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/de-pt.ding ] ; then \
-	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) de-pt.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/de-nl.ding ] ; then \
-	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) de-nl.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/thesaurus-de.ding ] ; then \
-	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) thesaurus-de.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/thesaurus-es.ding ] ; then \
-	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) thesaurus-es.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/lat-de.ding ] ; then \
-	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) lat-de.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/lat-en.ding ] ; then \
-	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) lat-en.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/en-es.ding ] ; then \
-	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) en-es.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/en-fr.ding ] ; then \
-	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) en-fr.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/en-no.ding ] ; then \
-	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) en-no.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/en-pt.ding ] ; then \
-	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) en-pt.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/no-en.ding ] ; then \
-	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) no-en.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/fr-de.ding ] ; then \
-	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) fr-de.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/es-de.ding ] ; then \
-	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) es-de.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/en-lat.ding ] ; then \
-	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) en-lat.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/en-de.ding ] ; then \
-	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) en-de.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/en-sv.ding ] ; then \
-	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) en-sv.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/en-it.ding ] ; then \
-	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) en-it.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/en-ar.ding ] ; then \
-	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) en-ar.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/it-de.ding ] ; then \
-	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) it-de.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
-	if [ -f $(srcdir)/it-en.ding ] ; then \
-	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
-	  $(INSTALL_DATA) it-en.ding $(DESTDIR)/usr/share/dict; \
-	fi; \
+	  $(INSTALL_DATA) $${P} $(DESTDIR)/usr/share/dict; \
+	done ;\
+	for P in ${DING_DOC} ; do \
+	  $(mkinstalldirs) $(DESTDIR)/usr/share/doc/gnome-ding/; \
+	  $(INSTALL_DATA)  $${P} $(DESTDIR)/usr/share/doc/gnome-ding; \
+	done ;\
 	if [ -f $(srcdir)/gnome-ding.desktop ] ; then \
 	  $(mkinstalldirs) $(DESTDIR)/usr/share/applications/; \
 	  $(INSTALL_DATA) gnome-ding.desktop $(DESTDIR)/usr/share/applications/; \
-	fi;
+	fi
 
 dist-hook:
 	if test -d pixmaps; then \
@@ -153,4 +88,12 @@ dist-hook:
 	    fi \
 	  done \
 	fi
+	tar -cpj \
+		${DING_THES} \
+		${DING_DICT_DE} \
+		${DING_DICT_EN} \
+		${DING_DICT_EX} \
+	-f $(distdir)-dict.tar.bz2 
 
+clean:
+	rm -f *~

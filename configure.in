@@ -10,12 +10,20 @@ AC_ISC_POSIX
 AC_PROG_CC
 AM_PROG_CC_STDC
 AC_HEADER_STDC
+AC_C_CONST
+AC_FUNC_STAT
+AC_HEADER_STDBOOL
+AC_HEADER_TIME
+AC_PROG_CXX
 
-pkg_modules="libgnomeui-2.0"
+pkg_modules="libgnomeui-2.0 gtk+-2.0 gconf-2.0 atk pango"
 PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)
-AC_SUBST(VERSION)
+AC_SUBST(VERSION) 
+
+AC_CHECK_FUNCS([strchr])
+AC_CHECK_FUNCS([strstr])
 
 GETTEXT_PACKAGE=gnome_ding
 AC_SUBST(GETTEXT_PACKAGE)
@@ -29,7 +37,7 @@ dnl ##########################################################################
 dnl Check for aspell if available
 dnl ##########################################################################
 
-AC_ARG_ENABLE(aspell, [  --enable-aspell        Use aspell v0.50 for spelling [default=yes]],[
+AC_ARG_ENABLE(aspell, [  --enable-aspell        Use aspell (>0.50) for spelling [default=yes]],[
         use_aspell=$enableval
 ],[
         use_aspell=yes
@@ -39,7 +47,14 @@ if test x"$use_aspell" = xyes; then
         AC_DEFINE(USE_ASPELL, 1, [Defined when aspell-api is to use.])
 	LIBS="$LIBS -laspell"
 fi
-                                                                                                          
+
+AC_ARG_ENABLE(debug, [  --enable-debug        Use debug mode [default=no]],[
+        use_debug=$enableval
+],[
+        use_debug=yes
+])                                                                                                          
+
+
 
 AC_OUTPUT([
 Makefile
@@ -48,8 +63,9 @@ po/Makefile.in
 doc/Makefile
 doc/C/Makefile
 doc/de/Makefile
-doc/fr/Makefile
-doc/es/Makefile
 gnome-ding.spec
+debian/control
+debian/Makefile
+debian/copyright
 ])
 

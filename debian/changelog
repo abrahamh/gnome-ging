@@ -1,5 +1,5 @@
-gnome-ding (2.2-1) unstable;
+gnome-ding (2.2) stable; urgency=low
 
- * first debian release
+  * Version 2.2
 
- -- H.Abraham <abrahamh@abe-si.de>  Fri, 01 Oct 2004 20:16:14 +0200
+ -- Heiko Abraham <abrahamh@web.de>  Thu, 10 Mar 2005 12:11:03 +0100

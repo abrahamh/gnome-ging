@@ -5,9 +5,37 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-# This is the debhelper compatability version to use.
-export DH_COMPAT=2
+# This is the debhelper compatibility version to use.
+export DH_COMPAT=4
 
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
+
+DEB_HOST_GNU_TYPE       ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_BUILD_GNU_TYPE      ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+
+
+ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
+        CFLAGS += -g
+endif
+ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
+        INSTALL_PROGRAM += -s
+endif
+
+autotools:
+        OLDDATESUB=`./config.sub -t | tr -d -` ;\
+        OLDDATEGUESS=`./config.guess -t | tr -d -` ;\
+        NEWDATESUB=`/usr/share/misc/config.sub -t | tr -d -` ;\
+        NEWDATEGUESS=`/usr/share/misc/config.guess -t | tr -d -` ;\
+        if [ $$OLDDATESUB -lt $$NEWDATESUB -o \
+             $$OLDDATEGUESS -lt $$NEWDATEGUESS ]; then \
+           dch -a -p "GNU config automated update: config.sub\
+             ($$OLDDATESUB to $$NEWDATESUB), config.guess\
+             ($$OLDDATEGUESS to $$NEWDATEGUESS)" ;\
+           cp -f /usr/share/misc/config.sub config.sub ;\
+           cp -f /usr/share/misc/config.guess config.guess ;\
+           echo WARNING: GNU config scripts updated from master copies 1>&2 ;\
+        fi
 
 configure: configure-stamp
 configure-stamp:
@@ -22,7 +50,12 @@ configure-stamp:
 	# [ -x ./autogen.sh ] || chmod a+x ./autogen.sh
 	# ./autogen.sh
 
-	./configure --prefix=/usr --enable-maintainer-mode --enable-aspell
+	./configure \
+	--prefix=/usr \
+	--sysconfdir=/etc \
+	--enable-maintainer-mode \
+	--enable-aspell \
+	--disable--debug
 
 	touch configure-stamp
 
@@ -34,7 +67,7 @@ build-stamp:
 
 	touch build-stamp
 
-clean:
+clean: autotools
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp configure-stamp
@@ -49,8 +82,9 @@ install: build
 	dh_clean -k
 	dh_installdirs
 
-	$(MAKE) DESTDIR=`pwd`/debian/tmp install-exec
+	$(MAKE) install DESTDIR=`pwd`/debian/tmp
 
+	dh_install
 
 # Build architecture-independent files here.
 binary-indep: build install
@@ -59,14 +93,19 @@ binary-indep: build install
 binary-arch: build install
 	dh_testdir
 	dh_testroot
-	dh_installdocs
-	dh_installchangelogs 
-	dh_link
+#	dh_installchangelogs
+#	dh_installdocs
+#	dh_installexamples
+#	dh_installmenu
+#	dh_installdebconf
+#	dh_installlogrotate
 	dh_strip
+	dh_link
 	dh_compress
 	dh_fixperms
+#	dh_makeshlibs -V
 	dh_installdeb
-	dh_shlibdeps
+#	dh_shlibdeps
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb

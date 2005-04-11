@@ -1,0 +1,7 @@
+debian/tmp/usr/bin/gnome-ding
+debian/tmp/usr/share/pixmaps
+debian/tmp/usr/share/locale
+debian/tmp/usr/share/omf
+debian/tmp/usr/share/gnome/help
+debian/tmp/usr/share/applications
+debian/tmp/usr/share/doc/gnome-ding

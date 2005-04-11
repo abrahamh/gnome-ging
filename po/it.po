@@ -7,7 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-08-18 08:28+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-04-10 11:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -429,6 +430,7 @@ msgid "Spellcheck (Portuguese)"
 msgstr ""
 
 #. } else if (SPELLIT_MACRO( _("Spellcheck (Portuguese, BR)"), "pt_BR" )
+#. } else if (COMBO_MACRO(ASPELL_PT_BR, "pt_BR", _("Spellcheck (Portuguese, BR)") )
 #: src/callbacks.c:1456 src/callbacks.c:1646
 msgid "Spellcheck (Russian)"
 msgstr ""
