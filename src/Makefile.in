@@ -226,15 +226,6 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
-callbacks.o: callbacks.c ../config.h callbacks.h interface.h support.h \
-	main.h thesaurus.h
-interface.o: interface.c ../config.h callbacks.h interface.h support.h
-main.o: main.c ../config.h interface.h support.h main.h
-myaspell.o: myaspell.c ../config.h support.h interface.h callbacks.h \
-	main.h
-support.o: support.c ../config.h support.h
-thesaurus.o: thesaurus.c ../config.h support.h interface.h callbacks.h \
-	main.h
 
 info-am:
 info: info-am

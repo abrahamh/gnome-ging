@@ -32,7 +32,7 @@
  <articleinfo>
    <title>&app; - Benutzerhandbuch</title>
    <copyright>
-     <year>2003-2004</year>
+     <year>2003-2005</year>
      <holder>Heiko Abraham</holder>
    </copyright>
    <releaseinfo>
@@ -132,6 +132,13 @@
 <para>
 Weitere W&ouml;rterb&uuml;cher k&ouml;nnen einfach aktiviert werden. Sehen Sie 
 hierzu ggf. im entsprechenden gconf-Eintrag nach. (gconf-editor app/gnome-ding).
+</para>
+
+<para>
+Weitere W&ouml;rterb&uuml;cher k&ouml;nnen einfach installiert werden. Typisch 
+sucht &app; im Verzeichnis /usr/share/dict nach W&ouml;rterb&uuml;cher. Hierbei 
+werden aber nur W&ouml;rterb&uuml;cher ber&uuml;cksichtigt, die in den entsprechenden
+gconf-Eintrag enthalten sind.
 </para>
 
 <para>

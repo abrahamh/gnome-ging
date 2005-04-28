@@ -32,7 +32,7 @@
  <articleinfo>
    <title>&app; - user manual</title>
    <copyright>
-     <year>2003-2004</year>
+     <year>2003-2005</year>
      <holder>Heiko Abraham</holder>
    </copyright>
    <releaseinfo>
@@ -136,6 +136,14 @@
 	&app; is designed that a use can easy change or extend new dictionaries, please 
 	refere the gconf-entries.
 	</para>
+	
+	<para>
+	To install new dictionaries please copy the valid file to /usr/share/dict. Also 
+	check the gconf-entry for &app; Remember,a easy way is to copy new dictionaries 
+	to /usr/share/dict and then press the 'reset'-button in the preferences dialog 
+    and start &app; again.	
+	</para>
+	
 	<para>
         &app; work with <acronym>Gtk2+</acronym> and <acronym>GNOME2</acronym>. 
         &app; required as backend aspell (0.50) und grep (2.5.x). 
