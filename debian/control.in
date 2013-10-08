@@ -2,13 +2,12 @@ Source: gnome-ding
 Section: gnome
 Priority: optional
 Maintainer: Heiko Abraham <abrahamh@web.de>
-Build-Depends: autotools-dev, debhelper, libc6-dev, libaspell-dev, libatk1.0-dev, libpango1.0-dev, libgnomeui-dev, libgnomecanvas2-dev, libgtk2.0-dev
+Build-Depends: autotools-dev, debhelper, libc6-dev
 Standards-Version: 3.2.1
 
 Package: gnome-ding
 Architecture: powerpc
-Depends:  libaspell15 (>= 0.50.5), libatk1.0-0, libc6, libgconf2-4 (>= 2.8.1), libglib2.0-0 (>= 2.4.7), libgnome2-0 (>= 2.8.0), libgtk2.0-0 (>= 2.4.4), libpango1.0-0,  scrollkeeper, libgnomecanvas2-0
-Suggests: gnome-ding-dict
+Depends:  libaspell15 (>= 0.50.5), libatk1.0-0 (>= 1.7.2), libc6, libgconf2-4 (>= 2.8.1), libglib2.0-0 (>= 2.4.7), libgnome2-0 (>= 2.8.0), libgtk2.0-0 (>= 2.4.4), libpango1.0-0,  scrollkeeper
 Description: GNOME ding translation- and spellchecking for GNOME
  GNOME ding is a translator and spellchecker for Gtk2, inspired by ding.
  For spellchecking, it will use installed aspell-dictionories and
@@ -20,4 +19,4 @@ Package: gnome-ding-dict
 Architecture: any
 Depends:  gnome-ding
 Description: GNOME ding dicts
- This package contain additional thesaurus and dictionaries for gnome-ding. All files are stored in the ding-format.
+ GNOME ding dicts

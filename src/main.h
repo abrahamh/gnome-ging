@@ -622,10 +622,4 @@ void model_default();
 gboolean  get_debug();
 GtkWidget *get_mainwin();
 
-// static gchar *gdk_color_to_string (GdkColor color);
-static gchar *gdk_color_to_string (GdkColor color) {
-	return g_strdup_printf ("#%04x%04x%04x", color.red,  color.green, color.blue);
-}
-
-
 #endif // __MAIN_H_

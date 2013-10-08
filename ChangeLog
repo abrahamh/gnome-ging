@@ -1,3 +1,7 @@
+Oct 7 2013 - I.Krueger
+- fix compile error - usage of gdk_color_to_string
+- new version 2.2.1
+
 Sep 21 2004 - H.Abraham
 - update en-xml-documentation
 - update some en-de-dict

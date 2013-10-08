@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(configure.in)
-VERSION="2.2"
+VERSION="2.2.1"
 AM_INIT_AUTOMAKE(gnome-ding, $VERSION)
 AM_MAINTAINER_MODE
 AM_CONFIG_HEADER(config.h)

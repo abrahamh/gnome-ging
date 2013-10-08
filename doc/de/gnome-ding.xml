@@ -3,7 +3,7 @@
 <!-- replace with actual application  version number-->
 <!ENTITY mdash ";"> 
 <!ENTITY legal SYSTEM "legal.xml">
-<!ENTITY appversion "2.2"> 
+<!ENTITY appversion "2.2.1"> 
 <!ENTITY date "April 2003"> 
 <!ENTITY manrevision "2.0">
 <!ENTITY mymail "abrahamh@web.de">
@@ -32,7 +32,7 @@
  <articleinfo>
    <title>&app; - Benutzerhandbuch</title>
    <copyright>
-     <year>2003-2005</year>
+     <year>2003-2004</year>
      <holder>Heiko Abraham</holder>
    </copyright>
    <releaseinfo>
@@ -103,7 +103,7 @@
 </para>
 
 <para>
-		In der Version 2.2 unterst&uuml;tzt &app; derzeit eine Reihe von Sprachen. 
+		In der Version 2.2.1 unterst&uuml;tzt &app; derzeit eine Reihe von Sprachen. 
 		
 		<itemizedlist>
 			<listitem>
@@ -132,13 +132,6 @@
 <para>
 Weitere W&ouml;rterb&uuml;cher k&ouml;nnen einfach aktiviert werden. Sehen Sie 
 hierzu ggf. im entsprechenden gconf-Eintrag nach. (gconf-editor app/gnome-ding).
-</para>
-
-<para>
-Weitere W&ouml;rterb&uuml;cher k&ouml;nnen einfach installiert werden. Typisch 
-sucht &app; im Verzeichnis /usr/share/dict nach W&ouml;rterb&uuml;cher. Hierbei 
-werden aber nur W&ouml;rterb&uuml;cher ber&uuml;cksichtigt, die in den entsprechenden
-gconf-Eintrag enthalten sind.
 </para>
 
 <para>

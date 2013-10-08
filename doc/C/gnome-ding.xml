@@ -3,7 +3,7 @@
 <!-- replace with actual application  version number-->
 <!ENTITY mdash ";"> 
 <!ENTITY legal SYSTEM "legal.xml">
-<!ENTITY appversion "2.2"> 
+<!ENTITY appversion "2.2.1"> 
 <!ENTITY date "April 2003"> 
 <!ENTITY manrevision "2.0">
 <!ENTITY mymail "abrahamh@web.de">
@@ -32,7 +32,7 @@
  <articleinfo>
    <title>&app; - user manual</title>
    <copyright>
-     <year>2003-2005</year>
+     <year>2003-2004</year>
      <holder>Heiko Abraham</holder>
    </copyright>
    <releaseinfo>
@@ -109,7 +109,7 @@
 </para>
 
 <para>
-		Since version 2.2 &app; provide the following languages directly:
+		Since version 2.2.1 &app; provide the following languages directly:
 		
 		<itemizedlist>
 			<listitem>
@@ -136,14 +136,6 @@
 	&app; is designed that a use can easy change or extend new dictionaries, please 
 	refere the gconf-entries.
 	</para>
-	
-	<para>
-	To install new dictionaries please copy the valid file to /usr/share/dict. Also 
-	check the gconf-entry for &app; Remember,a easy way is to copy new dictionaries 
-	to /usr/share/dict and then press the 'reset'-button in the preferences dialog 
-    and start &app; again.	
-	</para>
-	
 	<para>
         &app; work with <acronym>Gtk2+</acronym> and <acronym>GNOME2</acronym>. 
         &app; required as backend aspell (0.50) und grep (2.5.x). 

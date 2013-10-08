@@ -1239,14 +1239,14 @@ void on_pref_dialog_ok_clicked(GtkButton *button, gpointer user_data) {
 	color.red = color_r;
 	color.green = color_g;
 	color.blue = color_b;
-	set_model_char(MAIN_COLOR1, gdk_color_to_string (color) );
+	set_model_char(MAIN_COLOR1, gdk_color_to_string (&color) );
     // get highlight color
 	gnome_color_picker_get_i16 (GNOME_COLOR_PICKER (text_color2),
 				    &color_r, &color_g, &color_b, &color_a);
 	color.red = color_r;
 	color.green = color_g;
 	color.blue = color_b;
-	set_model_char(MAIN_COLOR2, gdk_color_to_string (color) );
+	set_model_char(MAIN_COLOR2, gdk_color_to_string (&color) );
 
 	// get text font
 	set_model_char(MAIN_FONT, 
