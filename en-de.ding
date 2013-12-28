@@ -96,11 +96,8 @@ abashment :: Beschämung {f}; Verlegenheit
 abasing :: demütigend; erniedrigend
 abatable :: abziehbar
 abated contribution :: niedrigerer Beitrag
-abated :: verminderte; verringerte
-abated :: vermindert {Verb}
-abated :: verringerte
-abatement :: Abnehmen; Nachlassen {n}
-abatement (n) :: Herabsetzung; {f}Kürzung; {f}Streichung; {f}Verringerung; {f}
+abated :: verminderte {Verb}; verringerte
+abatement (n) :: Abnehmen; Nachlassen {n}; Herabsetzung; {f}Kürzung; {f}Streichung; Verringerung
 abatement of action :: Verfahrenseinstellung
 abatement of tax :: Steuernachlass
 abatements :: Abnehmen; Nachlassen {n}
@@ -140,7 +137,6 @@ abbreviation :: die Abkürzung
 abbreviation document :: Kurzrufdokument
 abbreviations :: Abkürzungen {pl} {f}
 abbreviator :: Abkürzer {m}
-abbreviator :: verfertiger
 abbreviatory :: abkürzend
 abbroachement :: Wiederverkauf {m}; Aufkaufen {n}
 abc :: (das Alphabet), Abc
@@ -177,8 +173,7 @@ abend :: fehlerhaftes Progr.Ende
 aberrance :: Abweichung; Verirrung; Abirrung {f}
 aberrances :: Verirrung
 aberrancy :: Abweichung; Verirrung {n}
-aberrant :: anomal
-aberrant :: Irrtum
+aberrant :: anomal; Irrtum 
 aberrantly :: abweichend {adv}
 aberrate :: abweichen {Verb}
 aberrated :: abgewichen
@@ -364,11 +359,9 @@ aboveboard :: ehrlich
 aboveground :: übererdig {adv}
 above mentioned :: obenerwähnt
 abovementioned :: obengenannt {adj}
-above :: oben; oberhalb; obig; obige; über
+above | above zero :: oben; oberhalb; obig; obige; über | über Null
 above par :: über Nennwert
 above the line promotion :: Verkaufsförderung
-above :: über
-above zero :: über Null
 abracadabra :: Abrakadabra {n}
 abrade :: abschleifen; verschleißen; abreiben
 abraded :: rieb ab
@@ -398,7 +391,6 @@ abridgement :: zusammengefasst {adv}
 abridges :: kürzt; verkürzt
 abridging :: kürzend; verkürzend
 abroad :: im Ausland; ins Ausland; überallhin
-abroad :: im Ausland; überallhin
 a broad laughter :: schallendes Gelächter
 abrogate :: abschaffen; beseitigen
 abrogated :: aufgehoben; hob auf
@@ -3516,9 +3508,7 @@ aircraft captain :: Flugkapitän
 aircraft carrier :: Flugzeugträger
 aircraft construction :: Flugzeugbau
 aircraft fleet :: Flugzeugflotte
-aircraft :: Fluggerät; Flugsystem; Flugzeug; Luftfahrzeug
-aircraft :: flugzeug {n}
-aircraft :: Luftfahrzeug; Flugzeug; Fluggerät; Flugsystem
+aircraft :: Fluggerät; Flugsystem; Flugzeug {n}; Luftfahrzeug
 aircraft manufacturer :: Flugzeughersteller
 aircraft market :: Fluggerätemarkt
 aircraft navigation :: Flugzeugnavigation
@@ -24545,7 +24535,6 @@ cradling :: wiegend
 crafted :: handgemacht
 crafted :: Handgemacht
 craft :: Fahrzeug; Handwerk
-craft :: Handwerk; Fahrzeug
 craftier :: ausgekochtere; listiger
 craftiest :: ausgekochteste; listigste
 craftily :: listige
@@ -32193,8 +32182,7 @@ downiness :: Weichheit
 downing :: ruinierend
 downloaded :: nachgeladene
 downloading :: Laden
-download :: nachladen; laden
-download :: unterladen
+to download :: herunterladen; nachladen; laden; runterladen [ugs.]
 downpour :: Regenguss
 downpour :: Regenguß
 downpours :: Regengüsse
@@ -35281,15 +35269,11 @@ engineers pliers :: Kombizange
 engineer :: Techniker {m}
 engine fitter :: Maschinenschlosser
 engine lath :: Leitspindel-Drehbank
-engine :: Lokomotive; Maschine; Motor; Triebwerk
-engine :: Maschine {f}
-engine :: Motor {m}
-engine :: Motor; Triebwerk; Lokomotive; Maschine; Maschine
+engine :: Motor {m}; Triebwerk {n}; Maschine {f}; Lokomotive
 engines and machines :: Kraft- und Arbeitsmaschinen
-engines :: Maschinen; Motoren
+engines :: Maschinen {pl}; Motoren {pl}
 engines :: Triebwerke {n}
 engine timing :: Motorsteuerung
-engine :: Triebwerk {n}
 engine trouble :: Maschinenschaden
 England :: England
 englisch :: English
@@ -60797,8 +60781,7 @@ loaded :: aufgeladen; beladen; geladen
 loaded :: geladen {adv}
 loader initial program :: Ladeprogramm; Urlader
 loader :: Ladeprogramm; Lader
-loader :: Lader; Ladeprogramm
-loader :: Lader {n}
+loader :: Lader {n}; Ladeprogramm
 loaders :: Lader {n}
 loading :: aufladend; laden; Laden; ladend
 loading capacity :: Belastbarkeit (Technik)
@@ -60812,15 +60795,12 @@ loads of :: eine Menge
 loads of [fam] :: eine Menge
 loafed :: bummelte
 loafer :: Bummler; Gammler
-loafer :: Gammler; Bummler
 loafers :: Bummler
 loafing around :: Gammelei
 loafing :: bummelnd; Faulenzerei
 loafing :: Faulenzerei; bummelnd
 loaf :: Laib
-loaf of bread :: Brot {n}
-loaf of bread :: Laib Brot
-loaf of bread :: Laib {m}
+loaf of bread :: Brot {n}; Laib Brot; Laib {m}
 loamier :: lehmiger
 loamiest :: lehmigste
 loam :: Lehm
@@ -60851,10 +60831,8 @@ lobby :: Interessengruppe
 lobbyist :: Lobbyist
 lobe :: Lappen
 lobes :: Lappen
-lobster :: Hummer
 lobster :: Hummer {m}
-lobster :: Hummer {n}
-lobsters :: Hummer
+lobsters :: Hummer {pl}
 lobsters :: Hummer[Pronoun]
 lobule :: Läppchen
 local aera network :: lokales Netz (LAN)
@@ -61719,7 +61697,6 @@ lustrously :: glänzend; strahlend
 lusts :: Begierden; Wollüste
 lusts :: wollüste; Begierden
 lusty :: kräftig; rüstig
-lute :: Kitt; Laute
 lute :: Laute; Kitt
 lutes :: Lauten
 luxated :: verrenkte
@@ -61738,7 +61715,6 @@ luxuriated :: schwelgte
 luxuriate :: schwelgen in
 luxuriates :: schwelgt
 luxuriating :: schwelgend
-luxuries :: Luxus; Schwelgereien
 luxuries :: Schwelgereien; Luxus
 luxurious :: luxuriös
 luxurious :: luxuriös; verschwenderisch
@@ -61748,29 +61724,23 @@ luxuriousness :: Wohlleben
 luxurious :: üppig
 luxury :: Aufwand; Luxus
 luxury hotel :: Luxushotel
-luxury :: Luxus; Aufwand
-luxury :: Luxus {m}
+luxury :: Luxus {m}; Aufwand
 lyceum :: Lehrstätte; Vortragssaal
 lyceums :: Vortragssäle
 lyceum :: Vortragssaal; Lehrstätte
-lye :: Lauge
 lye :: Lauge; Laugen
 lying inbetween :: dazwischengelegene
-lying :: liegend
 lying :: liegend; liegend; liegenden
-lying :: lügereien
-lying :: lügnerisch
+lying :: lügereien; lügnerisch
 lying still :: stilliegend
 lying to :: anlügend; belügend
 lying to :: belügend
 lymphatic :: lymphatisch
-lymphatics :: Lymphgefässe
-lymphatics :: Lymphgefäße
+lymphatics :: Lymphgefäße; Lymphgefässe
 lymph :: Lymphe
 lynched :: gelyncht; lynchte
 lynches :: lyncht
-lynching :: Aufhängung {f}; lynchend
-lynching :: Aufhängung; lynchend; Lynchmord
+lynching :: Aufhängung {f}; lynchend; Lynchmord
 lynchlaw :: Lynchjustiz
 lynch law :: Volksjustiz
 lynch :: lynchen
@@ -61789,7 +61759,6 @@ lyrics :: Liedtext; Lyrik; Text
 lyrics :: Lyrik
 lyrist :: Leierspieler
 ma'am :: gnädige Frau {f}
-ma'am :: gnä Frau
 macabre :: grausig
 macabrely :: makaber {adv}
 macabre :: Schotterdecke
@@ -61797,8 +61766,6 @@ macadamize :: chaussieren
 macadamizes :: chaussiert
 macadamizing :: chaussierend
 macaroni :: Macaroni {n}
-macaroni :: Makaroni
-macaroon :: Makrone
 macaroon :: Makrone {n}
 macaroons :: Makronen
 Macau (mo) :: Macau
@@ -61831,7 +61798,6 @@ machinations :: Intrigen; Machenschaften
 machinator :: Intrigant
 machine address :: Maschinenadresse
 machine-aided :: automatisch; maschinenunterstützt
-machine :: bearbeiten; Maschine
 machine-building :: Maschinenbau
 machine code instruction :: Maschinenbefehl
 machine-code :: Maschinencode
@@ -61841,7 +61807,7 @@ machine-date :: Maschinendatum
 machined :: bearbeitet
 machine-dependant :: geräteabhängig
 machine-dependent :: maschinenabhängig
-machine :: die Maschine {n}
+machine :: die Maschine {f}; Mechanismus {n} 
 machine-drive :: Maschinenantrieb
 machine employment :: Maschineneinsatz
 machine fitter :: Maschinenschlosser
@@ -61849,20 +61815,17 @@ machine-gun :: Maschinengewehr
 machine-independent :: maschinenunabhängig
 machine language :: Maschinensprache
 machinelike :: maschinenähnlich {adj}
-machine :: maschine; Maschine
+machine | maschine made :: maschinell herstellen | maschinell hergestellt
 machineoperator :: Maschinist
 machine-oriented :: maschinennah; maschinenorientiert; maschinenorientierte
 machine-oriented :: maschinenorientiert; maschinennah
 machine program :: Maschinenprogramm
 machine readable :: maschinenlesbar
-machineries :: Maschinerien
 machineries :: Maschinerien {n}
 machinery :: Ausrüstung; Maschinen; Maschinenpark; Maschinerie
 machinery :: Maschinen; Maschinerie
 machinery :: Maschinerie {n}
-machines :: Maschinen
-machines :: Maschinen; Maschine
-machines :: Maschinen {n}
+machines :: Maschinen {pl}
 machine-tool :: Werkzeugmaschine
 machine work :: bearbeiten
 machining :: bearbeitend
@@ -68977,13 +68940,9 @@ mow :: mähen
 mown :: gemäht; gemäht; mäht
 mown :: gemäht; mähen; mäht
 Mozambique (mz) :: Mosambik
-mr :: Herr
-Mr. :: Herr
-Mr. :: Herr {m}
-mrs :: Frau
-Mrs. :: Frau {f}
+Mr. ; mr :: Herr {m}
+mrs ; Mrs. ; Ms. :: Frau {f}
 MSDOS :: MSDOS
-Ms. :: Frau {f}
 much 
 much as I would like :: so gern ich auch möchte
 much better :: viel besser
@@ -111801,8 +111760,8 @@ to dot :: stricheln
 to do :: tun
 to double :: verdoppeln
 to doubt :: anzweifeln; bezweifeln
-to doubt (of :: zweifeln (an)
-to doubt [of :: zweifeln [an]
+to doubt (of) :: zweifeln (an)
+to doubt (of) :: zweifeln (an)
 to doubt :: zweifeln; bezweifeln
 to douche :: duschen
 to douse :: begießen
@@ -111810,7 +111769,7 @@ to dovetail :: verzinken
 to dowel :: dübeln
 to do without :: entbehren; entbehren können
 to downgrade :: degradieren
-to download :: herunterladen; laden; nachladen
+to download :: herunterladen; laden; nachladen; runterladen [ugs.]
 to dowse :: begießen
 to doze :: dösen
 to draggle :: beschmutzen
