@@ -41,7 +41,7 @@ create_about_gnome_ding (void)
   GdkPixbuf *about_gnome_ding_logo_pixbuf;
   GtkWidget *about_gnome_ding;
 
-  about_gnome_ding_logo_pixbuf = create_pixbuf ("gnome-ding/gnome-ding.png");
+  about_gnome_ding_logo_pixbuf = create_pixbuf ("/usr/share/pixmaps/gnome-ding/gnome-ding.png");
   about_gnome_ding = gnome_about_new ("gnome-ding", VERSION,
                         _("(c) 2003, 2004 Heiko Abraham"),
                         _("A translation- and spellchecking program for single words, inspired by \"ding\" and \"g2ding\"."),
@@ -165,7 +165,7 @@ create_preferences1 (void)
   gtk_box_pack_start (GTK_BOX (vbox3), hbox8, FALSE, FALSE, 8);
   gtk_container_set_border_width (GTK_CONTAINER (hbox8), 2);
 
-  image21 = create_pixmap (preferences1, "gnome-ding/gnome-ding.png");
+  image21 = create_pixmap (preferences1, "/usr/share/pixmaps/gnome-ding/gnome-ding.png");
   gtk_widget_set_name (image21, "image21");
   gtk_widget_show (image21);
   gtk_box_pack_start (GTK_BOX (hbox8), image21, FALSE, FALSE, 8);
@@ -271,7 +271,7 @@ create_preferences1 (void)
   gtk_box_pack_start (GTK_BOX (vbox2), hbox9, FALSE, FALSE, 8);
   gtk_container_set_border_width (GTK_CONTAINER (hbox9), 2);
 
-  image22 = create_pixmap (preferences1, "gnome-ding/gnome-ding.png");
+  image22 = create_pixmap (preferences1, "/usr/share/pixmaps/gnome-ding/gnome-ding.png");
   gtk_widget_set_name (image22, "image22");
   gtk_widget_show (image22);
   gtk_box_pack_start (GTK_BOX (hbox9), image22, FALSE, FALSE, 8);
@@ -334,7 +334,7 @@ create_preferences1 (void)
   gtk_box_pack_start (GTK_BOX (vbox5), hbox10, FALSE, TRUE, 8);
   gtk_container_set_border_width (GTK_CONTAINER (hbox10), 2);
 
-  image28 = create_pixmap (preferences1, "gnome-ding/gnome-ding.png");
+  image28 = create_pixmap (preferences1, "/usr/share/pixmaps/gnome-ding/gnome-ding.png");
   gtk_widget_set_name (image28, "image28");
   gtk_widget_show (image28);
   gtk_box_pack_start (GTK_BOX (hbox10), image28, FALSE, FALSE, 8);
@@ -939,7 +939,7 @@ create_ding_mainwin (void)
 
   ding_mainwin = gnome_app_new ("gnome-ding", _("gnome-ding"));
   gtk_widget_set_name (ding_mainwin, "ding_mainwin");
-  ding_mainwin_icon_pixbuf = create_pixbuf ("gnome-ding/gnome-ding.png");
+  ding_mainwin_icon_pixbuf = create_pixbuf ("/usr/share/pixmaps/gnome-ding/gnome-ding.png");
   if (ding_mainwin_icon_pixbuf)
     {
       gtk_window_set_icon (GTK_WINDOW (ding_mainwin), ding_mainwin_icon_pixbuf);
@@ -1105,7 +1105,7 @@ create_ding_mainwin (void)
   gtk_box_pack_start (GTK_BOX (hbox19), eventbox1, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, eventbox1, _("minimode/winmode"), NULL);
 
-  image55 = create_pixmap (ding_mainwin, "gnome-ding/gnome-ding24.png");
+  image55 = create_pixmap (ding_mainwin, "/usr/share/pixmaps/gnome-ding/gnome-ding24.png");
   gtk_widget_set_name (image55, "image55");
   gtk_widget_show (image55);
   gtk_container_add (GTK_CONTAINER (eventbox1), image55);

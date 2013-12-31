@@ -930,50 +930,10 @@ void model_read(GConfClient *gconf) {
 		
 		set_model_char(DICT_LAT_DE, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_lat_de", NULL) );
 		set_model_char(DICT_EN_LAT, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_en_lat", NULL) );
-
+#if 0
+		/* to prevent initial "NULL" values, don't call follow */
 		set_model_char(DICT_DE_EN, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_de_en", NULL) );
-		set_model_char(DICT_DE_ES, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_de_es", NULL) );
-		set_model_char(DICT_DE_FR, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_de_fr", NULL) );
-		set_model_char(DICT_DE_IT, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_de_it", NULL) );
-		set_model_char(DICT_DE_PT, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_de_pt", NULL) );
-		set_model_char(DICT_DE_NL, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_de_nl", NULL) );
-	
-		set_model_char(DICT_FR_EN, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_fr_en", NULL) );
-		set_model_char(DICT_FR_ES, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_fr_es", NULL) );
-		set_model_char(DICT_FR_DE, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_fr_de", NULL) );
-		set_model_char(DICT_FR_IT, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_fr_it", NULL) );
-		set_model_char(DICT_FR_PT, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_fr_pt", NULL) );
-
-		set_model_char(DICT_ES_EN, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_es_en", NULL) );
-		set_model_char(DICT_ES_FR, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_es_fr", NULL) );
-		set_model_char(DICT_ES_DE, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_es_de", NULL) );
-		set_model_char(DICT_ES_IT, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_es_it", NULL) );
-		set_model_char(DICT_ES_PT, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_es_pt", NULL) );
-
-		set_model_char(DICT_IT_EN, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_it_en", NULL) );
-		set_model_char(DICT_IT_ES, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_it_es", NULL) );
-		set_model_char(DICT_IT_DE, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_it_de", NULL) );
-		set_model_char(DICT_IT_FR, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_it_fr", NULL) );
-		set_model_char(DICT_IT_PT, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_it_pt", NULL) );
-
-		set_model_char(DICT_EN_DE, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_en_de", NULL) );
-		set_model_char(DICT_EN_IT, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_en_it", NULL) );
-		set_model_char(DICT_EN_ES, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_en_es", NULL) );
-		set_model_char(DICT_EN_PT, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_en_pt", NULL) );
-		set_model_char(DICT_EN_FR, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_en_fr", NULL) );
-		set_model_char(DICT_EN_NO, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_en_no", NULL) );
-		set_model_char(DICT_EN_AR, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_en_ar", NULL) );
-		set_model_char(DICT_EN_SV, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_en_sv", NULL) );
-	
-		set_model_char(DICT_NO_EN, gconf_client_get_string( gconf, "/apps/gnome-ding/dict/file_dict_no_en", NULL) );
-	
-		set_model_char(THES_DE, gconf_client_get_string( gconf, "/apps/gnome-ding/thes/file_thes_de", NULL) );
-		set_model_char(THES_ES, gconf_client_get_string( gconf, "/apps/gnome-ding/thes/file_thes_es", NULL)  );
-		set_model_char(THES_EN, gconf_client_get_string( gconf, "/apps/gnome-ding/thes/file_thes_en", NULL)  );
-		set_model_char(THES_IT, gconf_client_get_string( gconf, "/apps/gnome-ding/thes/file_thes_it", NULL)  );
-		set_model_char(THES_FR, gconf_client_get_string( gconf, "/apps/gnome-ding/thes/file_thes_fr", NULL)  );
-		set_model_char(THES_PT, gconf_client_get_string( gconf, "/apps/gnome-ding/thes/file_thes_pt", NULL)  );
-		set_model_char(THES_PL, gconf_client_get_string( gconf, "/apps/gnome-ding/thes/file_thes_pl", NULL)  );
+#endif
 	} else {
 		// set to default value
 		model_default();

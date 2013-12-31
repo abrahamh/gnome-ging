@@ -3,7 +3,7 @@
 <!-- replace with actual application  version number-->
 <!ENTITY mdash ";"> 
 <!ENTITY legal SYSTEM "legal.xml">
-<!ENTITY appversion "2.2.1"> 
+<!ENTITY appversion "2.3"> 
 <!ENTITY date "April 2003"> 
 <!ENTITY manrevision "2.0">
 <!ENTITY mymail "abrahamh@web.de">
@@ -109,7 +109,7 @@
 </para>
 
 <para>
-		Since version 2.2.1 &app; provide the following languages directly:
+		Since version 2.3 &app; provide the following languages directly:
 		
 		<itemizedlist>
 			<listitem>
