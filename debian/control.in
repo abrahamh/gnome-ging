@@ -6,7 +6,7 @@ Build-Depends: autotools-dev, debhelper, libc6-dev
 Standards-Version: 3.2.1
 
 Package: gnome-ding
-Architecture: powerpc
+Architecture: powerpc i386
 Depends:  libaspell15 (>= 0.50.5), libatk1.0-0 (>= 1.7.2), libc6, libgconf2-4 (>= 2.8.1), libglib2.0-0 (>= 2.4.7), libgnome2-0 (>= 2.8.0), libgtk2.0-0 (>= 2.4.4), libpango1.0-0,  scrollkeeper
 Description: GNOME ding translation- and spellchecking for GNOME
  GNOME ding is a translator and spellchecker for Gtk2, inspired by ding.

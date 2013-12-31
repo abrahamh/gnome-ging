@@ -1167,13 +1167,13 @@ void model_default() {
 	g_string_printf(my_model.text_color, "#000000000000"); 
 	g_string_printf(my_model.text_highlight, "#00000000ffff"); 
 	
-	DEFAULT_MACRO(my_model.thes_de, my_model.sz_thes_de, "thesaurus-de.ding" );
-	DEFAULT_MACRO(my_model.thes_en, my_model.sz_thes_en, "thesaurus-en.ding" );
-	DEFAULT_MACRO(my_model.thes_es, my_model.sz_thes_es, "thesaurus-es.ding" );
-	DEFAULT_MACRO(my_model.thes_fr, my_model.sz_thes_fr, "thesaurus-fr.ding" );
-	DEFAULT_MACRO(my_model.thes_it, my_model.sz_thes_it, "thesaurus-it.ding" );
-	DEFAULT_MACRO(my_model.thes_pt, my_model.sz_thes_pt, "thesaurus-pt.ding" );
-	DEFAULT_MACRO(my_model.thes_pl, my_model.sz_thes_pl, "thesaurus-pl.ding" );
+	DEFAULT_MACRO(my_model.thes_de, my_model.sz_thes_de, "thesaurus_de.ding" );
+	DEFAULT_MACRO(my_model.thes_en, my_model.sz_thes_en, "thesaurus_en.ding" );
+	DEFAULT_MACRO(my_model.thes_es, my_model.sz_thes_es, "thesaurus_es.ding" );
+	DEFAULT_MACRO(my_model.thes_fr, my_model.sz_thes_fr, "thesaurus_fr.ding" );
+	DEFAULT_MACRO(my_model.thes_it, my_model.sz_thes_it, "thesaurus_it.ding" );
+	DEFAULT_MACRO(my_model.thes_pt, my_model.sz_thes_pt, "thesaurus_pt.ding" );
+	DEFAULT_MACRO(my_model.thes_pl, my_model.sz_thes_pl, "thesaurus_pl.ding" );
 
 	DEFAULT_MACRO(my_model.dict_de_en, my_model.sz_dict_de_en, "de-en.ding" );
 	DEFAULT_MACRO(my_model.dict_de_es, my_model.sz_dict_de_es, "de-es.ding" );

@@ -10,37 +10,14 @@ EXTRA_DIST = \
 	gnome-ding.desktop 
 
 
-DING_DICT_DE = \
+DING_DICT = \
 	de-en.ding \
-	de-fr.ding \
-	de-it.ding \
-	de-nl.ding \
-	de-pt.ding 
-
-DING_DICT_EN = \
-	en-lat.ding \
-	en-es.ding \
 	en-de.ding \
-	en-fr.ding \
-	en-sv.ding \
-	en-pt.ding \
-	en-it.ding \
-	en-no.ding \
-	en-ar.ding 
-
-DING_DICT_EX = \
-	lat-de.ding \
-	lat-en.ding \
-	es-de.ding \
-	fr-de.ding \
-	it-de.ding \
-	it-en.ding \
-	no-en.ding
+	en-ar.ding
 
 
 DING_THES = \
-	thesaurus-de.ding \
-	thesaurus-es.ding 
+	thesaurus_de.ding 
 
 DING_DOC = \
 	AUTHORS \
@@ -66,7 +43,7 @@ install-data-local:
 	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
 	  $(INSTALL_DATA)  $${P} $(DESTDIR)/usr/share/dict; \
 	done ;\
-	for P in ${DING_DICT_DE} ${DING_DICT_EN} ${DING_DICT_EX} ; do \
+	for P in ${DING_DICT} ; do \
 	  $(mkinstalldirs) $(DESTDIR)/usr/share/dict/; \
 	  $(INSTALL_DATA) $${P} $(DESTDIR)/usr/share/dict; \
 	done ;\
@@ -90,9 +67,7 @@ dist-hook:
 	fi
 	tar -cpj \
 		${DING_THES} \
-		${DING_DICT_DE} \
-		${DING_DICT_EN} \
-		${DING_DICT_EX} \
+		${DING_DICT} \
 	-f $(distdir)-dict.tar.bz2 
 
 clean:

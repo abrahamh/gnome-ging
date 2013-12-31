@@ -1,3 +1,9 @@
+Dec 31 2013 - H.Abraham
+- remove unkemptly languages and dictionaries
+- update build files (autogen)
+- sync de/en dictionary
+- new version 2.3
+
 Oct 7 2013 - I.Krueger
 - fix compile error - usage of gdk_color_to_string
 - new version 2.2.1
