@@ -26,4 +26,4 @@ as well as the database files (*.ding).
 
 # Future 
 
-I have no plan for new new releases or updates. 
+I have no plan for new releases or updates. 
